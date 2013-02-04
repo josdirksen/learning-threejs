@@ -9,7 +9,7 @@
     <style>
         body{
             /* set margin to 0 and overflow to hidden, to go fullscreen */
-            margin: 0px;
+            margin: 0;
             overflow: hidden;
         }
     </style>
@@ -36,7 +36,7 @@
         var renderer = new THREE.WebGLRenderer();
         renderer.setClearColorHex(0xEEEEEE, 1.0);
         renderer.setSize(window.innerWidth, window.innerHeight);
-        //renderer.shadowMapEnabled = true;
+        renderer.shadowMapEnabled = true;
 
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(60,20);
