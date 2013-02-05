@@ -34,13 +34,14 @@
 
         // create a render and set the size
         var renderer = new THREE.WebGLRenderer();
+
         renderer.setClearColorHex(0xEEEEEE, 1.0);
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMapEnabled = true;
 
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(60,20);
-        var planeMaterial =    new THREE.MeshPhongMaterial({color: 0xffffff});
+        var planeGeometry = new THREE.PlaneGeometry(60,20,1,1);
+        var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});
         var plane = new THREE.Mesh(planeGeometry,planeMaterial);
         plane.receiveShadow  = true;
 
@@ -55,7 +56,7 @@
 
         // create a cube
         var cubeGeometry = new THREE.CubeGeometry(4,4,4);
-        var cubeMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
+        var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
         cube.castShadow = true;
 
@@ -68,7 +69,7 @@
         scene.add(cube);
 
         var sphereGeometry = new THREE.SphereGeometry(4,20,20);
-        var sphereMaterial = new THREE.MeshPhongMaterial({color: 0x7777ff});
+        var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
         var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
 
         // position the sphere
