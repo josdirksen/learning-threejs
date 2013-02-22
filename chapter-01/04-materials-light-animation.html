@@ -3,9 +3,10 @@
 <html>
 
 <head>
-    <title>Example 01.02 - First Scene</title>
+    <title>Example 01.03 - Materials and light</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="../libs/stats.js"></script>
     <style>
         body{
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -16,6 +17,8 @@
 </head>
 <body>
 
+<div id="Stats-output">
+</div>
 <!-- Div which will hold the Output -->
 <div id="WebGL-output">
 </div>
@@ -26,6 +29,8 @@
     // once everything is loaded, we run our Three.js stuff.
     $(function () {
 
+        var stats = initStats();
+
         // create a scene, that will hold all our elements such as objects, cameras and lights.
         var scene = new THREE.Scene();
 
@@ -35,17 +40,15 @@
         // create a render and set the size
         var renderer = new THREE.WebGLRenderer();
 
-        renderer.setClearColorHex(0xEEEEEE);
+        renderer.setClearColorHex(0xEEEEEE, 1.0);
         renderer.setSize(window.innerWidth, window.innerHeight);
-
-        var axes = new THREE.AxisHelper( 20 );
-        scene.add(axes);
+        renderer.shadowMapEnabled = true;
 
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(60,20);
-        var planeMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc});
+        var planeGeometry = new THREE.PlaneGeometry(60,20,1,1);
+        var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});
         var plane = new THREE.Mesh(planeGeometry,planeMaterial);
-
+        plane.receiveShadow  = true;
 
         // rotate and position the plane
         plane.rotation.x=-0.5*Math.PI;
@@ -58,9 +61,9 @@
 
         // create a cube
         var cubeGeometry = new THREE.CubeGeometry(4,4,4);
-        var cubeMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
+        var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-
+        cube.castShadow = true;
 
         // position the cube
         cube.position.x=-4;
@@ -71,14 +74,14 @@
         scene.add(cube);
 
         var sphereGeometry = new THREE.SphereGeometry(4,20,20);
-        var sphereMaterial = new THREE.MeshBasicMaterial({color: 0x7777ff, wireframe: true});
+        var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
         var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
 
         // position the sphere
         sphere.position.x=20;
-        sphere.position.y=4;
+        sphere.position.y=0;
         sphere.position.z=2;
-
+        sphere.castShadow=true;
 
         // add the sphere to the scene
         scene.add(sphere);
@@ -89,11 +92,55 @@
         camera.position.z = 30;
         camera.lookAt(scene.position);
 
+        // add subtle ambient lighting
+        var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+        scene.add(ambientLight);
+
+        // add spotlight for the shadows
+        var spotLight = new THREE.SpotLight( 0xffffff );
+        spotLight.position.set( -40, 60, -10 );
+        spotLight.castShadow = true;
+        scene.add( spotLight );
+
         // add the output of the renderer to the html element
         $("#WebGL-output").append(renderer.domElement);
 
-        // render the scene
-        renderer.render(scene, camera);
+        // call the render function
+        var step=0;
+        render();
+
+        function render() {
+            stats.update();
+            // rotate the cube around its axes
+            cube.rotation.x += 0.02;
+            cube.rotation.y += 0.02;
+            cube.rotation.z += 0.02;
+
+            // bounce the sphere up and down
+            step+=0.04;
+            sphere.position.x = 20+( 10*(Math.cos(step)));
+            sphere.position.y = 2 +( 10*Math.abs(Math.sin(step)));
+
+            // render using requestAnimationFrame
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        }
+
+        function initStats() {
+
+            var stats = new Stats();
+
+            stats.setMode(0); // 0: fps, 1: ms
+
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            $("#Stats-output").append( stats.domElement );
+
+            return stats;
+        }
     });
 
 
