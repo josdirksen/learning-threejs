@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 02.02 - Foggy Scene</title>
+    <title>Example 02.01 - Basic Scene</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
@@ -34,8 +34,6 @@
 
         // create a scene, that will hold all our elements such as objects, cameras and lights.
         var scene = new THREE.Scene();
-        //scene.fog=new THREE.FogExp2( 0xffffff, 0.015 );
-        scene.fog=new THREE.Fog( 0xffffff, 0.015, 100 );
 
         // create a camera, which defines where we're looking at.
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -74,7 +72,7 @@
 
         // add spotlight for the shadows
         var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( -40, 60, -10 );
+        spotLight.position.set( -40, 60, 020 );
         spotLight.castShadow = true;
         scene.add( spotLight );
 
@@ -85,64 +83,57 @@
         var step=0;
 
         var controls = new function() {
-            this.rotationSpeed = 0.02;
-            this.numberOfObjects = scene.children.length;
+            this.scaleX = 1;
+            this.scaleY = 1;
+            this.scaleZ = 1;
 
-            this.removeCube = function() {
-                var allChildren = scene.children;
-                var lastObject = allChildren[allChildren.length-1];
-                if (lastObject instanceof THREE.Mesh) {
-                    scene.remove(lastObject);
-                    this.numberOfObjects = scene.children.length;
-                }
-            }
+            this.positionX = 0;
+            this.positionY = 4;
+            this.positionZ = 0;
 
-            this.addCube = function() {
-
-                var cubeSize = Math.ceil((Math.random() * 3));
-                var cubeGeometry = new THREE.CubeGeometry(cubeSize,cubeSize,cubeSize);
-                var cubeMaterial = new THREE.MeshLambertMaterial({color:  Math.random() * 0xffffff });
-                var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-                cube.castShadow = true;
-
-                // position the cube randomly in the scene
-                cube.position.x=-30 + Math.round((Math.random() * planeGeometry.width));
-                cube.position.y= Math.round((Math.random() * 5));
-                cube.position.z=-20 + Math.round((Math.random() * planeGeometry.height));
-
-                // add the cube to the scene
-                scene.add(cube);
-                this.numberOfObjects = scene.children.length;
-            };
-
-            this.outputObjects = function() {
-                console.log(scene.children);
-            }
+            this.rotationX = 0;
+            this.rotationY = 0;
+            this.rotationZ = 0;
+            this.scale = 1;
         }
 
+        var material = new THREE.MeshLambertMaterial( {color: 0x44ff44 } );
+        var geom = new THREE.CubeGeometry(5,8,3);
+        var cube = new THREE.Mesh(geom,material);
+        cube.castShadow=true;
+        scene.add(cube);
+
+
         var gui = new dat.GUI();
-        gui.add(controls, 'rotationSpeed',0,0.5);
-        gui.add(controls, 'addCube');
-        gui.add(controls, 'removeCube');
-        gui.add(controls, 'outputObjects');
-        gui.add(controls, 'numberOfObjects').listen();
+        guiScale = gui.addFolder('scale');
+        guiScale.add(controls,'scaleX',0,5);
+        guiScale.add(controls,'scaleY',0,5);
+        guiScale.add(controls,'scaleZ',0,5);
+        guiPosition = gui.addFolder('position');
+        guiPosition.add(controls,'positionX',-10,10);
+        guiPosition.add(controls,'positionY',-4,20);
+        guiPosition.add(controls,'positionZ',-10,10);
+        guiRotation = gui.addFolder('rotation');
+        guiRotation.add(controls,'rotationX',-4,4);
+        guiRotation.add(controls,'rotationY',-4,4);
+        guiRotation.add(controls,'rotationZ',-4,4);
 
         render();
 
         function render() {
             stats.update();
 
-            // rotate the cubes around its axes
-            scene.traverse(function(e) {
-                if (e instanceof THREE.Mesh && e != plane ) {
-
-                    e.rotation.x+=controls.rotationSpeed;
-                    e.rotation.y+=controls.rotationSpeed;
-                    e.rotation.z+=controls.rotationSpeed;
-                }
-            });
-
             // render using requestAnimationFrame
+            cube.position.x=controls.positionX;
+            cube.position.y=controls.positionY;
+            cube.position.z=controls.positionZ;
+
+            cube.rotation.x=controls.rotationX;
+            cube.rotation.y=controls.rotationY;
+            cube.rotation.z=controls.rotationZ;
+
+            cube.scale.set(controls.scaleX,controls.scaleY,controls.scaleZ);
+
             requestAnimationFrame(render);
             renderer.render(scene, camera);
         }

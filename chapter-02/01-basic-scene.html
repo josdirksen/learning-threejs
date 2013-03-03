@@ -102,6 +102,8 @@
                 var cubeMaterial = new THREE.MeshLambertMaterial({color:  Math.random() * 0xffffff });
                 var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
                 cube.castShadow = true;
+                cube.name = "cube-" + scene.children.length;
+
 
                 // position the cube randomly in the scene
                 cube.position.x=-30 + Math.round((Math.random() * planeGeometry.width));

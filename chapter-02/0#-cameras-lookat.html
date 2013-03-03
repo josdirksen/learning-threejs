@@ -135,7 +135,7 @@
             step+=0.02;
             if (camera instanceof THREE.PerspectiveCamera) {
                 var y = 10+( 20*(Math.cos(step)));
-                camera.lookAt(new THREE.Vector3(0,ys,0));
+                camera.lookAt(new THREE.Vector3(0,y,0));
             } else {
                 var y = ((Math.cos(step)));
                 camera.lookAt(new THREE.Vector3(0,y,0));
