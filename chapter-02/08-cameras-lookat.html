@@ -76,6 +76,9 @@
             }
         }
 
+        var lookAtGeom = new THREE.SphereGeometry(2);
+        var lookAtMesh = new THREE.Mesh(lookAtGeom,new THREE.MeshLambertMaterial({color: 0xff0000}));
+        scene.add(lookAtMesh);
 
 
         var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.7 );
@@ -122,13 +125,28 @@
 
         // make sure that for the first time, the
         // camera is looking at the scene
-        camera.lookAt(scene.position);
+     //   camera.lookAt(scene.position);
         render();
+
+
+        var step=0;
 
         function render() {
 
             stats.update();
             // render using requestAnimationFrame
+            step+=0.02;
+            if (camera instanceof THREE.PerspectiveCamera) {
+                var x = 10+( 100*(Math.sin(step)));
+                camera.lookAt(new THREE.Vector3(x,10,0));
+                lookAtMesh.position=new THREE.Vector3(x,10,0);
+            } else {
+                var x = ((Math.cos(step)));
+                camera.lookAt(new THREE.Vector3(x,0,0));
+                lookAtMesh.position=new THREE.Vector3(x,10,0);
+            }
+
+//        .position.x = 20+( 10*(Math.cos(step)));
             requestAnimationFrame(render);
             renderer.render(scene, camera);
         }

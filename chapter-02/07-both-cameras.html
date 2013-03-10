@@ -99,7 +99,7 @@
             this.switchCamera = function() {
                 if (camera instanceof THREE.PerspectiveCamera) {
                     camera = new THREE.OrthographicCamera( window.innerWidth / - 16, window.innerWidth / 16, window.innerHeight / 16, window.innerHeight / - 16, -200, 500 );
-                    camera.position.x = 2;
+                    camera.position.x = 3;
                     camera.position.y = 1;
                     camera.position.z = 3;
                     camera.lookAt(scene.position);
@@ -122,26 +122,13 @@
 
         // make sure that for the first time, the
         // camera is looking at the scene
-     //   camera.lookAt(scene.position);
+        camera.lookAt(scene.position);
         render();
-
-
-        var step=0;
 
         function render() {
 
             stats.update();
             // render using requestAnimationFrame
-            step+=0.02;
-            if (camera instanceof THREE.PerspectiveCamera) {
-                var y = 10+( 20*(Math.cos(step)));
-                camera.lookAt(new THREE.Vector3(0,y,0));
-            } else {
-                var y = ((Math.cos(step)));
-                camera.lookAt(new THREE.Vector3(0,y,0));
-            }
-
-//        .position.x = 20+( 10*(Math.cos(step)));
             requestAnimationFrame(render);
             renderer.render(scene, camera);
         }

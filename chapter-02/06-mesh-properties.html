@@ -95,28 +95,69 @@
             this.rotationY = 0;
             this.rotationZ = 0;
             this.scale = 1;
+
+            this.translateX = 0;
+            this.translateY = 0;
+            this.translateZ = 0;
+
+            this.translate = function() {
+                cube.translateX(this.translateX);
+                cube.translateY(this.translateX);
+                cube.translateZ(this.translateX);
+
+                this.positionX = cube.position.x;
+                this.positionY = cube.position.y;
+                this.positionZ = cube.position.z;
+            }
         }
 
         var material = new THREE.MeshLambertMaterial( {color: 0x44ff44 } );
         var geom = new THREE.CubeGeometry(5,8,3);
         var cube = new THREE.Mesh(geom,material);
+        cube.position.y=4;
         cube.castShadow=true;
         scene.add(cube);
 
 
         var gui = new dat.GUI();
+
         guiScale = gui.addFolder('scale');
         guiScale.add(controls,'scaleX',0,5);
         guiScale.add(controls,'scaleY',0,5);
         guiScale.add(controls,'scaleZ',0,5);
+
         guiPosition = gui.addFolder('position');
-        guiPosition.add(controls,'positionX',-10,10);
-        guiPosition.add(controls,'positionY',-4,20);
-        guiPosition.add(controls,'positionZ',-10,10);
+        var contX = guiPosition.add(controls,'positionX',-10,10);
+        var contY = guiPosition.add(controls,'positionY',-4,20);
+        var contZ = guiPosition.add(controls,'positionZ',-10,10);
+
+        contX.listen();
+        contX.onChange(function(value) {
+            cube.position.x=controls.positionX;
+        });
+
+        contY.listen();
+        contY.onChange(function(value) {
+            cube.position.y=controls.positionY;
+        });
+
+        contZ.listen();
+        contZ.onChange(function(value) {
+            cube.position.z=controls.positionZ;
+        });
+
+
         guiRotation = gui.addFolder('rotation');
         guiRotation.add(controls,'rotationX',-4,4);
         guiRotation.add(controls,'rotationY',-4,4);
         guiRotation.add(controls,'rotationZ',-4,4);
+
+        guiTranslate = gui.addFolder('translate');
+
+        guiTranslate.add(controls,'translateX',-10,10);
+        guiTranslate.add(controls,'translateY',-10,10);
+        guiTranslate.add(controls,'translateZ',-10,10);
+        guiTranslate.add(controls,'translate');
 
         render();
 
@@ -124,15 +165,17 @@
             stats.update();
 
             // render using requestAnimationFrame
-            cube.position.x=controls.positionX;
-            cube.position.y=controls.positionY;
-            cube.position.z=controls.positionZ;
+
+
+
 
             cube.rotation.x=controls.rotationX;
             cube.rotation.y=controls.rotationY;
             cube.rotation.z=controls.rotationZ;
 
             cube.scale.set(controls.scaleX,controls.scaleY,controls.scaleZ);
+
+
 
             requestAnimationFrame(render);
             renderer.render(scene, camera);

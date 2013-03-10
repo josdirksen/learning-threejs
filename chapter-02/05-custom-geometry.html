@@ -62,9 +62,9 @@
 
         // position and point the camera to the center of the scene
         camera.position.x = -20;
-        camera.position.y = 35;
-        camera.position.z = 30;
-        camera.lookAt(scene.position);
+        camera.position.y = 25;
+        camera.position.z = 20;
+        camera.lookAt(new THREE.Vector3(5,0,0));
 
         // add subtle ambient lighting
 //        var ambientLight = new THREE.AmbientLight(0x494949);
@@ -105,7 +105,6 @@
         ];
 
         var geom = new THREE.Geometry();
-        geom.dynamic = true;
         geom.vertices = vertices;
         geom.faces = faces;
 
@@ -122,6 +121,8 @@
 
         var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,materials);
         mesh.children.forEach(function(e) {e.castShadow=true});
+//        mesh.children[0].translateX(0.5);
+//        mesh.children[0].translateZ(0.5);
 
         scene.add(mesh);
 
@@ -148,13 +149,35 @@
         controlPoints.push(addControl(0,0,3));
 
         var gui = new dat.GUI();
+        gui.add(new function() {
+            this.clone = function() {
+
+                var cloned = mesh.children[0].geometry.clone();
+                var materials = [
+                    new THREE.MeshLambertMaterial( { opacity:0.6, color: 0xff44ff, transparent:true } ),
+                    new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } )
+
+                ];
+
+                var mesh2 = THREE.SceneUtils.createMultiMaterialObject(cloned,materials);
+                mesh2.children.forEach(function(e) {e.castShadow=true});
+
+                mesh2.translateX(5);
+                mesh2.translateZ(5);
+                mesh2.name="clone";
+                scene.remove(scene.getChildByName("clone"));
+                scene.add(mesh2);
+
+
+            }
+        },'clone');
 
         for (var i = 0 ; i < 8 ; i++) {
 
             f1 = gui.addFolder('Vertices ' + (i+1));
-            f1.add(controlPoints[i], 'x',0,10);
-            f1.add(controlPoints[i], 'y',0,10);
-            f1.add(controlPoints[i], 'z',0,10);
+            f1.add(controlPoints[i], 'x',-10,10);
+            f1.add(controlPoints[i], 'y',-10,10);
+            f1.add(controlPoints[i], 'z',-10,10);
 
         }
 
