@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 03.04 - Directional Light</title>
+    <title>Example 03.08 - Directional Light</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
@@ -34,20 +34,29 @@ $(function () {
 
     // create a scene, that will hold all our elements such as objects, cameras and lights.
     var scene = new THREE.Scene();
+    scene.fog=new THREE.Fog( 0xaaaaaa, 0.010, 200 );
 
     // create a camera, which defines where we're looking at.
     var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
+
     // create a render and set the size
     var renderer = new THREE.WebGLRenderer();
 
-    renderer.setClearColorHex(0xEEEEEE, 1.0);
+    renderer.setClearColorHex(0xaaaaff, 1.0);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMapEnabled = true;
 
+
     // create the ground plane
-    var planeGeometry = new THREE.PlaneGeometry(60,20,1,1);
-    var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});
+    var textureGrass = THREE.ImageUtils.loadTexture( "../assets/textures/ground/grasslight-big.jpg" );
+    textureGrass.wrapS = THREE.RepeatWrapping;
+    textureGrass.wrapT = THREE.RepeatWrapping;
+    textureGrass.repeat.set(4,4);
+
+
+    var planeGeometry = new THREE.PlaneGeometry(1000,200,20,20);
+    var planeMaterial =    new THREE.MeshLambertMaterial({map: textureGrass});
     var plane = new THREE.Mesh(planeGeometry,planeMaterial);
     plane.receiveShadow  = true;
 
@@ -74,23 +83,23 @@ $(function () {
     // add the cube to the scene
     scene.add(cube);
 
-    var sphereGeometry = new THREE.SphereGeometry(4,20,20);
+    var sphereGeometry = new THREE.SphereGeometry(4,25,25);
     var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
     var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
 
     // position the sphere
-    sphere.position.x=20;
-    sphere.position.y=0;
-    sphere.position.z=2;
+    sphere.position.x=10;
+    sphere.position.y=5;
+    sphere.position.z=10;
     sphere.castShadow=true;
 
     // add the sphere to the scene
     scene.add(sphere);
 
     // position and point the camera to the center of the scene
-    camera.position.x = -35;
-    camera.position.y = 30;
-    camera.position.z = 25;
+    camera.position.x = -20;
+    camera.position.y = 15;
+    camera.position.z = 45;
     camera.lookAt(new THREE.Vector3(10,0,0));
 
     // add subtle ambient lighting
@@ -111,34 +120,26 @@ $(function () {
 
 
     var pointColor = "#ffffff";
-    var directionalLight = new THREE.DirectionalLight( pointColor);
-    directionalLight.position.set( -40, 60, -10 );
-    directionalLight.castShadow = true;
-    directionalLight.shadowCameraNear = 2;
-    directionalLight.shadowCameraFar = 200;
-    directionalLight.shadowCameraLeft=-100;
-    directionalLight.shadowCameraRight=100;
-    directionalLight.shadowCameraTop=100;
-    directionalLight.shadowCameraBottom=-100;
-    directionalLight.target=plane;
-    directionalLight.distance = 0;
-    directionalLight.intensity = 0.1;
-    directionalLight.shadowMapHeight=1024;
-    directionalLight.shadowMapWidth=1024;
+//    var spotLight = new THREE.SpotLight( pointColor);
+    var spotLight = new THREE.DirectionalLight( pointColor);
+    spotLight.position.set( 30, 10, -50 );
+    spotLight.castShadow = true;
+    spotLight.shadowCameraNear = 0.1;
+    spotLight.shadowCameraFar = 100;
+    spotLight.shadowCameraFov = 50;
+    spotLight.target=plane;
+    spotLight.distance = 0;
+    spotLight.shadowCameraNear = 2;
+    spotLight.shadowCameraFar = 200;
+    spotLight.shadowCameraLeft=-100;
+    spotLight.shadowCameraRight=100;
+    spotLight.shadowCameraTop=100;
+    spotLight.shadowCameraBottom=-100;
+    spotLight.shadowMapWidth=2048;
+    spotLight.shadowMapHeight=2048;
 
 
-    scene.add( directionalLight );
-
-
-
-    // add a small sphere simulating the pointlight
-    var sphereLight = new THREE.SphereGeometry(0.2);
-    var sphereLightMaterial = new THREE.MeshBasicMaterial({color: 0xac6c25});
-    var sphereLightMesh = new THREE.Mesh(sphereLight, sphereLightMaterial);
-    sphereLightMesh.castShadow = true;
-
-    sphereLightMesh.position = new THREE.Vector3(3,20,3);
-    scene.add(sphereLightMesh);
+    scene.add( spotLight );
 
 
     // add the output of the renderer to the html element
@@ -173,47 +174,53 @@ $(function () {
     });
 
     gui.addColor(controls, 'pointColor').onChange(function(e) {
-        directionalLight.color = new THREE.Color(e);
+        spotLight.color = new THREE.Color(e);
     });
 
     gui.add(controls, 'intensity',0,5).onChange(function(e) {
-        directionalLight.intensity = e;
+        spotLight.intensity = e;
     });
 
-    gui.add(controls, 'distance',0,200).onChange(function(e) {
-        directionalLight.distance = e;
-    });
 
-    gui.add(controls, 'debug').onChange(function(e) {
-        directionalLight.shadowCameraVisible=e;
-    });
+    var textureFlare0 = THREE.ImageUtils.loadTexture( "../assets/textures/lensflare/lensflare0.png" );
+    var textureFlare3 = THREE.ImageUtils.loadTexture( "../assets/textures/lensflare/lensflare3.png" );
 
-    gui.add(controls, 'castShadow').onChange(function(e) {
-        directionalLight.castShadow = e;
-    });
+    var flareColor = new THREE.Color( 0xffaacc );
+    var lensFlare = new THREE.LensFlare( textureFlare0, 350, 0.0, THREE.AdditiveBlending, flareColor );
 
-    gui.add(controls, 'onlyShadow').onChange(function(e) {
-        directionalLight.onlyShadow = e;
-    });
+    lensFlare.add( textureFlare3, 60, 0.6, THREE.AdditiveBlending );
+    lensFlare.add( textureFlare3, 70, 0.7, THREE.AdditiveBlending );
+    lensFlare.add( textureFlare3, 120, 0.9, THREE.AdditiveBlending );
+    lensFlare.add( textureFlare3, 70, 1.0, THREE.AdditiveBlending );
 
-    gui.add(controls, 'target', ['Plane','Sphere','Cube']).onChange(function(e) {
-        console.log(e);
-        switch(e) {
-            case "Plane":
-                directionalLight.target=plane;
-                break;
-            case "Sphere":
-                directionalLight.target=sphere;
-                break;
-            case "Cube":
-                directionalLight.target=cube;
-                break;
-        }
-
-    });
-
+    lensFlare.position = spotLight.position;
+    scene.add( lensFlare );
 
     render();
+
+    function lensFlareUpdateCallback( object ) {
+
+        var f, fl = object.lensFlares.length;
+        var flare;
+        var vecX = -object.positionScreen.x * 2;
+        var vecY = -object.positionScreen.y * 2;
+
+
+        for( f = 0; f < fl; f++ ) {
+
+            flare = object.lensFlares[ f ];
+
+            flare.x = object.positionScreen.x + vecX * flare.distance;
+            flare.y = object.positionScreen.y + vecY * flare.distance;
+
+            flare.rotation = 0;
+
+        }
+
+        object.lensFlares[ 2 ].y += 0.025;
+        object.lensFlares[ 3 ].rotation = object.positionScreen.x * 0.5 + THREE.Math.degToRad( 45 );
+
+    }
 
     function render() {
         stats.update();
@@ -227,27 +234,7 @@ $(function () {
         sphere.position.x = 20+( 10*(Math.cos(step)));
         sphere.position.y = 2 +( 10*Math.abs(Math.sin(step)));
 
-        // move the light simulation
-        if (phase > 2*Math.PI) {
-            invert = invert*-1;
-            phase-=2*Math.PI;
-        } else {
-            phase+=controls.rotationSpeed;
-        }
-        sphereLightMesh.position.z = +(7*(Math.sin(phase)));
-        sphereLightMesh.position.x = +(14*(Math.cos(phase)));
-
-        if (invert<0) {
-            var pivot = 14;
-            sphereLightMesh.position.x = (invert*(sphereLightMesh.position.x-pivot))+pivot;
-        }
-
-        directionalLight.position = sphereLightMesh.position;
-
-        // render using requestAnimationFrame
         requestAnimationFrame(render);
-
-
         renderer.render(scene, camera);
     }
 
