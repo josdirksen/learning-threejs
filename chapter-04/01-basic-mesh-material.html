@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 01.03 - Materials and light</title>
+    <title>Example 04.01 - MeshBasicMaterial</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
@@ -50,7 +50,7 @@
         renderer = webGLRenderer;
 
         var groundGeom = new THREE.PlaneGeometry(100,100,4,4);
-        var groundMesh = new THREE.Mesh(groundGeom,new THREE.MeshBasicMaterial({color: 0xff7755}));
+        var groundMesh = new THREE.Mesh(groundGeom,new THREE.MeshBasicMaterial({color: 0x777777}));
         groundMesh.rotation.x=-Math.PI/2;
         groundMesh.position.y=-20;
         scene.add(groundMesh);
@@ -63,6 +63,7 @@
 
 
         var meshMaterial = new THREE.MeshBasicMaterial({color: 0x7777ff});
+
         var sphere = new THREE.Mesh(sphereGeometry,meshMaterial);
         var cube = new THREE.Mesh(cubeGeometry,meshMaterial);
         var plane = new THREE.Mesh(planeGeometry,meshMaterial);

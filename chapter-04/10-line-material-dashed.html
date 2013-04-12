@@ -78,13 +78,9 @@
         });
 
         lines.colors = colors;
-//        var material = new THREE.LineBasicMaterial( { color: 0xffffff,
-//            opacity: 1.0,
-//            linewidth: 1,
-//            vertexColors: THREE.VertexColors } );
 
         lines.computeLineDistances();
-        var material = new THREE.LineDashedMaterial( { vertexColors: true, color: 0xffffff, dashSize: 10, gapSize: 1 } );
+        var material = new THREE.LineDashedMaterial( { vertexColors: true, color: 0xffffff, dashSize: 10, gapSize: 1, scale:0.1 } );
 
         var line = new THREE.Line(lines,material);
         line.position.set(25,-30,-60);
