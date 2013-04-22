@@ -50,7 +50,7 @@
 
 
 
-        scene.add( spotLight );
+
 
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
@@ -72,8 +72,6 @@
         spotLight.position = new THREE.Vector3(-70,70,70);
         spotLight.intensity = 1.7;
         spotLight.target=shape;
-
-        spotLight.shadowCameraVisible = true;
         scene.add(spotLight);
 
         // add the output of the renderer to the html element
