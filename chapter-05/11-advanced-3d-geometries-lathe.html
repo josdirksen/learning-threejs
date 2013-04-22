@@ -71,7 +71,7 @@
             this.phiStart = 0;
             this.phiLength = 2*Math.PI;
 
-            this.newPoints = function() {
+            this.redraw = function() {
                 scene.remove(spGroup);
                 scene.remove(latheMesh);
                 generatePoints(controls.segments, controls.phiStart, controls.phiLength);
@@ -79,9 +79,9 @@
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'segments',0,50).step(1).onChange(controls.newPoints);
-        gui.add(controls,'phiStart',0,2*Math.PI).onChange(controls.newPoints);
-        gui.add(controls,'phiLength',0,2*Math.PI).onChange(controls.newPoints);
+        gui.add(controls,'segments',0,50).step(1).onChange(controls.redraw);
+        gui.add(controls,'phiStart',0,2*Math.PI).onChange(controls.redraw);
+        gui.add(controls,'phiLength',0,2*Math.PI).onChange(controls.redraw);
 
 
         render();

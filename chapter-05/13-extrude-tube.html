@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 05.10 - Advanced 3D geometries - Convex Hull</title>
+    <title>Example 05.13 - Extrude TubeGeometry</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
@@ -59,40 +59,61 @@
         // the points group
         var spGroup;
         // the mesh
-        var hullMesh;
+        var tubeMesh;
 
-        generatePoints();
+
+
 
         // setup the control gui
         var controls = new function() {
+
+            this.numberOfPoints = 5;
+            this.segments = 64;
+            this.radius = 1;
+            this.radiusSegments = 8;
+            this.closed = false;
+            this.points = [];
             // we need the first child, since it's a multimaterial
+
+            this.newPoints = function () {
+                var points = [];
+                for (var i = 0 ; i < controls.numberOfPoints ; i++) {
+                    var randomX = -20 + Math.round(Math.random() * 50);
+                    var randomY = -15 + Math.round(Math.random() * 40);
+                    var randomZ = -20 + Math.round(Math.random() * 40);
+
+                    points.push(new THREE.Vector3(randomX,randomY,randomZ));
+                }
+                controls.points = points;
+                controls.redraw();
+            }
 
             this.redraw = function() {
                 scene.remove(spGroup);
-                scene.remove(hullMesh);
-                generatePoints();
-
+                scene.remove(tubeMesh);
+                generatePoints(controls.points, controls.segments, controls.radius, controls.radiusSegments, controls.closed);
             };
 
         }
 
         var gui = new dat.GUI();
         gui.add(controls,'newPoints');
+        gui.add(controls,'numberOfPoints',2,15).step(1).onChange(controls.newPoints);
+        gui.add(controls,'segments',0,200).step(1).onChange(controls.redraw);
+        gui.add(controls,'radius',0,10).onChange(controls.redraw);
+        gui.add(controls,'radiusSegments',0,100).step(1).onChange(controls.redraw);
+        gui.add(controls,'closed').onChange(controls.redraw);
+
+
+        controls.newPoints();
 
 
 
         render();
 
-        function generatePoints() {
-            // add 10 random spheres
-            var points = [];
-            for (var i = 0 ; i < 20 ; i++) {
-                var randomX = -15 + Math.round(Math.random() * 30);
-                var randomY = -15 + Math.round(Math.random() * 30);
-                var randomZ = -15 + Math.round(Math.random() * 30);
+        function generatePoints(points, segments, radius, radiusSegments, closed) {
+            // add n random spheres
 
-                points.push(new THREE.Vector3(randomX,randomY,randomZ));
-            }
 
             spGroup = new THREE.Object3D();
             var material = new THREE.MeshBasicMaterial({color: 0xff0000, transparent: false});
@@ -107,16 +128,17 @@
             scene.add(spGroup);
 
             // use the same points to create a convexgeometry
-            var hullGeometry = new THREE.ConvexGeometry(points);
-            hullMesh = createMesh(hullGeometry);
-            scene.add(hullMesh);
+            var tubeGeometry = new THREE.TubeGeometry(new THREE.SplineCurve3(points),segments,radius,radiusSegments,closed);
+            tubeMesh = createMesh(tubeGeometry);
+            scene.add(tubeMesh);
         }
 
         function createMesh(geom) {
 
             // assign two materials
+            //var meshMaterial = new THREE.MeshNormalMaterial();
             var meshMaterial = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, opacity:0.2});
-            meshMaterial.side = THREE.DoubleSide;
+
             var wireFrameMat = new THREE.MeshBasicMaterial();
             wireFrameMat.wireframe = true;
 
@@ -130,7 +152,7 @@
             stats.update();
 
             spGroup.rotation.y=step;
-            hullMesh.rotation.y=step+=0.01;
+            tubeMesh.rotation.y=step+=0.01;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);

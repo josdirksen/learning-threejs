@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var knot = createMesh(new THREE.TorusKnotGeometry(10,2));
+        var knot = createMesh(new THREE.TorusKnotGeometry(10,1));
         // add the sphere to the scene
         scene.add(knot);
 
@@ -65,7 +65,7 @@
         var controls = new function() {
             // we need the first child, since it's a multimaterial
             this.radius = knot.children[0].geometry.radius;
-            this.tube = knot.children[0].geometry.tube;
+            this.tube = 0.3;
             this.radialSegments = knot.children[0].geometry.radialSegments;
             this.tubularSegments = knot.children[0].geometry.tubularSegments;
             this.p = knot.children[0].geometry.p;
@@ -86,10 +86,10 @@
         var gui = new dat.GUI();
         gui.add(controls,'radius',0,40).onChange(controls.redraw);
         gui.add(controls,'tube',0,40).onChange(controls.redraw);
-        gui.add(controls,'radialSegments',0,200).onChange(controls.redraw);
-        gui.add(controls,'tubularSegments',1,20).onChange(controls.redraw);
-        gui.add(controls,'p',-5,5).onChange(controls.redraw);
-        gui.add(controls,'q',-5,5).onChange(controls.redraw);
+        gui.add(controls,'radialSegments',0,400).step(1).onChange(controls.redraw);
+        gui.add(controls,'tubularSegments',1,20).step(1).onChange(controls.redraw);
+        gui.add(controls,'p',1,10).step(1).onChange(controls.redraw);
+        gui.add(controls,'q',1,15).step(1).onChange(controls.redraw);
         gui.add(controls,'heightScale',0,5).onChange(controls.redraw);
 
 
@@ -99,13 +99,11 @@
         function createMesh(geom) {
 
             // assign two materials
-            var meshMaterial = new THREE.MeshNormalMaterial();
+            var meshMaterial = new THREE.MeshNormalMaterial({});
             meshMaterial.side = THREE.DoubleSide;
-            var wireFrameMat = new THREE.MeshBasicMaterial();
-            wireFrameMat.wireframe = true;
 
             // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial,wireFrameMat]);
+            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial]);
 
             return mesh;
         }
