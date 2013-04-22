@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 05.08 - Basic 3D geometries - Torus</title>
+    <title>Example 05.09 - Basic 3D geometries - Polyhedron</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
@@ -44,9 +44,9 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var torus = createMesh(new THREE.TorusGeometry(10,10));
+        var polyhedron = createMesh(new THREE.IcosahedronGeometry(10,0));
         // add the sphere to the scene
-        scene.add(torus);
+        scene.add(polyhedron);
 
         // position and point the camera to the center of the scene
         camera.position.x = -30;
@@ -64,30 +64,49 @@
         // setup the control gui
         var controls = new function() {
             // we need the first child, since it's a multimaterial
+            this.radius = 10;
+            this.detail = 0;
+            this.type = 'Icosahedron';
 
-            this.radius = torus.children[0].geometry.radius;
-            this.tube = torus.children[0].geometry.tube;
-            this.radialSegments = torus.children[0].geometry.radialSegments;
-            this.tubularSegments = torus.children[0].geometry.tubularSegments;
-            this.arc = torus.children[0].geometry.arc;
             
             this.redraw = function() {
                 // remove the old plane
-                scene.remove(torus);
+                scene.remove(polyhedron);
                 // create a new one
 
-                torus = createMesh(new THREE.TorusGeometry(controls.radius, controls.tube,Math.round(controls.radialSegments),Math.round(controls.tubularSegments),controls.arc));
+                switch (controls.type) {
+                    case 'Icosahedron':
+                        polyhedron = createMesh(new THREE.IcosahedronGeometry(controls.radius,controls.detail));
+                        break;
+                    case 'Tetrahedron':
+                        polyhedron = createMesh(new THREE.TetrahedronGeometry(controls.radius,controls.detail));
+                        break;
+                    case 'Octahedron':
+                        polyhedron = createMesh(new THREE.OctahedronGeometry(controls.radius,controls.detail));
+                        break;
+                    case 'Custom':
+                        var vertices = [
+                            [ 1,  0,  1 ], [ 1, 0, -1 ], [ -1, 0, -1 ], [ -1, 0, 1 ], [0, 1, 0]
+                        ];
+
+                        var faces = [
+                            [0,1,2,3],[0,1,4],[1,2,4],[2,3,4],[3,0,4]
+                        ];
+
+                        polyhedron = createMesh(new THREE.PolyhedronGeometry(vertices, faces, controls.radius, controls.detail));
+                        break;
+                }
+
                 // add it to the scene.
-                scene.add(torus);
+                scene.add(polyhedron);
             };
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'radius',0,40).onChange(controls.redraw);
-        gui.add(controls,'tube',0,40).onChange(controls.redraw);
-        gui.add(controls,'radialSegments',0,40).onChange(controls.redraw);
-        gui.add(controls,'tubularSegments',1,20).onChange(controls.redraw);
-        gui.add(controls,'arc',0,Math.PI*2).onChange(controls.redraw);
+        gui.add(controls,'radius',0,40).step(1).onChange(controls.redraw);
+        gui.add(controls,'detail',0,3).step(1).onChange(controls.redraw);
+        gui.add(controls,'type',['Icosahedron','Tetrahedron','Octahedron','Custom']).onChange(controls.redraw);
+
 
 
 
@@ -110,7 +129,7 @@
         function render() {
             stats.update();
 
-            torus.rotation.y=step+=0.01;
+            polyhedron.rotation.y=step+=0.01;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
