@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Example 05.16 - Text geometry</title>
+    <script type="text/javascript" src="../libs/three.js"></script>
+    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="../libs/stats.js"></script>
+    <script type="text/javascript" src="../libs/dat.gui.js"></script>
+    <script type="text/javascript" src="../assets/fonts/helvetiker_regular.typeface.js"></script>
+    <script type="text/javascript" src="../assets/fonts/helvetiker_bold.typeface.js"></script>
+    <script type="text/javascript" src="../assets/fonts/qumpellkano12_regular.typeface.js"></script>
+    <script type="text/javascript" src="../assets/fonts/chunkfive_roman.typeface.js"></script>
+    <script type="text/javascript" src="../assets/fonts/bubbleboy2_regular.typeface.js"></script>
+    <style>
+        body{
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="Stats-output">
+</div>
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+    // once everything is loaded, we run our Three.js stuff.
+    $(function () {
+
+        var stats = initStats();
+
+        // create a scene, that will hold all our elements such as objects, cameras and lights.
+        var scene = new THREE.Scene();
+
+        // create a camera, which defines where we're looking at.
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // create a render and set the size
+        var webGLRenderer = new THREE.WebGLRenderer();
+        webGLRenderer.setClearColorHex(0xEEEEEE, 1.0);
+        webGLRenderer.setSize(window.innerWidth, window.innerHeight);
+        webGLRenderer.shadowMapEnabled = true;
+
+        // position and point the camera to the center of the scene
+        camera.position.x = 100;
+        camera.position.y = 300;
+        camera.position.z = 600;
+        camera.lookAt(new THREE.Vector3(400,0,-300));
+
+        var spotLight = new THREE.SpotLight( 0xffffff );
+        spotLight.position = new THREE.Vector3(734,582,279);
+        spotLight.target.position.x=0;
+        spotLight.target.position.y=0;
+        spotLight.target.position.z=0;
+        spotLight.intensity =2.4;
+
+        scene.add(spotLight);
+
+        // add the output of the renderer to the html element
+        $("#WebGL-output").append(webGLRenderer.domElement);
+
+        // call the render function
+        var step=0;
+
+
+        var text1;
+        var text2;
+
+        var controls = new function() {
+
+            this.size = 90;
+            this.height = 90;
+            this.bevelThickness = 2;
+            this.bevelSize = 0.5;
+            this.bevelEnabled = true;
+            this.bevelSegments = 3;
+            this.bevelEnabled = true;
+            this.curveSegments = 12;
+            this.steps = 1;
+            this.font = "helvetiker";
+            this.weight = "normal";
+//            this.style = "italics";
+
+            this.asGeom = function() {
+                // remove the old plane
+                scene.remove(text1);
+                scene.remove(text2);
+                // create a new one
+
+                var options = {
+                    size: controls.size,
+                    height: controls.height,
+                    weight: controls.weight,
+                    font: controls.font,
+                    bevelThickness: controls.bevelThickness,
+                    bevelSize: controls.bevelSize,
+                    bevelSegments: controls.bevelSegments,
+                    bevelEnabled: controls.bevelEnabled,
+                    curveSegments: controls.curveSegments,
+                    steps:controls.steps
+                };
+
+                console.log(THREE.FontUtils.faces);
+
+                text1 = createMesh(new THREE.TextGeometry("Learning",options));
+                text1.position.z = -100;
+                text1.position.y = 100;
+                scene.add(text1);
+
+                text2 = createMesh(new THREE.TextGeometry("Three.js",options));
+                scene.add(text2);
+            };
+
+        }
+
+        controls.asGeom();
+
+        var gui = new dat.GUI();
+        gui.add(controls,'size',0,200).onChange(controls.asGeom);
+        gui.add(controls,'height',0,200).onChange(controls.asGeom);
+        gui.add(controls,'font',['bubbleboy2','chunkfive','helvetiker','qumpellkano12']).onChange(controls.asGeom);
+        gui.add(controls,'bevelThickness',0,10).onChange(controls.asGeom);
+        gui.add(controls,'bevelSize',0,10).onChange(controls.asGeom);
+        gui.add(controls,'bevelSegments',0,30).step(1).onChange(controls.asGeom);
+        gui.add(controls,'bevelEnabled').onChange(controls.asGeom);
+        gui.add(controls,'curveSegments',1,30).step(1).onChange(controls.asGeom);
+        gui.add(controls,'steps',1,5).step(1).onChange(controls.asGeom);
+
+
+
+
+        render();
+
+
+
+
+        function createMesh(geom) {
+
+            // assign two materials
+//            var meshMaterial = new THREE.MeshLambertMaterial({color: 0xff5555});
+//            var meshMaterial = new THREE.MeshNormalMaterial();
+            var meshMaterial = new THREE.MeshPhongMaterial({specular: 0xffffff, color: 0xff5555, shininess: 100, metal: true});
+//            meshMaterial.side=THREE.DoubleSide;
+            // create a multimaterial
+            var plane = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial]);
+
+            return plane;
+        }
+
+        function render() {
+            stats.update();
+            requestAnimationFrame(render);
+            webGLRenderer.render(scene, camera);
+        }
+
+        function initStats() {
+
+            var stats = new Stats();
+            stats.setMode(0); // 0: fps, 1: ms
+
+
+
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            $("#Stats-output").append( stats.domElement );
+
+            return stats;
+        }
+    });
+
+
+
+</script>
+</body>
+</html>
