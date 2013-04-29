@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 05.02 - Basic 2D geometries - Circle</title>
+    <title>Example 05.03 - Basic 2D geometries - Shape</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
@@ -166,10 +166,10 @@
 
         function createLine(shape, spaced) {
             if (!spaced) {
-                var mesh = new THREE.Line( shape.createPointsGeometry(), new THREE.LineBasicMaterial( { color: 0xff3333, linewidth: 2 } ) );
+                var mesh = new THREE.Line( shape.createPointsGeometry(10), new THREE.LineBasicMaterial( { color: 0xff3333, linewidth: 2 } ) );
                 return mesh;
             } else {
-                var mesh = new THREE.Line( shape.createSpacedPointsGeometry(20), new THREE.LineBasicMaterial( { color: 0xff3333, linewidth: 2 } ) );
+                var mesh = new THREE.Line( shape.createSpacedPointsGeometry(3), new THREE.LineBasicMaterial( { color: 0xff3333, linewidth: 2 } ) );
                 return mesh;
             }
 

@@ -10,9 +10,8 @@
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../assets/fonts/helvetiker_regular.typeface.js"></script>
     <script type="text/javascript" src="../assets/fonts/helvetiker_bold.typeface.js"></script>
-    <script type="text/javascript" src="../assets/fonts/qumpellkano12_regular.typeface.js"></script>
-    <script type="text/javascript" src="../assets/fonts/chunkfive_roman.typeface.js"></script>
-    <script type="text/javascript" src="../assets/fonts/bubbleboy2_regular.typeface.js"></script>
+    <script type="text/javascript" src="../assets/fonts/bitstream_vera_sans_mono_roman.typeface.js"></script>
+
     <style>
         body{
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -126,7 +125,7 @@
         var gui = new dat.GUI();
         gui.add(controls,'size',0,200).onChange(controls.asGeom);
         gui.add(controls,'height',0,200).onChange(controls.asGeom);
-        gui.add(controls,'font',['bubbleboy2','chunkfive','helvetiker','qumpellkano12']).onChange(controls.asGeom);
+        gui.add(controls,'font',['bitstream vera sans mono','helvetiker']).onChange(controls.asGeom);
         gui.add(controls,'bevelThickness',0,10).onChange(controls.asGeom);
         gui.add(controls,'bevelSize',0,10).onChange(controls.asGeom);
         gui.add(controls,'bevelSegments',0,30).step(1).onChange(controls.asGeom);
