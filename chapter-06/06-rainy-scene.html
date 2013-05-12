@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Example 06.06 - Particles - Rainy scene</title>
+    <script type="text/javascript" src="../libs/three.js"></script>
+    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="../libs/stats.js"></script>
+    <script type="text/javascript" src="../libs/dat.gui.js"></script>
+    <style>
+        body{
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+
+<div id="Stats-output">
+</div>
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+    // once everything is loaded, we run our Three.js stuff.
+    $(function () {
+
+        var stats = initStats();
+
+        // create a scene, that will hold all our elements such as objects, cameras and lights.
+        var scene = new THREE.Scene();
+
+        // create a camera, which defines where we're looking at.
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
+
+        // create a render and set the size
+        var webGLRenderer = new THREE.WebGLRenderer();
+        webGLRenderer.setClearColorHex(0x000000, 1.0);
+        webGLRenderer.setSize(window.innerWidth, window.innerHeight);
+
+        // position and point the camera to the center of the scene
+        camera.position.x = 20;
+        camera.position.y = 40;
+        camera.position.z = 110;
+        camera.lookAt(new THREE.Vector3(20,30,0));
+
+        // add the output of the renderer to the html element
+        $("#WebGL-output").append(webGLRenderer.domElement);
+
+        var system1;
+        var system2;
+
+        var controls = new function() {
+            this.size = 3;
+            this.transparent = true;
+            this.opacity = 0.6;
+            this.color = 0xffffff;
+
+            this.sizeAttenuation = true;
+
+            this.redraw = function() {
+                scene.remove(scene.getChildByName("particles1"));
+                scene.remove(scene.getChildByName("particles2"));
+
+                createParticles(controls.size, controls.transparent, controls.opacity, controls.sizeAttenuation, controls.color);
+            };
+        }
+
+        var gui = new dat.GUI();
+        gui.add(controls,'size',0,20).onChange(controls.redraw);
+        gui.add(controls,'transparent').onChange(controls.redraw);
+        gui.add(controls,'opacity',0,1).onChange(controls.redraw);
+        gui.addColor(controls,'color').onChange(controls.redraw);
+        gui.add(controls,'sizeAttenuation').onChange(controls.redraw);
+
+        controls.redraw();
+
+        render();
+
+
+        function createParticles(size,transparent,opacity,sizeAttenuation,color) {
+
+
+            var texture1 = THREE.ImageUtils.loadTexture("../assets/textures/particles/raindrop-1.png");
+            var texture2 = THREE.ImageUtils.loadTexture("../assets/textures/particles/raindrop-2.png");
+
+            var geom1 = new THREE.Geometry();
+            var geom2 = new THREE.Geometry();
+
+            var material1 = new THREE.ParticleBasicMaterial({
+                size: size,
+                transparent:transparent,
+                opacity:opacity,
+                map: texture1,
+                blending: THREE.AdditiveBlending,
+                sizeAttenuation: sizeAttenuation,
+                color:color});
+
+            var material2 = new THREE.ParticleBasicMaterial({
+                size: size,
+                transparent:transparent,
+                opacity:opacity,
+                map: texture2,
+                blending: THREE.AdditiveBlending,
+                sizeAttenuation: sizeAttenuation,
+                color:color});
+
+
+            var range = 40;
+//            for (var i = 0 ; i < 10000 ; i++) {
+//                var particle = new THREE.Vector3(Math.random()*range-range/2,Math.random()*range-range/2,Math.random()*range-range/2);
+//                geom1.vertices.push(particle);
+//            }
+
+            // y is from 0 to 60
+            // x is from -20 to 20
+            for (var i = 0 ; i < 1500 ; i++) {
+                var particle = new THREE.Vector3(
+                        Math.random()*range-range/2,
+                        Math.random()*range*1.5,
+                        Math.random()*range-range/2);
+                particle.velocityY = 0.1+Math.random()/5;
+                particle.velocityX = (Math.random()-0.5)/3;
+                geom2.vertices.push(particle);
+            }
+
+
+//            system1 = new THREE.ParticleSystem(geom1,material1);
+
+
+
+            system2 = new THREE.ParticleSystem(geom2,material2);
+
+//            system1.sortParticles = true;
+//            system1.name = "particles1";
+
+            system2.sortParticles = true;
+            system2.name = "particles2";
+
+//            scene.add(system1);
+            scene.add(system2);
+        }
+
+
+        var step = 0;
+        function render() {
+
+            stats.update();
+
+            var vertices = system2.geometry.vertices;
+            vertices.forEach(function(v) {
+                v.y= v.y-(v.velocityY);
+                v.x= v.x-(v.velocityX);
+
+                if (v.y <= 0) v.y = 60;
+                if (v.x <=-20 || v.x >= 20) v.velocityX = v.velocityX * -1;
+            });
+
+
+            requestAnimationFrame(render);
+            webGLRenderer.render(scene, camera);
+        }
+
+        function initStats() {
+
+            var stats = new Stats();
+            stats.setMode(0); // 0: fps, 1: ms
+
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            $("#Stats-output").append( stats.domElement );
+
+            return stats;
+        }
+
+
+    });
+
+
+
+</script>
+</body>
+</html>

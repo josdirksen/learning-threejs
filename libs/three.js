@@ -12032,7 +12032,7 @@ THREE.ParticleCanvasMaterial = function ( parameters ) {
 
 	THREE.Material.call( this );
 
-	this.color = new THREE.Color( 0xffffff );
+	this.color = new THREE.Color( 0xff0000 );
 	this.program = function ( context, color ) {};
 
 	this.setValues( parameters );
