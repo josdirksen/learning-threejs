@@ -3,8 +3,9 @@
 <html>
 
 <head>
-    <title>Example 07.01 - </title>
+    <title>Example 07.13 - Load pdb model </title>
     <script type="text/javascript" src="../libs/three.js"></script>
+    <script type="text/javascript" src="../libs/VTKLoader.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
@@ -40,24 +41,19 @@
 
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColorHex(0xEEEEEE, 1.0);
+        webGLRenderer.setClearColorHex(0x000, 1.0);
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var plane = createMesh(new THREE.PlaneGeometry(10,14,4,4));
-        // add the sphere to the scene
-        scene.add(plane);
-
         // position and point the camera to the center of the scene
-        camera.position.x = -20;
-        camera.position.y = 30;
-        camera.position.z = 40;
-        camera.lookAt(new THREE.Vector3(10,0,0));
-
+        camera.position.x = 10;
+        camera.position.y = 10;
+        camera.position.z = 10;
+        camera.lookAt(new THREE.Vector3(0,0,0));
 
         // add spotlight for the shadows
         var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( -40, 60, -10 );
+        spotLight.position.set( 20, 20, 20 );
         scene.add( spotLight );
 
         // add the output of the renderer to the html element
@@ -72,50 +68,33 @@
             // we need the first child, since it's a multimaterial
 
 
-            this.width = plane.children[0].geometry.width;
-            this.height = plane.children[0].geometry.height;
 
-            this.widthSegments = plane.children[0].geometry.widthSegments;
-            this.heightSegments = plane.children[0].geometry.heightSegments;
-
-            this.redraw = function() {
-                // remove the old plane
-                scene.remove(plane);
-                // create a new one
-                plane = createMesh(new THREE.PlaneGeometry(controls.width,controls.height,Math.round(controls.widthSegments),Math.round(controls.heightSegments)));
-                // add it to the scene.
-                scene.add(plane);
-            };
         }
 
+        var group;
         var gui = new dat.GUI();
-        gui.add(controls,'width',0,40).onChange(controls.redraw);
-        gui.add(controls,'height',0,40).onChange(controls.redraw);;
-        gui.add(controls,'widthSegments',0,10).onChange(controls.redraw);;
-        gui.add(controls,'heightSegments',0,10).onChange(controls.redraw);;
 
+
+        var loader = new THREE.VTKLoader();
+        var group = new THREE.Object3D();
+        loader.load( "../assets/models/moai_fixed.vtk", function ( geometry ) {
+            var mat = new THREE.MeshLambertMaterial({color:0xaaffaa});
+            group = new THREE.Mesh(geometry, mat);
+            group.scale.set(9,9,9);
+            scene.add(group);
+        } );
 
 
         render();
 
-        function createMesh(geom) {
-
-            // assign two materials
-            var meshMaterial = new THREE.MeshNormalMaterial();
-            meshMaterial.side = THREE.DoubleSide;
-            var wireFrameMat = new THREE.MeshBasicMaterial();
-            wireFrameMat.wireframe = true;
-
-            // create a multimaterial
-            var plane = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial,wireFrameMat]);
-
-            return plane;
-        }
 
         function render() {
             stats.update();
 
-            plane.rotation.y=step+=0.01;
+            if (group) {
+                group.rotation.y+=0.006;
+               // group.rotation.x+=0.006;
+            }
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);

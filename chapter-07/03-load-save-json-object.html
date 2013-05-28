@@ -80,7 +80,6 @@
                 // remove the old plane
                 scene.remove(knot);
                 // create a new one
-
                 knot = createMesh(new THREE.TorusKnotGeometry(controls.radius,controls.tube,Math.round(controls.radialSegments),Math.round(controls.tubularSegments),Math.round(controls.p),Math.round(controls.q),controls.heightScale));
                 // add it to the scene.
                 scene.add(knot);
@@ -89,7 +88,6 @@
             this.save = function() {
                 var exporter = new THREE.GeometryExporter();
                 var result = exporter.parse(knot.geometry);
-
                 localStorage.setItem("json",JSON.stringify(result));
             }
 
