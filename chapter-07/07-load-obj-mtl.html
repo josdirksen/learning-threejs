@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 07.05 - Load blender model </title>
+    <title>Example 07.07 - Load OBJ and MTL </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/OBJLoader.js"></script>
     <script type="text/javascript" src="../libs/MTLLoader.js"></script>
@@ -78,26 +78,13 @@
         var gui = new dat.GUI();
         var mesh;
 
-//        var loader = new THREE.OBJLoader();
         var loader = new THREE.OBJMTLLoader();
-
         loader.addEventListener( 'load', function ( event ) {
 
             var object = event.content;
 
-
-            var body = object.children[9];
-            console.log(body);
-          //  object.remove(body);
-
             var wing2 = object.children[5].children[0];
             var wing1 = object.children[4].children[0];
-
-//            object.remove(object.children[6]);
-//            object.remove(object.children[7]);
-//            object.remove(object.children[6]);
-
-
 
             wing1.material.alphaTest=0.5;
             wing1.material.opacity=0.6;
@@ -107,24 +94,15 @@
             wing2.material.opacity=0.7;
             wing2.material.transparent=true;
 
-
-            console.log(object);
             object.scale.set(140,140,140);
             mesh = object;
             scene.add(mesh);
 
             object.rotation.x=0.2;
             object.rotation.y=-1.3;
-
-
-          //  object.position.y = - 80;
-          //  scene.add( object );
-
         });
 
 
-        // MENTION THAT WE NEEDED TO CHANGE THE MTL FILE!!!
-//        loader.load( '../assets/models/butterfly.obj', function ( geometry ) {
         loader.load( '../assets/models/butterfly.obj','../assets/models/butterfly.mtl',{side: THREE.DoubleSide});
 
 //                function ( geometry ) {

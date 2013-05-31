@@ -3,11 +3,11 @@
 <html>
 
 <head>
-    <title>Example 07.05 - Load blender model </title>
+    <title>Example 07.06 - Load OBJ model </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/OBJLoader.js"></script>
-    <script type="text/javascript" src="../libs/MTLLoader.js"></script>
-    <script type="text/javascript" src="../libs/OBJMTLLoader.js"></script>
+
+
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
@@ -79,13 +79,7 @@
         var mesh;
 
         var loader = new THREE.OBJLoader();
-
-
         loader.load( '../assets/models/pinecone.obj', function ( geometry ) {
-//            console.log(geometry);
-            // we haven't loaded the material.
-            // so create a new material for this object
-            console.log(geometry);
             var material = new THREE.MeshLambertMaterial({color: 0x5C3A21});
 
             // geometry is a group of children. If a child has one additional child it's probably a mesh
@@ -101,7 +95,6 @@
             geometry.scale.set(100,100,100);
             geometry.rotation.x=-0.3;
             scene.add(geometry);
-
         });
 
 
