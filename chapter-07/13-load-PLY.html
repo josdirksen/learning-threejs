@@ -80,7 +80,8 @@
         loader.load( "../assets/models/test.ply", function ( geometry ) {
             var material = new THREE.ParticleBasicMaterial({
                 color: 0xffffff,
-                size: 0.3,
+                size: 0.4,
+                opacity: 0.6,
                 transparent: true,
                 blending: THREE.AdditiveBlending,
                 map: generateSprite()
@@ -88,6 +89,8 @@
 
             group = new THREE.ParticleSystem(geometry, material);
             group.sortParticles = true;
+
+            console.log(group);
             scene.add(group);
         } );
 
@@ -121,9 +124,26 @@
             stats.update();
 
             if (group) {
-                group.rotation.y+=0.006;
-                // group.rotation.x+=0.006;
+               // group.rotation.y+=0.006;
+                 group.rotation.y+=0.006;
+//                if (group.geometry) {
+//                    group.geometry.vertices.forEach(function(v) {
+////                        var scale = 1.001 + Math.random()/100;
+//                        var sMatrix = new THREE.Matrix3(1.001 + Math.random()/100,0,0,
+//                                0,1.001 + Math.random()/100,0,
+//                                0,0,1.001 + Math.random()/100);
+//                        v.applyMatrix3(sMatrix);
+//                    })
+//                }
+;
+
+
             }
+
+
+
+
+
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);

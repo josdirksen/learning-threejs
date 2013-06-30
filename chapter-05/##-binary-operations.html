@@ -45,7 +45,7 @@
 
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColorHex(0xEEEEEE, 1.0);
+        webGLRenderer.setClearColor(0x999999, 1.0);
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
@@ -160,22 +160,22 @@
             var sphere2BSP = new ThreeBSP(sphere2);
             var cube2BSP = new ThreeBSP(cube);
 
-            var substractBSP;
+            var resultBSP;
 
             // first do the sphere
             switch (controls.actionSphere) {
-                case "subtract": substractBSP = sphere1BSP.subtract(sphere2BSP);break;
-                case "intersect": substractBSP = sphere1BSP.intersect(sphere2BSP);break;
-                case "union": substractBSP = sphere1BSP.union(sphere2BSP);break;
+                case "subtract": resultBSP = sphere1BSP.subtract(sphere2BSP);break;
+                case "intersect": resultBSP = sphere1BSP.intersect(sphere2BSP);break;
+                case "union": resultBSP = sphere1BSP.union(sphere2BSP);break;
                 case "none": // noop;
             }
 
             // next do the cube
-            if (!substractBSP) substractBSP = sphere1BSP;
+            if (!resultBSP) resultBSP = sphere1BSP;
             switch (controls.actionCube) {
-                case "subtract": substractBSP = substractBSP.subtract(cube2BSP);break;
-                case "intersect": substractBSP = substractBSP.intersect(cube2BSP);break;
-                case "union": substractBSP = substractBSP.union(cube2BSP);break;
+                case "subtract": resultBSP = resultBSP.subtract(cube2BSP);break;
+                case "intersect": resultBSP = resultBSP.intersect(cube2BSP);break;
+                case "union": resultBSP = resultBSP.union(cube2BSP);break;
                 case "none": // noop;
             }
 
@@ -183,7 +183,7 @@
             if (controls.actionCube == "none" && controls.actionSphere == "none") {
                 // do nothing
             } else {
-                result = substractBSP.toMesh();
+                result = resultBSP.toMesh();
                 result.geometry.computeVertexNormals();
                 scene.add(result);
             }

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Example 07.05 - Load blender model </title>
+    <script type="text/javascript" src="../libs/three.js"></script>
+    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="../libs/stats.js"></script>
+    <script type="text/javascript" src="../libs/dat.gui.js"></script>
+    <style>
+        body{
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="Stats-output">
+</div>
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+    // once everything is loaded, we run our Three.js stuff.
+    $(function () {
+
+        var stats = initStats();
+
+        // create a scene, that will hold all our elements such as objects, cameras and lights.
+        var scene = new THREE.Scene();
+
+        // create a camera, which defines where we're looking at.
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        // create a render and set the size
+        var webGLRenderer = new THREE.WebGLRenderer();
+        webGLRenderer.setClearColorHex(0xEEEEEE, 1.0);
+        webGLRenderer.setSize(window.innerWidth, window.innerHeight);
+        webGLRenderer.shadowMapEnabled = true;
+
+        // position and point the camera to the center of the scene
+        camera.position.x = 0;
+        camera.position.y = 0;
+        camera.position.z = 10;
+        camera.lookAt(new THREE.Vector3(0,0,0));
+
+
+        // add spotlight for the shadows
+        var spotLight = new THREE.SpotLight( 0xffffff );
+        spotLight.position.set( 0, 50, 30 );
+        spotLight.intensity = 2;
+        scene.add( spotLight );
+
+        // add the output of the renderer to the html element
+        $("#WebGL-output").append(webGLRenderer.domElement);
+
+        // call the render function
+        var step=0;
+
+
+        // setup the control gui
+        var controls = new function() {
+            // we need the first child, since it's a multimaterial
+
+
+
+        }
+
+        var gui = new dat.GUI();
+        var mesh;
+        var clock = new THREE.Clock();
+
+        var loader = new THREE.JSONLoader();
+        loader.load( '../assets/models/alien.js', function ( geometry, mat ) {
+//            loader.load( '../assets/models/buffalo.js', function ( geometry, mat ) {
+
+             console.log(geometry);
+
+            var uv3 = geometry.faceVertexUvs[0][1984];
+            var uv4 = geometry.faceVertexUvs[0][1985];
+
+            // fill in the missing ones
+            for (var j = 0 ; j < 1984 ; j++) {
+                if (geometry.faces[j] instanceof THREE.Face4 ) {
+                    geometry.faceVertexUvs[0][j]=uv4;
+                } else {
+                    geometry.faceVertexUvs[0][j]=uv4;
+                }
+            }
+
+            // correct the ones where 3 vertices are listed but four are needed
+            // and vice versa
+            for (var j = 0 ; j < geometry.faces.length ; j++) {
+                if (geometry.faces[j] instanceof THREE.Face4) {
+                    if (geometry.faceVertexUvs[0][j].length == 3) {
+                        geometry.faceVertexUvs[0][j] = uv4;
+                    }
+
+                }  else {
+                    if (geometry.faceVertexUvs[0][j].length == 4) {
+                        geometry.faceVertexUvs[0][j] = uv3;
+                    }
+                }
+            }
+
+            THREE.AnimationHandler.add( geometry.animation );
+            geometry.computeMorphNormals();
+            geometry.computeFaceNormals();
+
+//            var mat2 = new THREE.MeshBasicMaterial();
+//            mat[0]=mat2;
+//            mat[1]=mat2;
+//            mat[2]=mat2;
+
+
+            console.log(mat[1]);
+
+            mat[0].skinning=true;
+
+            var test = new THREE.MeshLambertMaterial();
+            test.skinning=true;
+
+            mesh = new THREE.SkinnedMesh( geometry,
+                    test,false);
+
+            console.log(mesh);
+            //var group = geometry.geometryGroups[0];
+            //geometry.geometryGroups=[group];
+           // mesh.scale.set(4.11,4.11,4.11);
+            scene.add(mesh);
+
+//
+           var animation = new THREE.Animation( mesh, "ArmatureAction", THREE.AnimationHandler.CATMULLROM );
+//                var animation = new THREE.Animation( mesh, "take_001" );
+
+            animation.play();
+            //webGLRenderer.initWebGLObjects(scene);
+
+        },'../assets/models' );
+
+
+
+        render();
+
+
+        function render() {
+            stats.update();
+
+
+            var delta = clock.getDelta();
+            if (mesh) {
+            //    mesh.rotation.y+=0.01;
+                THREE.AnimationHandler.update(delta);
+
+            }
+
+
+            // render using requestAnimationFrame
+            requestAnimationFrame(render);
+            webGLRenderer.render(scene, camera);
+        }
+
+        function initStats() {
+
+            var stats = new Stats();
+            stats.setMode(0); // 0: fps, 1: ms
+
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            $("#Stats-output").append( stats.domElement );
+
+            return stats;
+        }
+    });
+
+
+
+</script>
+</body>
+</html>

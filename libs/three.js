@@ -21187,8 +21187,6 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 				uv = obj_uvs[ fi ];
 
-				if ( uv === undefined ) continue;
-
 				for ( i = 0; i < 4; i ++ ) {
 
 					uvi = uv[ i ];
@@ -23197,7 +23195,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 				material = object.material;
 
 				if ( geometry.geometryGroups === undefined ) {
-
+                    // TODO: Hier gaat het fout
 					sortFacesByMaterial( geometry, material );
 
 				}
@@ -23360,7 +23358,6 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 		} else if ( object instanceof THREE.Mesh ) {
 
-			// check all geometry groups
 
 			for( var i = 0, il = geometry.geometryGroupsList.length; i < il; i ++ ) {
 
@@ -30076,9 +30073,9 @@ THREE.AnimationHandler = (function() {
 
 	that.update = function( deltaTimeMS ) {
 
+
 		for( var i = 0; i < playing.length; i ++ )
 			playing[ i ].update( deltaTimeMS );
-
 	};
 
 
@@ -30432,10 +30429,11 @@ THREE.Animation.prototype.stop = function() {
 
 THREE.Animation.prototype.update = function ( deltaTimeMS ) {
 
+
+
 	// early out
 
 	if ( this.isPlaying === false ) return;
-
 
 	// vars
 
