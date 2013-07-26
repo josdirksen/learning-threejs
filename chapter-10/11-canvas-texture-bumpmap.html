@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Example 10.01 - Basic textures</title>
+    <script type="text/javascript" src="../libs/three.js"></script>
+    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="../libs/stats.js"></script>
+    <script type="text/javascript" src="../libs/dat.gui.js"></script>
+    <script type="text/javascript" src="../libs/perlin.js"></script>
+    <style>
+        body{
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<div id="Stats-output">
+</div>
+
+<!-- Div which will hold the Output -->
+<div id="canvas-output" style="float:left">
+
+</div>
+
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+    var canvas = document.createElement("canvas");
+    canvas.setAttribute("width", 256);
+    canvas.setAttribute("height", 256);
+    canvas.setAttribute("style", "position: absolute; x:0; y:0; bottom: 0px");
+
+    $('#canvas-output')[0].appendChild(canvas);
+    var ctx = canvas.getContext("2d");
+    var date = new Date();
+    var pn = new Perlin('rnd' + date.getTime());
+
+
+    fillWithPerlin(pn,ctx);
+
+    function fillWithPerlin(perlin, ctx) {
+
+        for (var x = 0 ; x < 512 ; x++) {
+            for (var y = 0 ; y < 512 ; y++) {
+                var base = new THREE.Color(0xffffff);
+                var value = perlin.noise(x/10, y/10, 0);
+                base.multiplyScalar(value);
+                ctx.fillStyle="#" + base.getHexString();
+                ctx.fillRect(x,y,1,1);
+            }
+        }
+    }
+
+
+
+    // once everything is loaded, we run our Three.js stuff.
+    $(function () {
+
+        var stats = initStats();
+
+        // create a scene, that will hold all our elements such as objects, cameras and lights.
+        var scene = new THREE.Scene();
+
+        // create a camera, which defines where we're looking at.
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+        // create a render and set the size
+        var webGLRenderer = new THREE.WebGLRenderer();
+        webGLRenderer.setClearColorHex(0xEEEEEE, 1.0);
+        webGLRenderer.setSize(window.innerWidth, window.innerHeight);
+        webGLRenderer.shadowMapEnabled = true;
+
+
+
+        var cube = createMesh(new THREE.CubeGeometry(12,12,12),"floor-wood.jpg");
+        cube.position.x=3;
+        scene.add(cube);
+
+
+        // position and point the camera to the center of the scene
+        camera.position.x = 00;
+        camera.position.y = 12;
+        camera.position.z = 28;
+        camera.lookAt(new THREE.Vector3(0,0,0));
+
+        var ambiLight = new THREE.AmbientLight(0x141414)
+        scene.add(ambiLight);
+
+        var light = new THREE.DirectionalLight();
+        light.position.set(0,30,20);
+        scene.add(light);
+
+        // add the output of the renderer to the html element
+        $("#WebGL-output").append(webGLRenderer.domElement);
+
+        // call the render function
+        var step=0;
+
+//        var polyhedron = createMesh(new THREE.PolyhedronGeometry(vertices, faces, controls.radius, controls.detail));
+
+        // setup the control gui
+        var controls = new function() {
+            this.bumpScale = cube.material.bumpScale;
+            this.regenerateMap = function() {
+                var date = new Date();
+                pn = new Perlin('rnd' + date.getTime());
+                fillWithPerlin(pn,ctx);
+                cube.material.bumpMap.needsUpdate = true;
+            };
+
+            this.updateScale = function() {
+                cube.material.bumpScale = controls.bumpScale;
+            }
+        };
+
+
+        var gui = new dat.GUI();
+        gui.add(controls,"regenerateMap");
+        gui.add(controls,"bumpScale",-2,2).onChange(controls.updateScale);
+
+
+
+        render();
+
+        function createMesh(geom, texture) {
+            var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + texture)
+            var bumpMap = new THREE.Texture(canvas);
+
+            geom.computeVertexNormals();
+            var mat = new THREE.MeshPhongMaterial();
+            mat.color = new THREE.Color(0x77ff77);
+            mat.bumpMap = bumpMap;
+            bumpMap.needsUpdate = true;
+
+            // create a multimaterial
+            var mesh = new THREE.Mesh(geom,mat);
+            return mesh;
+        }
+
+        function render() {
+            stats.update();
+
+            cube.rotation.y+=0.01;
+            cube.rotation.x+=0.01;
+
+
+            // render using requestAnimationFrame
+            requestAnimationFrame(render);
+            webGLRenderer.render(scene, camera);
+        }
+
+        function initStats() {
+
+            var stats = new Stats();
+            stats.setMode(0); // 0: fps, 1: ms
+
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            $("#Stats-output").append( stats.domElement );
+
+            return stats;
+        }
+    });
+
+
+
+</script>
+
+<!--var canvas2  = new fabric.Canvas('c2', { backgroundColor: "#000", renderOnAddition: false }),-->
+<!--results2 = document.getElementById('results-c2');-->
+
+<!--startTimer();-->
+<!--for (i = 1000; i >= 0; i--) {-->
+<!--dot = new fabric.Circle({-->
+<!--left:   getRandomInt(0, 400),-->
+<!--top:    getRandomInt(0, 350),-->
+<!--radius: 3,-->
+<!--fill:   rainbow[getRandomInt(0, rainbowEnd)]-->
+<!--});-->
+<!--canvas2.add(dot);-->
+<!--}-->
+<!--canvas2.renderAll(); // Note, calling renderAll() is important in this case-->
+<!--results2.innerHTML = 'Rendering 1000 elements using canvas.renderOnAddition = false in ' + stopTimer() + 'ms';-->
+
+
+<!--value = pn.noise(x, y, 0);-->
+</body>
+</html>
