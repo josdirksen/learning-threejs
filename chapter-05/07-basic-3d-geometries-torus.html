@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var torus = createMesh(new THREE.TorusGeometry(10,10));
+        var torus = createMesh(new THREE.TorusGeometry(10, 10));
         // add the sphere to the scene
         scene.add(torus);
 
@@ -52,17 +52,17 @@
         camera.position.x = -30;
         camera.position.y = 40;
         camera.position.z = 50;
-        camera.lookAt(new THREE.Vector3(10,0,0));
+        camera.lookAt(new THREE.Vector3(10, 0, 0));
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
 
             this.radius = torus.children[0].geometry.radius;
@@ -70,25 +70,24 @@
             this.radialSegments = torus.children[0].geometry.radialSegments;
             this.tubularSegments = torus.children[0].geometry.tubularSegments;
             this.arc = torus.children[0].geometry.arc;
-            
-            this.redraw = function() {
+
+            this.redraw = function () {
                 // remove the old plane
                 scene.remove(torus);
                 // create a new one
 
-                torus = createMesh(new THREE.TorusGeometry(controls.radius, controls.tube,Math.round(controls.radialSegments),Math.round(controls.tubularSegments),controls.arc));
+                torus = createMesh(new THREE.TorusGeometry(controls.radius, controls.tube, Math.round(controls.radialSegments), Math.round(controls.tubularSegments), controls.arc));
                 // add it to the scene.
                 scene.add(torus);
             };
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'radius',0,40).onChange(controls.redraw);
-        gui.add(controls,'tube',0,40).onChange(controls.redraw);
-        gui.add(controls,'radialSegments',0,40).onChange(controls.redraw);
-        gui.add(controls,'tubularSegments',1,20).onChange(controls.redraw);
-        gui.add(controls,'arc',0,Math.PI*2).onChange(controls.redraw);
-
+        gui.add(controls, 'radius', 0, 40).onChange(controls.redraw);
+        gui.add(controls, 'tube', 0, 40).onChange(controls.redraw);
+        gui.add(controls, 'radialSegments', 0, 40).onChange(controls.redraw);
+        gui.add(controls, 'tubularSegments', 1, 20).onChange(controls.redraw);
+        gui.add(controls, 'arc', 0, Math.PI * 2).onChange(controls.redraw);
 
 
         render();
@@ -102,7 +101,7 @@
             wireFrameMat.wireframe = true;
 
             // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial,wireFrameMat]);
+            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial, wireFrameMat]);
 
             return mesh;
         }
@@ -110,7 +109,7 @@
         function render() {
             stats.update();
 
-            torus.rotation.y=step+=0.01;
+            torus.rotation.y = step += 0.01;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -127,12 +126,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

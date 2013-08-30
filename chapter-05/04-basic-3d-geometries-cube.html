@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var cube = createMesh(new THREE.CubeGeometry(10,10,10));
+        var cube = createMesh(new THREE.CubeGeometry(10, 10, 10));
         // add the sphere to the scene
         scene.add(cube);
 
@@ -52,26 +52,26 @@
         camera.position.x = -20;
         camera.position.y = 30;
         camera.position.z = 40;
-        camera.lookAt(new THREE.Vector3(10,0,0));
+        camera.lookAt(new THREE.Vector3(10, 0, 0));
 
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( -40, 60, -10 );
-        scene.add( spotLight );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 60, -10);
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
 
             console.log(cube.children[0].geometry);
-            
+
             // we need the first child, since it's a multimaterial
             this.width = cube.children[0].geometry.width;
             this.height = cube.children[0].geometry.height;
@@ -82,23 +82,28 @@
             this.depthSegments = cube.children[0].geometry.depthSegments;
 
 
-            this.redraw = function() {
+            this.redraw = function () {
                 // remove the old plane
                 scene.remove(cube);
                 // create a new one
-                cube = createMesh(new THREE.CubeGeometry(controls.width,controls.height,controls.depth,Math.round(controls.widthSegments), Math.round(controls.heightSegments), Math.round(controls.depthSegments)));
+                cube = createMesh(new THREE.CubeGeometry(controls.width, controls.height, controls.depth, Math.round(controls.widthSegments), Math.round(controls.heightSegments), Math.round(controls.depthSegments)));
                 // add it to the scene.
                 scene.add(cube);
             };
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'width',0,40).onChange(controls.redraw);
-        gui.add(controls,'height',0,40).onChange(controls.redraw);;
-        gui.add(controls,'depth',0,40).onChange(controls.redraw);;
-        gui.add(controls,'widthSegments',0,10).onChange(controls.redraw);;
-        gui.add(controls,'heightSegments',0,10).onChange(controls.redraw);;
-        gui.add(controls,'depthSegments',0,10).onChange(controls.redraw);;
+        gui.add(controls, 'width', 0, 40).onChange(controls.redraw);
+        gui.add(controls, 'height', 0, 40).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'depth', 0, 40).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'widthSegments', 0, 10).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'heightSegments', 0, 10).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'depthSegments', 0, 10).onChange(controls.redraw);
+        ;
 
         render();
 
@@ -111,7 +116,7 @@
             wireFrameMat.wireframe = true;
 
             // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial,wireFrameMat]);
+            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial, wireFrameMat]);
 
             return mesh;
         }
@@ -119,7 +124,7 @@
         function render() {
             stats.update();
 
-            cube.rotation.y=step+=0.01;
+            cube.rotation.y = step += 0.01;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -136,12 +141,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

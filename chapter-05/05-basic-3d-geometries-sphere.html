@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var sphere = createMesh(new THREE.SphereGeometry(4,10,10));
+        var sphere = createMesh(new THREE.SphereGeometry(4, 10, 10));
         // add the sphere to the scene
         scene.add(sphere);
 
@@ -52,18 +52,18 @@
         camera.position.x = -20;
         camera.position.y = 30;
         camera.position.z = 40;
-        camera.lookAt(new THREE.Vector3(10,0,0));
+        camera.lookAt(new THREE.Vector3(10, 0, 0));
 
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
             this.radius = sphere.children[0].geometry.radius;
             this.widthSegments = sphere.children[0].geometry.widthSegments;
@@ -71,28 +71,31 @@
             this.phiStart = 0;
             this.phiLength = Math.PI * 2;
             this.thetaStart = 0;
-            this.thetaLength =  Math.PI;
+            this.thetaLength = Math.PI;
 
 
-            this.redraw = function() {
+            this.redraw = function () {
                 // remove the old plane
                 scene.remove(sphere);
                 // create a new one
-                sphere = createMesh(new THREE.SphereGeometry(controls.radius,controls.widthSegments,controls.heightSegments, controls.phiStart, controls.phiLength, controls.thetaStart, controls.thetaLength));
+                sphere = createMesh(new THREE.SphereGeometry(controls.radius, controls.widthSegments, controls.heightSegments, controls.phiStart, controls.phiLength, controls.thetaStart, controls.thetaLength));
                 // add it to the scene.
                 scene.add(sphere);
             };
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'radius',0,40).onChange(controls.redraw);
-        gui.add(controls,'widthSegments',0,20).onChange(controls.redraw);;
-        gui.add(controls,'heightSegments',0,20).onChange(controls.redraw);;
-        gui.add(controls,'phiStart',0,2*Math.PI).onChange(controls.redraw);;
-        gui.add(controls,'phiLength',0,2*Math.PI).onChange(controls.redraw);
-        gui.add(controls,'thetaStart',0,2*Math.PI).onChange(controls.redraw);;
-        gui.add(controls,'thetaLength',0,2*Math.PI).onChange(controls.redraw);
-
+        gui.add(controls, 'radius', 0, 40).onChange(controls.redraw);
+        gui.add(controls, 'widthSegments', 0, 20).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'heightSegments', 0, 20).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'phiStart', 0, 2 * Math.PI).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'phiLength', 0, 2 * Math.PI).onChange(controls.redraw);
+        gui.add(controls, 'thetaStart', 0, 2 * Math.PI).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'thetaLength', 0, 2 * Math.PI).onChange(controls.redraw);
 
 
         render();
@@ -106,7 +109,7 @@
             wireFrameMat.wireframe = true;
 
             // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial,wireFrameMat]);
+            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial, wireFrameMat]);
 
             return mesh;
         }
@@ -114,7 +117,7 @@
         function render() {
             stats.update();
 
-            sphere.rotation.y=step+=0.01;
+            sphere.rotation.y = step += 0.01;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -131,12 +134,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

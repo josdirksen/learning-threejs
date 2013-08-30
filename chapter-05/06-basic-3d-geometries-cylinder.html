@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var cylinder = createMesh(new THREE.CylinderGeometry(20,20,20));
+        var cylinder = createMesh(new THREE.CylinderGeometry(20, 20, 20));
         // add the sphere to the scene
         scene.add(cylinder);
 
@@ -52,17 +52,17 @@
         camera.position.x = -30;
         camera.position.y = 40;
         camera.position.z = 50;
-        camera.lookAt(new THREE.Vector3(10,0,0));
+        camera.lookAt(new THREE.Vector3(10, 0, 0));
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
 
             this.radiusTop = 20;
@@ -74,25 +74,24 @@
 
             this.openEnded = false;
 
-            this.redraw = function() {
+            this.redraw = function () {
                 // remove the old plane
                 scene.remove(cylinder);
                 // create a new one
 
-                cylinder = createMesh(new THREE.CylinderGeometry(controls.radiusTop,controls.radiusBottom,controls.height,controls.segmentsX,controls.segmentsY,controls.openEnded));
+                cylinder = createMesh(new THREE.CylinderGeometry(controls.radiusTop, controls.radiusBottom, controls.height, controls.segmentsX, controls.segmentsY, controls.openEnded));
                 // add it to the scene.
                 scene.add(cylinder);
             };
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'radiusTop',-40,40).onChange(controls.redraw);
-        gui.add(controls,'radiusBottom',-40,40).onChange(controls.redraw);
-        gui.add(controls,'height',0,40).onChange(controls.redraw);
-        gui.add(controls,'segmentsX',1,20).step(1).onChange(controls.redraw);
-        gui.add(controls,'segmentsY',1,20).step(1).onChange(controls.redraw);
-        gui.add(controls,'openEnded').onChange(controls.redraw);
-
+        gui.add(controls, 'radiusTop', -40, 40).onChange(controls.redraw);
+        gui.add(controls, 'radiusBottom', -40, 40).onChange(controls.redraw);
+        gui.add(controls, 'height', 0, 40).onChange(controls.redraw);
+        gui.add(controls, 'segmentsX', 1, 20).step(1).onChange(controls.redraw);
+        gui.add(controls, 'segmentsY', 1, 20).step(1).onChange(controls.redraw);
+        gui.add(controls, 'openEnded').onChange(controls.redraw);
 
 
         render();
@@ -106,7 +105,7 @@
             wireFrameMat.wireframe = true;
 
             // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial,wireFrameMat]);
+            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial, wireFrameMat]);
 
             return mesh;
         }
@@ -114,7 +113,7 @@
         function render() {
             stats.update();
 
-            cylinder.rotation.y=step+=0.01;
+            cylinder.rotation.y = step += 0.01;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -131,12 +130,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

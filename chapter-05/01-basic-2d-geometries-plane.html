@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var plane = createMesh(new THREE.PlaneGeometry(10,14,4,4));
+        var plane = createMesh(new THREE.PlaneGeometry(10, 14, 4, 4));
         // add the sphere to the scene
         scene.add(plane);
 
@@ -52,23 +52,23 @@
         camera.position.x = -20;
         camera.position.y = 30;
         camera.position.z = 40;
-        camera.lookAt(new THREE.Vector3(10,0,0));
+        camera.lookAt(new THREE.Vector3(10, 0, 0));
 
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( -40, 60, -10 );
-        scene.add( spotLight );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 60, -10);
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
 
 
@@ -78,22 +78,24 @@
             this.widthSegments = plane.children[0].geometry.widthSegments;
             this.heightSegments = plane.children[0].geometry.heightSegments;
 
-            this.redraw = function() {
+            this.redraw = function () {
                 // remove the old plane
                 scene.remove(plane);
                 // create a new one
-                plane = createMesh(new THREE.PlaneGeometry(controls.width,controls.height,Math.round(controls.widthSegments),Math.round(controls.heightSegments)));
+                plane = createMesh(new THREE.PlaneGeometry(controls.width, controls.height, Math.round(controls.widthSegments), Math.round(controls.heightSegments)));
                 // add it to the scene.
                 scene.add(plane);
             };
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'width',0,40).onChange(controls.redraw);
-        gui.add(controls,'height',0,40).onChange(controls.redraw);;
-        gui.add(controls,'widthSegments',0,10).onChange(controls.redraw);;
-        gui.add(controls,'heightSegments',0,10).onChange(controls.redraw);;
-
+        gui.add(controls, 'width', 0, 40).onChange(controls.redraw);
+        gui.add(controls, 'height', 0, 40).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'widthSegments', 0, 10).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'heightSegments', 0, 10).onChange(controls.redraw);
+        ;
 
 
         render();
@@ -107,7 +109,7 @@
             wireFrameMat.wireframe = true;
 
             // create a multimaterial
-            var plane = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial,wireFrameMat]);
+            var plane = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial, wireFrameMat]);
 
             return plane;
         }
@@ -115,7 +117,7 @@
         function render() {
             stats.update();
 
-            plane.rotation.y=step+=0.01;
+            plane.rotation.y = step += 0.01;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -132,12 +134,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

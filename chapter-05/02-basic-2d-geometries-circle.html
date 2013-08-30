@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var circle = createMesh(new THREE.CircleGeometry(4,10,0.3*Math.PI*2,0.3*Math.PI*2));
+        var circle = createMesh(new THREE.CircleGeometry(4, 10, 0.3 * Math.PI * 2, 0.3 * Math.PI * 2));
         // add the sphere to the scene
         scene.add(circle);
 
@@ -52,49 +52,52 @@
         camera.position.x = -20;
         camera.position.y = 30;
         camera.position.z = 40;
-        camera.lookAt(new THREE.Vector3(10,0,0));
+        camera.lookAt(new THREE.Vector3(10, 0, 0));
 
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( -40, 60, -10 );
-        scene.add( spotLight );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 60, -10);
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
 
 
             console.log(circle.children[0].geometry);
             this.radius = 4;
 
-            this.thetaStart = 0.3*Math.PI*2;
-            this.thetaLength = 0.3*Math.PI*2;;
+            this.thetaStart = 0.3 * Math.PI * 2;
+            this.thetaLength = 0.3 * Math.PI * 2;
+            ;
             this.segments = 10;
 
-            this.redraw = function() {
+            this.redraw = function () {
                 // remove the old plane
                 scene.remove(circle);
                 // create a new one
-                circle = createMesh(new THREE.CircleGeometry(controls.radius,controls.segments,controls.thetaStart, controls.thetaLength));
+                circle = createMesh(new THREE.CircleGeometry(controls.radius, controls.segments, controls.thetaStart, controls.thetaLength));
                 // add it to the scene.
                 scene.add(circle);
             };
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'radius',0,40).onChange(controls.redraw);
-        gui.add(controls,'segments',0,40).onChange(controls.redraw);;
-        gui.add(controls,'thetaStart',0,2*Math.PI).onChange(controls.redraw);;
-        gui.add(controls,'thetaLength',0,2*Math.PI).onChange(controls.redraw);;
-
+        gui.add(controls, 'radius', 0, 40).onChange(controls.redraw);
+        gui.add(controls, 'segments', 0, 40).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'thetaStart', 0, 2 * Math.PI).onChange(controls.redraw);
+        ;
+        gui.add(controls, 'thetaLength', 0, 2 * Math.PI).onChange(controls.redraw);
+        ;
 
 
         render();
@@ -108,8 +111,7 @@
             wireFrameMat.wireframe = true;
 
             // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial,wireFrameMat]);
-
+            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial, wireFrameMat]);
 
 
             return mesh;
@@ -118,7 +120,7 @@
         function render() {
             stats.update();
 
-           circle.rotation.y=step+=0.01;
+            circle.rotation.y = step += 0.01;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -135,12 +137,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

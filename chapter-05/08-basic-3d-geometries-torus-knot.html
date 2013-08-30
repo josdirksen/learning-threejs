@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var knot = createMesh(new THREE.TorusKnotGeometry(10,1));
+        var knot = createMesh(new THREE.TorusKnotGeometry(10, 1));
         // add the sphere to the scene
         scene.add(knot);
 
@@ -52,17 +52,17 @@
         camera.position.x = -30;
         camera.position.y = 40;
         camera.position.z = 50;
-        camera.lookAt(new THREE.Vector3(10,0,0));
+        camera.lookAt(new THREE.Vector3(10, 0, 0));
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
             this.radius = knot.children[0].geometry.radius;
             this.tube = 0.3;
@@ -71,27 +71,26 @@
             this.p = knot.children[0].geometry.p;
             this.q = knot.children[0].geometry.q;
             this.heightScale = knot.children[0].geometry.heightScale;
-            
-            this.redraw = function() {
+
+            this.redraw = function () {
                 // remove the old plane
                 scene.remove(knot);
                 // create a new one
 
-                knot = createMesh(new THREE.TorusKnotGeometry(controls.radius,controls.tube,Math.round(controls.radialSegments),Math.round(controls.tubularSegments),Math.round(controls.p),Math.round(controls.q),controls.heightScale));
+                knot = createMesh(new THREE.TorusKnotGeometry(controls.radius, controls.tube, Math.round(controls.radialSegments), Math.round(controls.tubularSegments), Math.round(controls.p), Math.round(controls.q), controls.heightScale));
                 // add it to the scene.
                 scene.add(knot);
             };
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'radius',0,40).onChange(controls.redraw);
-        gui.add(controls,'tube',0,40).onChange(controls.redraw);
-        gui.add(controls,'radialSegments',0,400).step(1).onChange(controls.redraw);
-        gui.add(controls,'tubularSegments',1,20).step(1).onChange(controls.redraw);
-        gui.add(controls,'p',1,10).step(1).onChange(controls.redraw);
-        gui.add(controls,'q',1,15).step(1).onChange(controls.redraw);
-        gui.add(controls,'heightScale',0,5).onChange(controls.redraw);
-
+        gui.add(controls, 'radius', 0, 40).onChange(controls.redraw);
+        gui.add(controls, 'tube', 0, 40).onChange(controls.redraw);
+        gui.add(controls, 'radialSegments', 0, 400).step(1).onChange(controls.redraw);
+        gui.add(controls, 'tubularSegments', 1, 20).step(1).onChange(controls.redraw);
+        gui.add(controls, 'p', 1, 10).step(1).onChange(controls.redraw);
+        gui.add(controls, 'q', 1, 15).step(1).onChange(controls.redraw);
+        gui.add(controls, 'heightScale', 0, 5).onChange(controls.redraw);
 
 
         render();
@@ -103,7 +102,7 @@
             meshMaterial.side = THREE.DoubleSide;
 
             // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial]);
+            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);
 
             return mesh;
         }
@@ -111,7 +110,7 @@
         function render() {
             stats.update();
 
-            knot.rotation.y=step+=0.01;
+            knot.rotation.y = step += 0.01;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -128,12 +127,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>
