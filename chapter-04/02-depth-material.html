@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -34,7 +34,7 @@
 
         // create a scene, that will hold all our elements such as objects, cameras and lights.
         var scene = new THREE.Scene();
-        scene.overrideMaterial =  new THREE.MeshDepthMaterial();
+        scene.overrideMaterial = new THREE.MeshDepthMaterial();
 
         // create a camera, which defines where we're looking at.
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 10, 130);
@@ -56,55 +56,55 @@
         $("#WebGL-output").append(renderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
-        var controls = new function() {
+        var controls = new function () {
             this.cameraNear = camera.near;
             this.cameraFar = camera.far;
             this.rotationSpeed = 0.02;
             this.numberOfObjects = scene.children.length;
 
-            this.removeCube = function() {
+            this.removeCube = function () {
                 var allChildren = scene.children;
-                var lastObject = allChildren[allChildren.length-1];
+                var lastObject = allChildren[allChildren.length - 1];
                 if (lastObject instanceof THREE.Mesh) {
                     scene.remove(lastObject);
                     this.numberOfObjects = scene.children.length;
                 }
             }
 
-            this.addCube = function() {
+            this.addCube = function () {
 
-                var cubeSize = Math.ceil(3+(Math.random() * 3));
-                var cubeGeometry = new THREE.CubeGeometry(cubeSize,cubeSize,cubeSize);
-                var cubeMaterial = new THREE.MeshLambertMaterial({color:  Math.random() * 0xffffff });
+                var cubeSize = Math.ceil(3 + (Math.random() * 3));
+                var cubeGeometry = new THREE.CubeGeometry(cubeSize, cubeSize, cubeSize);
+                var cubeMaterial = new THREE.MeshLambertMaterial({color: Math.random() * 0xffffff });
                 var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
                 cube.castShadow = true;
 
                 // position the cube randomly in the scene
-                cube.position.x=-60 + Math.round((Math.random() * 100));
-                cube.position.y= Math.round((Math.random() * 10));
-                cube.position.z=-100 + Math.round((Math.random() * 150));
+                cube.position.x = -60 + Math.round((Math.random() * 100));
+                cube.position.y = Math.round((Math.random() * 10));
+                cube.position.z = -100 + Math.round((Math.random() * 150));
 
                 // add the cube to the scene
                 scene.add(cube);
                 this.numberOfObjects = scene.children.length;
             };
 
-            this.outputObjects = function() {
+            this.outputObjects = function () {
                 console.log(scene.children);
             }
         }
 
         var gui = new dat.GUI();
-        gui.add(controls, 'rotationSpeed',0,0.5);
+        gui.add(controls, 'rotationSpeed', 0, 0.5);
         gui.add(controls, 'addCube');
         gui.add(controls, 'removeCube');
-        gui.add(controls, 'cameraNear',0,50).onChange(function(e) {
-            camera.near=e;
+        gui.add(controls, 'cameraNear', 0, 50).onChange(function (e) {
+            camera.near = e;
         });
-        gui.add(controls, 'cameraFar',50,200).onChange(function(e) {
-            camera.far=e;
+        gui.add(controls, 'cameraFar', 50, 200).onChange(function (e) {
+            camera.far = e;
         });
 
 
@@ -114,12 +114,12 @@
             stats.update();
 
             // rotate the cubes around its axes
-            scene.traverse(function(e) {
-                if (e instanceof THREE.Mesh ) {
+            scene.traverse(function (e) {
+                if (e instanceof THREE.Mesh) {
 
-                    e.rotation.x+=controls.rotationSpeed;
-                    e.rotation.y+=controls.rotationSpeed;
-                    e.rotation.z+=controls.rotationSpeed;
+                    e.rotation.x += controls.rotationSpeed;
+                    e.rotation.y += controls.rotationSpeed;
+                    e.rotation.z += controls.rotationSpeed;
                 }
             });
 
@@ -139,12 +139,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

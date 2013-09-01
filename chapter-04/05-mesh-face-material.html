@@ -3,13 +3,13 @@
 <html>
 
 <head>
-    <title>Example 04.04 - Mesh face material</title>
+    <title>Example 04.05 - Mesh face material</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -46,16 +46,16 @@
         renderer.shadowMapEnabled = false;
 
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(60,40,1,1);
-        var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});
-        var plane = new THREE.Mesh(planeGeometry,planeMaterial);
-        plane.receiveShadow  = true;
+        var planeGeometry = new THREE.PlaneGeometry(60, 40, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.receiveShadow = true;
 
         // rotate and position the plane
-        plane.rotation.x=-0.5*Math.PI;
-        plane.position.x=0
-        plane.position.y=-2
-        plane.position.z=0
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 0
+        plane.position.y = -2
+        plane.position.z = 0
 
         // add the plane to the scene
         scene.add(plane);
@@ -71,49 +71,48 @@
 //        scene.add(ambientLight);
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( -40, 60, -10 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 60, -10);
         spotLight.castShadow = true;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(renderer.domElement);
 
         var group = new THREE.Mesh();
         // add all the rubik cube elements
-        for (var x = 0 ; x < 3 ; x++) {
-            for (var y = 0 ; y < 3 ; y++) {
-                for (var z = 0 ; z < 3 ; z++) {
-                    var materialArray = [];
-                    materialArray.push(new THREE.MeshBasicMaterial( { color: 0x009e60  }));
-                    materialArray.push(new THREE.MeshBasicMaterial( { color: 0x0051ba  }));
-                    materialArray.push(new THREE.MeshBasicMaterial( { color: 0xffd500  }));
-                    materialArray.push(new THREE.MeshBasicMaterial( { color: 0xff5800  }));
-                    materialArray.push(new THREE.MeshBasicMaterial( { color: 0xC41E3A }));
-                    materialArray.push(new THREE.MeshBasicMaterial( { color: 0xffffff  }));
-                    var faceMaterial = new THREE.MeshFaceMaterial(materialArray);
+        var mats = [];
+        mats.push(new THREE.MeshBasicMaterial({ color: 0x009e60  }));
+        mats.push(new THREE.MeshBasicMaterial({ color: 0x0051ba  }));
+        mats.push(new THREE.MeshBasicMaterial({ color: 0xffd500  }));
+        mats.push(new THREE.MeshBasicMaterial({ color: 0xff5800  }));
+        mats.push(new THREE.MeshBasicMaterial({ color: 0xC41E3A }));
+        mats.push(new THREE.MeshBasicMaterial({ color: 0xffffff  }));
+        var faceMaterial = new THREE.MeshFaceMaterial(mats);
 
-                    var cubeGeom = new THREE.CubeGeometry(2.9,2.9,2.9);
+        for (var x = 0; x < 3; x++) {
+            for (var y = 0; y < 3; y++) {
+                for (var z = 0; z < 3; z++) {
+                    var cubeGeom = new THREE.CubeGeometry(2.9, 2.9, 2.9);
                     var cube = new THREE.Mesh(cubeGeom, faceMaterial);
-                    cube.position = new THREE.Vector3(x*3-3,y*3,z*3-3);
+                    cube.position = new THREE.Vector3(x * 3 - 3, y * 3, z * 3 - 3);
                     group.add(cube);
                 }
             }
         }
 
 
-
         // call the render function
         scene.add(group);
-        var step=0;
+        var step = 0;
 
-        var controls = new function() {
+        var controls = new function () {
             this.rotationSpeed = 0.02;
             this.numberOfObjects = scene.children.length;
         }
 
         var gui = new dat.GUI();
-        gui.add(controls, 'rotationSpeed',0,0.5);
+        gui.add(controls, 'rotationSpeed', 0, 0.5);
 
         render();
 
@@ -121,7 +120,7 @@
             stats.update();
 
 
-            group.rotation.y=step+=0.01;
+            group.rotation.y = step += 0.01;
             // render using requestAnimationFrame
             requestAnimationFrame(render);
             renderer.render(scene, camera);
@@ -134,18 +133,16 @@
             stats.setMode(0); // 0: fps, 1: ms
 
 
-
             // Align top-left
             stats.domElement.style.position = 'absolute';
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>
