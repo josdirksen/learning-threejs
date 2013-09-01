@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../assets/fonts/bitstream_vera_sans_mono_roman.typeface.js"></script>
 
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -52,14 +52,14 @@
         camera.position.x = 100;
         camera.position.y = 300;
         camera.position.z = 600;
-        camera.lookAt(new THREE.Vector3(400,0,-300));
+        camera.lookAt(new THREE.Vector3(400, 0, -300));
 
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position = new THREE.Vector3(734,582,279);
-        spotLight.target.position.x=0;
-        spotLight.target.position.y=0;
-        spotLight.target.position.z=0;
-        spotLight.intensity =2.4;
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position = new THREE.Vector3(734, 582, 279);
+        spotLight.target.position.x = 0;
+        spotLight.target.position.y = 0;
+        spotLight.target.position.z = 0;
+        spotLight.intensity = 2.4;
 
         scene.add(spotLight);
 
@@ -67,13 +67,13 @@
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         var text1;
         var text2;
 
-        var controls = new function() {
+        var controls = new function () {
 
             this.size = 90;
             this.height = 90;
@@ -88,7 +88,7 @@
             this.weight = "normal";
 //            this.style = "italics";
 
-            this.asGeom = function() {
+            this.asGeom = function () {
                 // remove the old plane
                 scene.remove(text1);
                 scene.remove(text2);
@@ -104,17 +104,17 @@
                     bevelSegments: controls.bevelSegments,
                     bevelEnabled: controls.bevelEnabled,
                     curveSegments: controls.curveSegments,
-                    steps:controls.steps
+                    steps: controls.steps
                 };
 
                 console.log(THREE.FontUtils.faces);
 
-                text1 = createMesh(new THREE.TextGeometry("Learning",options));
+                text1 = createMesh(new THREE.TextGeometry("Learning", options));
                 text1.position.z = -100;
                 text1.position.y = 100;
                 scene.add(text1);
 
-                text2 = createMesh(new THREE.TextGeometry("Three.js",options));
+                text2 = createMesh(new THREE.TextGeometry("Three.js", options));
                 scene.add(text2);
             };
 
@@ -123,22 +123,18 @@
         controls.asGeom();
 
         var gui = new dat.GUI();
-        gui.add(controls,'size',0,200).onChange(controls.asGeom);
-        gui.add(controls,'height',0,200).onChange(controls.asGeom);
-        gui.add(controls,'font',['bitstream vera sans mono','helvetiker']).onChange(controls.asGeom);
-        gui.add(controls,'bevelThickness',0,10).onChange(controls.asGeom);
-        gui.add(controls,'bevelSize',0,10).onChange(controls.asGeom);
-        gui.add(controls,'bevelSegments',0,30).step(1).onChange(controls.asGeom);
-        gui.add(controls,'bevelEnabled').onChange(controls.asGeom);
-        gui.add(controls,'curveSegments',1,30).step(1).onChange(controls.asGeom);
-        gui.add(controls,'steps',1,5).step(1).onChange(controls.asGeom);
-
-
+        gui.add(controls, 'size', 0, 200).onChange(controls.asGeom);
+        gui.add(controls, 'height', 0, 200).onChange(controls.asGeom);
+        gui.add(controls, 'font', ['bitstream vera sans mono', 'helvetiker']).onChange(controls.asGeom);
+        gui.add(controls, 'bevelThickness', 0, 10).onChange(controls.asGeom);
+        gui.add(controls, 'bevelSize', 0, 10).onChange(controls.asGeom);
+        gui.add(controls, 'bevelSegments', 0, 30).step(1).onChange(controls.asGeom);
+        gui.add(controls, 'bevelEnabled').onChange(controls.asGeom);
+        gui.add(controls, 'curveSegments', 1, 30).step(1).onChange(controls.asGeom);
+        gui.add(controls, 'steps', 1, 5).step(1).onChange(controls.asGeom);
 
 
         render();
-
-
 
 
         function createMesh(geom) {
@@ -149,7 +145,7 @@
             var meshMaterial = new THREE.MeshPhongMaterial({specular: 0xffffff, color: 0xff5555, shininess: 100, metal: true});
 //            meshMaterial.side=THREE.DoubleSide;
             // create a multimaterial
-            var plane = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial]);
+            var plane = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);
 
             return plane;
         }
@@ -166,18 +162,16 @@
             stats.setMode(0); // 0: fps, 1: ms
 
 
-
             // Align top-left
             stats.domElement.style.position = 'absolute';
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

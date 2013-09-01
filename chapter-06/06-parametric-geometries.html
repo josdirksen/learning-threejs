@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -48,13 +48,13 @@
         camera.position.x = -30;
         camera.position.y = 50;
         camera.position.z = 50;
-        camera.lookAt(new THREE.Vector3(10,-20,0));
+        camera.lookAt(new THREE.Vector3(10, -20, 0));
 
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position = new THREE.Vector3(-20,250,-50);
-        spotLight.target.position.x=30;
-        spotLight.target.position.y=-40;
-        spotLight.target.position.z=-20;
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position = new THREE.Vector3(-20, 250, -50);
+        spotLight.target.position.x = 30;
+        spotLight.target.position.y = -40;
+        spotLight.target.position.z = -20;
         spotLight.intensity = 0.7;
 
         scene.add(spotLight);
@@ -63,18 +63,18 @@
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
 
         }
 
         var gui = new dat.GUI();
 
 
-        klein = function (v, u) {
+        klein = function (u, v) {
             u *= Math.PI;
             v *= 2 * Math.PI;
 
@@ -93,41 +93,39 @@
             return new THREE.Vector3(x, y, z);
         };
 
-        radialWave = function (v,u) {
+        radialWave = function (u, v) {
             var r = 50;
 
-            var x = Math.sin(u)*r;
-            var z = Math.sin(v/2)*2*r;
-            var y = (Math.sin(u*4*Math.PI)+Math.cos(v*2*Math.PI))*2.8;
+            var x = Math.sin(u) * r;
+            var z = Math.sin(v / 2) * 2 * r;
+            var y = (Math.sin(u * 4 * Math.PI) + Math.cos(v * 2 * Math.PI)) * 2.8;
 
-            return new THREE.Vector3(x,y,z);
+            return new THREE.Vector3(x, y, z);
         }
 
-        var mesh = createMesh(new THREE.ParametricGeometry(radialWave,120,120,false));
+        var mesh = createMesh(new THREE.ParametricGeometry(radialWave, 120, 120, false));
         scene.add(mesh);
 
         render();
 
 
-
-
         function createMesh(geom) {
-            geom.applyMatrix(new THREE.Matrix4().makeTranslation(-25,0,-25));
+            geom.applyMatrix(new THREE.Matrix4().makeTranslation(-25, 0, -25));
             // assign two materials
 //            var meshMaterial = new THREE.MeshLambertMaterial({color: 0xff5555});
             //var meshMaterial = new THREE.MeshNormalMaterial();
-            var meshMaterial = new THREE.MeshPhongMaterial({specular: 0xffffff, color: 0x00ff55, shininess: 100, metal: true});
-            meshMaterial.side=THREE.DoubleSide;
+            var meshMaterial = new THREE.MeshPhongMaterial({specular: 0xffffff, color: 0x3399ff, shininess: 100, metal: true});
+            meshMaterial.side = THREE.DoubleSide;
             // create a multimaterial
-            var plane = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial]);
+            var plane = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);
 
             return plane;
         }
 
         function render() {
             stats.update();
-            mesh.rotation.y=step+=0.01;
-            mesh.rotation.x=step;
+            mesh.rotation.y = step += 0.01;
+            mesh.rotation.x = step;
             // render using requestAnimationFrame
             requestAnimationFrame(render);
             webGLRenderer.render(scene, camera);
@@ -139,18 +137,16 @@
             stats.setMode(0); // 0: fps, 1: ms
 
 
-
             // Align top-left
             stats.domElement.style.position = 'absolute';
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

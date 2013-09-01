@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -52,18 +52,17 @@
         camera.position.x = -20;
         camera.position.y = 60;
         camera.position.z = 60;
-        camera.lookAt(new THREE.Vector3(20,20,0));
+        camera.lookAt(new THREE.Vector3(20, 20, 0));
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
-
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
 
             this.amount = 2;
             this.bevelThickness = 2;
@@ -74,7 +73,7 @@
             this.curveSegments = 12;
             this.steps = 1;
 
-            this.asGeom = function() {
+            this.asGeom = function () {
                 // remove the old plane
                 scene.remove(shape);
                 // create a new one
@@ -86,10 +85,10 @@
                     bevelSegments: controls.bevelSegments,
                     bevelEnabled: controls.bevelEnabled,
                     curveSegments: controls.curveSegments,
-                    steps:controls.steps
+                    steps: controls.steps
                 };
 
-                shape = createMesh(new THREE.ExtrudeGeometry(drawShape(),options));
+                shape = createMesh(new THREE.ExtrudeGeometry(drawShape(), options));
                 // add it to the scene.
                 scene.add(shape);
             };
@@ -97,13 +96,13 @@
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'amount',0,20).onChange(controls.asGeom);
-        gui.add(controls,'bevelThickness',0,10).onChange(controls.asGeom);
-        gui.add(controls,'bevelSize',0,10).onChange(controls.asGeom);
-        gui.add(controls,'bevelSegments',0,30).step(1).onChange(controls.asGeom);
-        gui.add(controls,'bevelEnabled').onChange(controls.asGeom);
-        gui.add(controls,'curveSegments',1,30).step(1).onChange(controls.asGeom);
-        gui.add(controls,'steps',1,5).step(1).onChange(controls.asGeom);
+        gui.add(controls, 'amount', 0, 20).onChange(controls.asGeom);
+        gui.add(controls, 'bevelThickness', 0, 10).onChange(controls.asGeom);
+        gui.add(controls, 'bevelSize', 0, 10).onChange(controls.asGeom);
+        gui.add(controls, 'bevelSegments', 0, 30).step(1).onChange(controls.asGeom);
+        gui.add(controls, 'bevelEnabled').onChange(controls.asGeom);
+        gui.add(controls, 'curveSegments', 1, 30).step(1).onChange(controls.asGeom);
+        gui.add(controls, 'steps', 1, 5).step(1).onChange(controls.asGeom);
 
         controls.asGeom();
         render();
@@ -114,37 +113,37 @@
             var shape = new THREE.Shape();
 
             // startpoint
-            shape.moveTo(10,10);
+            shape.moveTo(10, 10);
 
             // straight line upwards
-            shape.lineTo(10,40);
+            shape.lineTo(10, 40);
 
             // the top of the figure, curve to the right
-            shape.bezierCurveTo(15,25,25,25,30,40);
+            shape.bezierCurveTo(15, 25, 25, 25, 30, 40);
 
             // spline back down
             shape.splineThru(
-                    [new THREE.Vector2(32,30),
-                        new THREE.Vector2(28,20),
-                        new THREE.Vector2(30,10),
-            ])
+                    [new THREE.Vector2(32, 30),
+                        new THREE.Vector2(28, 20),
+                        new THREE.Vector2(30, 10),
+                    ])
 
             // curve at the bottom
-            shape.quadraticCurveTo(20,15,10,10);
+            shape.quadraticCurveTo(20, 15, 10, 10);
 
             // add 'eye' hole one
             var hole1 = new THREE.Path();
-            hole1.absellipse(16,24,2,3,0,Math.PI*2,true);
+            hole1.absellipse(16, 24, 2, 3, 0, Math.PI * 2, true);
             shape.holes.push(hole1);
 
             // add 'eye hole 2'
             var hole2 = new THREE.Path();
-            hole2.absellipse(23,24,2,3,0,Math.PI*2,true);
+            hole2.absellipse(23, 24, 2, 3, 0, Math.PI * 2, true);
             shape.holes.push(hole2);
 
             // add 'mouth'
             var hole3 = new THREE.Path();
-            hole3.absarc(20,16,2,0,Math.PI,true);
+            hole3.absarc(20, 16, 2, 0, Math.PI, true);
             shape.holes.push(hole3);
 
             // return the shape
@@ -153,27 +152,27 @@
 
         function createMesh(geom) {
 
-            geom.applyMatrix(new THREE.Matrix4().makeTranslation(-20,0,0));
+            geom.applyMatrix(new THREE.Matrix4().makeTranslation(-20, 0, 0));
 
             // assign two materials
-            var meshMaterial = new THREE.MeshNormalMaterial({transparent:true, opacity:0.7});
+            var meshMaterial = new THREE.MeshNormalMaterial({transparent: true, opacity: 0.7});
 
-          //  meshMaterial.side = THREE.DoubleSide;
+            //  meshMaterial.side = THREE.DoubleSide;
             var wireFrameMat = new THREE.MeshBasicMaterial();
             wireFrameMat.wireframe = true;
 
             // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[meshMaterial]);
+            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);
 
             return mesh;
         }
 
         function createLine(shape, spaced) {
             if (!spaced) {
-                var mesh = new THREE.Line( shape.createPointsGeometry(), new THREE.LineBasicMaterial( { color: 0xff3333, linewidth: 2 } ) );
+                var mesh = new THREE.Line(shape.createPointsGeometry(), new THREE.LineBasicMaterial({ color: 0xff3333, linewidth: 2 }));
                 return mesh;
             } else {
-                var mesh = new THREE.Line( shape.createSpacedPointsGeometry(20), new THREE.LineBasicMaterial( { color: 0xff3333, linewidth: 2 } ) );
+                var mesh = new THREE.Line(shape.createSpacedPointsGeometry(20), new THREE.LineBasicMaterial({ color: 0xff3333, linewidth: 2 }));
                 return mesh;
             }
 
@@ -182,7 +181,7 @@
         function render() {
             stats.update();
 
-            shape.rotation.y=step+=0.01;
+            shape.rotation.y = step += 0.01;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -199,12 +198,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>
