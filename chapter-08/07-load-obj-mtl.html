@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 07.07 - Load OBJ and MTL </title>
+    <title>Example 08.07 - Load OBJ and MTL </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/OBJLoader.js"></script>
     <script type="text/javascript" src="../libs/MTLLoader.js"></script>
@@ -12,7 +12,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -51,26 +51,25 @@
         camera.position.x = -30;
         camera.position.y = 40;
         camera.position.z = 50;
-        camera.lookAt(new THREE.Vector3(0,10,0));
+        camera.lookAt(new THREE.Vector3(0, 10, 0));
 
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 0, 40, 30 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(0, 40, 30);
         spotLight.intensity = 2;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
-
 
 
         }
@@ -79,31 +78,31 @@
         var mesh;
 
         var loader = new THREE.OBJMTLLoader();
-        loader.addEventListener( 'load', function ( event ) {
+        loader.addEventListener('load', function (event) {
 
             var object = event.content;
 
             var wing2 = object.children[5].children[0];
             var wing1 = object.children[4].children[0];
 
-            wing1.material.alphaTest=0.5;
-            wing1.material.opacity=0.6;
-            wing1.material.transparent=true;
+            wing1.material.alphaTest = 0.5;
+            wing1.material.opacity = 0.6;
+            wing1.material.transparent = true;
 
-            wing2.material.alphaTest=0.4;
-            wing2.material.opacity=0.7;
-            wing2.material.transparent=true;
+            wing2.material.alphaTest = 0.4;
+            wing2.material.opacity = 0.7;
+            wing2.material.transparent = true;
 
-            object.scale.set(140,140,140);
+            object.scale.set(140, 140, 140);
             mesh = object;
             scene.add(mesh);
 
-            object.rotation.x=0.2;
-            object.rotation.y=-1.3;
+            object.rotation.x = 0.2;
+            object.rotation.y = -1.3;
         });
 
 
-        loader.load( '../assets/models/butterfly.obj','../assets/models/butterfly.mtl',{side: THREE.DoubleSide});
+        loader.load('../assets/models/butterfly.obj', '../assets/models/butterfly.mtl', {side: THREE.DoubleSide});
 
 //                function ( geometry ) {
 //
@@ -151,7 +150,7 @@
             stats.update();
 
             if (mesh) {
-          //      mesh.rotation.y+=0.006;
+                //      mesh.rotation.y+=0.006;
             }
 
 
@@ -170,12 +169,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

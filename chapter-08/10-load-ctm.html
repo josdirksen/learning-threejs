@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 07.13 - Load pdb model </title>
+    <title>Example 08.10 - Load pdb model </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/CTMLoader.js"></script>
     <script type="text/javascript" src="../libs/ctm.js"></script>
@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -52,18 +52,18 @@
         camera.position.x = 10;
         camera.position.y = 10;
         camera.position.z = 10;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 20, 20, 20 );
-        scene.add( spotLight );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(20, 20, 20);
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         var group;
@@ -73,12 +73,12 @@
         var loader = new THREE.CTMLoader();
         var group = new THREE.Object3D();
 
-        loader.load( "../assets/models/auditt_wheel.ctm", function ( geometry ) {
-            var mat = new THREE.MeshLambertMaterial({color:0xff8888});
+        loader.load("../assets/models/auditt_wheel.ctm", function (geometry) {
+            var mat = new THREE.MeshLambertMaterial({color: 0xff8888});
             group = new THREE.Mesh(geometry, mat);
-            group.scale.set(20,20,20);
+            group.scale.set(20, 20, 20);
             scene.add(group);
-        }, {} );
+        }, {});
 
 
         render();
@@ -88,8 +88,8 @@
             stats.update();
 
             if (group) {
-                group.rotation.y+=0.006;
-                group.rotation.x+=0.009;
+                group.rotation.y += 0.006;
+                group.rotation.x += 0.009;
                 // group.rotation.x+=0.006;
             }
 
@@ -108,12 +108,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

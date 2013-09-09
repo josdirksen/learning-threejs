@@ -3,13 +3,13 @@
 <html>
 
 <head>
-    <title>Example 06.03 - Particle Basic Material</title>
+    <title>Example 07.03 - Particle Basic Material</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -54,7 +54,7 @@
 
         var system;
 
-        var controls = new function() {
+        var controls = new function () {
             this.size = 4;
             this.transparent = true;
             this.opacity = 0.6;
@@ -63,7 +63,7 @@
             this.sizeAttenuation = true;
             this.rotateSystem = true;
 
-            this.redraw = function() {
+            this.redraw = function () {
                 if (scene.getChildByName("particles")) {
                     scene.remove(scene.getChildByName("particles"));
                 }
@@ -72,66 +72,58 @@
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'size',0,10).onChange(controls.redraw);
-        gui.add(controls,'transparent').onChange(controls.redraw);
-        gui.add(controls,'opacity',0,1).onChange(controls.redraw);
-        gui.add(controls,'vertexColors').onChange(controls.redraw);
-        gui.addColor(controls,'color').onChange(controls.redraw);
-        gui.add(controls,'sizeAttenuation').onChange(controls.redraw);
-        gui.add(controls,'rotateSystem');
+        gui.add(controls, 'size', 0, 10).onChange(controls.redraw);
+        gui.add(controls, 'transparent').onChange(controls.redraw);
+        gui.add(controls, 'opacity', 0, 1).onChange(controls.redraw);
+        gui.add(controls, 'vertexColors').onChange(controls.redraw);
+        gui.addColor(controls, 'color').onChange(controls.redraw);
+        gui.add(controls, 'sizeAttenuation').onChange(controls.redraw);
+        gui.add(controls, 'rotateSystem');
 
         controls.redraw();
         render();
 
-        function createParticles(size,transparent,opacity,vertexColors,sizeAttenuation,color) {
+        function createParticles(size, transparent, opacity, vertexColors, sizeAttenuation, color) {
 
-            scene.getChildByName("particles")
 
             var geom = new THREE.Geometry();
             var material = new THREE.ParticleBasicMaterial({
                 size: size,
-                transparent:transparent,
-                opacity:opacity,
+                transparent: transparent,
+                opacity: opacity,
                 vertexColors: vertexColors,
 
                 sizeAttenuation: sizeAttenuation,
-                color:color});
+                color: color});
 
 
             var range = 500;
-            for (var i = 0 ; i < 15000 ; i++) {
-                var particle = new THREE.Vector3(Math.random()*range-range/2,Math.random()*range-range/2,Math.random()*range-range/2);
+            for (var i = 0; i < 15000; i++) {
+                var particle = new THREE.Vector3(Math.random() * range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2);
                 geom.vertices.push(particle);
                 var color = new THREE.Color(0x00ff00);
-                color.setHSL(color.getHSL().h,color.getHSL().s,Math.random()*color.getHSL().l);
+                color.setHSL(color.getHSL().h, color.getHSL().s, Math.random() * color.getHSL().l);
                 geom.colors.push(color);
 
             }
 
-            system = new THREE.ParticleSystem(geom,material);
-            system.name = "particles";
+            system = new THREE.ParticleSystem(geom, material);
             scene.add(system);
         }
 
 
-
-
-
         var step = 0;
+
         function render() {
 
             stats.update();
 
             if (controls.rotateSystem) {
-                step+=0.01;
+                step += 0.01;
 
-                system.rotation.x=step;
-                system.rotation.z=step;
+                system.rotation.x = step;
+                system.rotation.z = step;
             }
-
-
-
-
 
 
             requestAnimationFrame(render);
@@ -148,12 +140,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

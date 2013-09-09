@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 07.03 - Save & Load</title>
+    <title>Example 08.03 - Save & Load</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/GeometryExporter.js"></script>
     <script type="text/javascript" src="../libs/JSONLoader.js"></script>
@@ -11,7 +11,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -46,7 +46,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var knot = createMesh(new THREE.TorusKnotGeometry(10,1));
+        var knot = createMesh(new THREE.TorusKnotGeometry(10, 1));
         // add the sphere to the scene
         scene.add(knot);
 
@@ -54,19 +54,19 @@
         camera.position.x = -30;
         camera.position.y = 40;
         camera.position.z = 50;
-        camera.lookAt(new THREE.Vector3(-20,0,0));
+        camera.lookAt(new THREE.Vector3(-20, 0, 0));
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         var loadedMesh;
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
             this.radius = knot.geometry.radius;
             this.tube = 0.3;
@@ -76,22 +76,22 @@
             this.q = knot.geometry.q;
             this.heightScale = knot.geometry.heightScale;
 
-            this.redraw = function() {
+            this.redraw = function () {
                 // remove the old plane
                 scene.remove(knot);
                 // create a new one
-                knot = createMesh(new THREE.TorusKnotGeometry(controls.radius,controls.tube,Math.round(controls.radialSegments),Math.round(controls.tubularSegments),Math.round(controls.p),Math.round(controls.q),controls.heightScale));
+                knot = createMesh(new THREE.TorusKnotGeometry(controls.radius, controls.tube, Math.round(controls.radialSegments), Math.round(controls.tubularSegments), Math.round(controls.p), Math.round(controls.q), controls.heightScale));
                 // add it to the scene.
                 scene.add(knot);
             };
 
-            this.save = function() {
+            this.save = function () {
                 var exporter = new THREE.GeometryExporter();
                 var result = exporter.parse(knot.geometry);
-                localStorage.setItem("json",JSON.stringify(result));
+                localStorage.setItem("json", JSON.stringify(result));
             }
 
-            this.load = function() {
+            this.load = function () {
 
                 scene.remove(loadedMesh);
 
@@ -112,18 +112,18 @@
 
         var gui = new dat.GUI();
         var ioGui = gui.addFolder('Save & Load');
-        ioGui.add(controls,'save').onChange(controls.save);
-        ioGui.add(controls,'load').onChange(controls.load);;
+        ioGui.add(controls, 'save').onChange(controls.save);
+        ioGui.add(controls, 'load').onChange(controls.load);
+        ;
 
         var meshGui = gui.addFolder('mesh');
-        meshGui.add(controls,'radius',0,40).onChange(controls.redraw);
-        meshGui.add(controls,'tube',0,40).onChange(controls.redraw);
-        meshGui.add(controls,'radialSegments',0,400).step(1).onChange(controls.redraw);
-        meshGui.add(controls,'tubularSegments',1,20).step(1).onChange(controls.redraw);
-        meshGui.add(controls,'p',1,10).step(1).onChange(controls.redraw);
-        meshGui.add(controls,'q',1,15).step(1).onChange(controls.redraw);
-        meshGui.add(controls,'heightScale',0,5).onChange(controls.redraw);
-
+        meshGui.add(controls, 'radius', 0, 40).onChange(controls.redraw);
+        meshGui.add(controls, 'tube', 0, 40).onChange(controls.redraw);
+        meshGui.add(controls, 'radialSegments', 0, 400).step(1).onChange(controls.redraw);
+        meshGui.add(controls, 'tubularSegments', 1, 20).step(1).onChange(controls.redraw);
+        meshGui.add(controls, 'p', 1, 10).step(1).onChange(controls.redraw);
+        meshGui.add(controls, 'q', 1, 15).step(1).onChange(controls.redraw);
+        meshGui.add(controls, 'heightScale', 0, 5).onChange(controls.redraw);
 
 
         render();
@@ -131,12 +131,11 @@
         function createMesh(geom) {
 
             // assign two materials
-            var meshMaterial = new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors
-                , wireframe: true, wireframeLinewidth: 2, color: 0xaaaaaa});
+            var meshMaterial = new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors, wireframe: true, wireframeLinewidth: 2, color: 0xaaaaaa});
             meshMaterial.side = THREE.DoubleSide;
 
             // create a multimaterial
-            var mesh = new THREE.Mesh(geom,meshMaterial);
+            var mesh = new THREE.Mesh(geom, meshMaterial);
 
             return mesh;
         }
@@ -144,7 +143,7 @@
         function render() {
             stats.update();
 
-            knot.rotation.y=step+=0.01;
+            knot.rotation.y = step += 0.01;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -161,12 +160,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

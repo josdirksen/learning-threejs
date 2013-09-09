@@ -3,13 +3,13 @@
 <html>
 
 <head>
-    <title>Example 06.01 - Particles - Only works in CanvasRenderer</title>
+    <title>Example 07.02 - Particles - Only works in WebGLRenderer</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -60,17 +60,17 @@
 
 
             var geom = new THREE.Geometry();
-            var material = new THREE.ParticleBasicMaterial({size:4, vertexColors: true, color:0xffffff});
+            var material = new THREE.ParticleBasicMaterial({size: 4, vertexColors: true, color: 0xffffff});
 
-            for (var x = -5 ; x < 5 ; x++) {
-                for (var y = -5 ; y < 5 ; y++) {
-                        var particle = new THREE.Vector3(x*10,y*10,0);
-                        geom.vertices.push(particle);
-                        geom.colors.push(new THREE.Color(Math.random()*0x00ffff));
+            for (var x = -5; x < 5; x++) {
+                for (var y = -5; y < 5; y++) {
+                    var particle = new THREE.Vector3(x * 10, y * 10, 0);
+                    geom.vertices.push(particle);
+                    geom.colors.push(new THREE.Color(Math.random() * 0x00ffff));
                 }
             }
 
-            var system = new THREE.ParticleSystem(geom,material);
+            var system = new THREE.ParticleSystem(geom, material);
             scene.add(system);
         }
 
@@ -93,12 +93,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

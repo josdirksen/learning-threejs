@@ -10,7 +10,7 @@
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/OrbitControls.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -45,7 +45,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var sphere = createMesh(new THREE.SphereGeometry(20,40,40));
+        var sphere = createMesh(new THREE.SphereGeometry(20, 40, 40));
         // add the sphere to the scene
         scene.add(sphere);
 
@@ -53,42 +53,40 @@
         camera.position.x = -20;
         camera.position.y = 30;
         camera.position.z = 40;
-        camera.lookAt(new THREE.Vector3(00,0,0));
+        camera.lookAt(new THREE.Vector3(00, 0, 0));
 
         var orbitControls = new THREE.OrbitControls(camera);
-        orbitControls.autoRotate =true;
+        orbitControls.autoRotate = true;
         var clock = new THREE.Clock();
 
         var ambiLight = new THREE.AmbientLight(0x111111);
         scene.add(ambiLight);
-        var spotLight = new THREE.DirectionalLight( 0xffffff );
-        spotLight.position.set( -20, 30, 40 );
+        var spotLight = new THREE.DirectionalLight(0xffffff);
+        spotLight.position.set(-20, 30, 40);
         spotLight.intensity = 1.5;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         render();
 
         function createMesh(geom) {
-            var planetTexture   = THREE.ImageUtils.loadTexture( "../assets/textures/planets/mars_1k_color.jpg" );
-            var normalTexture   = THREE.ImageUtils.loadTexture( "../assets/textures/planets/mars_1k_normal.jpg" );
+            var planetTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/mars_1k_color.jpg");
+            var normalTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/mars_1k_normal.jpg");
 
-            var planetMaterial = new THREE.MeshPhongMaterial({map:planetTexture, bumpMap:normalTexture});
-
-
+            var planetMaterial = new THREE.MeshPhongMaterial({map: planetTexture, bumpMap: normalTexture});
 
 
             var wireFrameMat = new THREE.MeshBasicMaterial();
             wireFrameMat.wireframe = true;
 
             // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[planetMaterial]);
+            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [planetMaterial]);
 
             return mesh;
         }
@@ -115,12 +113,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

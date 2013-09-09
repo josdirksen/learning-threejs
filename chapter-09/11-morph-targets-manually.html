@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -46,39 +46,39 @@
 
 
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(20,20,1,1);
-        var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});
-        var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+        var planeGeometry = new THREE.PlaneGeometry(20, 20, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
 
         // rotate and position the plane
-        plane.rotation.x=-0.5*Math.PI;
-        plane.position.x=
-        plane.position.y=0
-        plane.position.z=0
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x =
+                plane.position.y = 0
+        plane.position.z = 0
 
         // add the plane to the scene
         scene.add(plane);
 
         // create a cube
-        var cubeGeometry = new THREE.CubeGeometry(4,4,4);
-        var cubeMaterial = new THREE.MeshLambertMaterial({morphTargets:true, color: 0xff0000});
+        var cubeGeometry = new THREE.CubeGeometry(4, 4, 4);
+        var cubeMaterial = new THREE.MeshLambertMaterial({morphTargets: true, color: 0xff0000});
 
         // define morphtargets, we'll use the vertices from these geometries
-        var mt1 = new THREE.CubeGeometry(2,10,2);
-        var mt2 = new THREE.CubeGeometry(8,2,8);
+        var cubeTarget1 = new THREE.CubeGeometry(2, 10, 2);
+        var cubeTarget2 = new THREE.CubeGeometry(8, 2, 8);
 
         // define morphtargets and compute the morphnormal
-        cubeGeometry.morphTargets[0]={name: 't1' ,vertices:mt2.vertices};
-        cubeGeometry.morphTargets[1]={name: 't2' ,vertices:mt1.vertices};
+        cubeGeometry.morphTargets[0] = {name: 't1', vertices: cubeTarget2.vertices};
+        cubeGeometry.morphTargets[1] = {name: 't2', vertices: cubeTarget1.vertices};
         cubeGeometry.computeMorphNormals();
 
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
         // position the cube
-        cube.position.x=0;
-        cube.position.y=3;
-        cube.position.z=0;
+        cube.position.x = 0;
+        cube.position.y = 3;
+        cube.position.z = 0;
 
         // add the cube to the scene
         scene.add(cube);
@@ -95,28 +95,28 @@
         scene.add(ambientLight);
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( -25, 25, 15 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-25, 25, 15);
 
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(renderer.domElement);
 
 
-        var controls = new function() {
+        var controls = new function () {
             this.influence1 = 0.01;
             this.influence2 = 0.01;
 
-            this.update = function() {
-                cube.morphTargetInfluences[0]=controls.influence1;
-                cube.morphTargetInfluences[1]=controls.influence2;
+            this.update = function () {
+                cube.morphTargetInfluences[0] = controls.influence1;
+                cube.morphTargetInfluences[1] = controls.influence2;
             };
         }
 
         var gui = new dat.GUI();
-        gui.add(controls, 'influence1',0,1).onChange(controls.update);
-        gui.add(controls, 'influence2',0,1).onChange(controls.update);
+        gui.add(controls, 'influence1', 0, 1).onChange(controls.update);
+        gui.add(controls, 'influence2', 0, 1).onChange(controls.update);
 
 
         render();
@@ -142,12 +142,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

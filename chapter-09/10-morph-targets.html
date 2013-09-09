@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -48,29 +48,29 @@
         camera.position.x = 250;
         camera.position.y = 250;
         camera.position.z = 350;
-        camera.lookAt(new THREE.Vector3(100,50,0));
+        camera.lookAt(new THREE.Vector3(100, 50, 0));
 
 
         // add spotlight for the shadows
-        var spotLight = new THREE.DirectionalLight( 0xffffff );
-        spotLight.position.set( 300, 200, 300 );
+        var spotLight = new THREE.DirectionalLight(0xffffff);
+        spotLight.position.set(300, 200, 300);
         spotLight.intensity = 1;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
-            this.keyframe=0;
+        var controls = new function () {
+            this.keyframe = 0;
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,"keyframe",0,15).step(1).onChange(function(e){
+        gui.add(controls, "keyframe", 0, 15).step(1).onChange(function (e) {
             showFrame(e);
         });
         var mesh;
@@ -80,33 +80,32 @@
         var clock = new THREE.Clock();
 
         var loader = new THREE.JSONLoader();
-        loader.load( '../assets/models/horse.js', function ( geometry, mat ) {
+        loader.load('../assets/models/horse.js', function (geometry, mat) {
 
             var mat = new THREE.MeshLambertMaterial(
-                    {color:0xffffff,morphNormals: false,
-                        morphTargets:true,
+                    {color: 0xffffff, morphNormals: false,
+                        morphTargets: true,
                         vertexColors: THREE.FaceColors});
 
 
             var mat2 = new THREE.MeshLambertMaterial(
-                    {color:0xffffff,vertexColors: THREE.FaceColors});
+                    {color: 0xffffff, vertexColors: THREE.FaceColors});
 
-            mesh = new THREE.Mesh( geometry, mat );
-            mesh.position.x=-100;
+            mesh = new THREE.Mesh(geometry, mat);
+            mesh.position.x = -100;
             frames.push(mesh);
             currentMesh = mesh;
             morphColorsToFaceColors(geometry);
 
-            mesh.geometry.morphTargets.forEach(function(e) {
+            mesh.geometry.morphTargets.forEach(function (e) {
                 var geom = new THREE.Geometry();
                 geom.vertices = e.vertices;
                 geom.faces = geometry.faces;
 
 
-
-                var morpMesh = new THREE.Mesh( geom, mat2 );
+                var morpMesh = new THREE.Mesh(geom, mat2);
                 frames.push(morpMesh);
-                morpMesh.position.x=-100;
+                morpMesh.position.x = -100;
 
             });
 
@@ -117,16 +116,16 @@
             geometry.computeMorphNormals();
             console.log(geometry);
 
-            meshAnim = new THREE.MorphAnimMesh( geometry, mat );
+            meshAnim = new THREE.MorphAnimMesh(geometry, mat);
             meshAnim.duration = 1000;
-            meshAnim.position.x=200;
-            meshAnim.position.z=0;
+            meshAnim.position.x = 200;
+            meshAnim.position.z = 0;
 
             scene.add(meshAnim);
 
             showFrame(0);
 
-        },'../assets/models' );
+        }, '../assets/models');
 
         function showFrame(e) {
             scene.remove(currentMesh);
@@ -135,14 +134,14 @@
             console.log(currentMesh);
         }
 
-        function morphColorsToFaceColors( geometry ) {
+        function morphColorsToFaceColors(geometry) {
 
-            if ( geometry.morphColors && geometry.morphColors.length ) {
+            if (geometry.morphColors && geometry.morphColors.length) {
 
                 var colorMap = geometry.morphColors[ 0 ];
-                for ( var i = 0; i < colorMap.colors.length; i ++ ) {
+                for (var i = 0; i < colorMap.colors.length; i++) {
                     geometry.faces[ i ].color = colorMap.colors[ i ];
-                    geometry.faces[ i ].color.offsetHSL( 0, 0.3, 0 );
+                    geometry.faces[ i ].color.offsetHSL(0, 0.3, 0);
 
                 }
 
@@ -160,8 +159,8 @@
             var delta = clock.getDelta();
             webGLRenderer.clear();
             if (meshAnim) {
-                meshAnim.updateAnimation( delta *1000 );
-                meshAnim.rotation.y+=0.01;
+                meshAnim.updateAnimation(delta * 1000);
+                meshAnim.rotation.y += 0.01;
             }
             // render using requestAnimationFrame
 
@@ -181,12 +180,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

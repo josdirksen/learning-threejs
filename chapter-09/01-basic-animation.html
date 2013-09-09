@@ -3,13 +3,13 @@
 <html>
 
 <head>
-    <title>Example 09.01 - Materials and light</title>
+    <title>Example 09.01 - Basic animations</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -46,50 +46,50 @@
 
 
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(60,20,1,1);
-        var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});
-        var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+        var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
 
         // rotate and position the plane
-        plane.rotation.x=-0.5*Math.PI;
-        plane.position.x=15
-        plane.position.y=0
-        plane.position.z=0
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 15
+        plane.position.y = 0
+        plane.position.z = 0
 
         // add the plane to the scene
         scene.add(plane);
 
         // create a cube
-        var cubeGeometry = new THREE.CubeGeometry(4,4,4);
+        var cubeGeometry = new THREE.CubeGeometry(4, 4, 4);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
 
         // position the cube
-        cube.position.x=-9;
-        cube.position.y=3;
-        cube.position.z=0;
+        cube.position.x = -9;
+        cube.position.y = 3;
+        cube.position.z = 0;
 
         // add the cube to the scene
         scene.add(cube);
 
-        var sphereGeometry = new THREE.SphereGeometry(4,20,20);
+        var sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
         var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
-        var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
         // position the sphere
-        sphere.position.x=20;
-        sphere.position.y=0;
-        sphere.position.z=2;
+        sphere.position.x = 20;
+        sphere.position.y = 0;
+        sphere.position.z = 2;
         // add the sphere to the scene
         scene.add(sphere);
 
-        var cylinderGeometry = new THREE.CylinderGeometry(2,2,20);
+        var cylinderGeometry = new THREE.CylinderGeometry(2, 2, 20);
         var cylinderMaterial = new THREE.MeshLambertMaterial({color: 0x77ff77});
-        var cylinder = new THREE.Mesh(cylinderGeometry,cylinderMaterial);
+        var cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
 
-        cylinder.position.set(0,0,1);
+        cylinder.position.set(0, 0, 1);
 
         scene.add(cylinder);
 
@@ -105,28 +105,28 @@
         scene.add(ambientLight);
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( -40, 60, -10 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 60, -10);
 
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(renderer.domElement);
 
         // call the render function
-        var step=0;
-        var scalingStep=0;
+        var step = 0;
+        var scalingStep = 0;
 
-        var controls = new function() {
+        var controls = new function () {
             this.rotationSpeed = 0.02;
             this.bouncingSpeed = 0.03;
             this.scalingSpeed = 0.03;
         }
 
         var gui = new dat.GUI();
-        gui.add(controls, 'rotationSpeed',0,0.5);
-        gui.add(controls, 'bouncingSpeed',0,0.5);
-        gui.add(controls, 'scalingSpeed',0,0.5);
+        gui.add(controls, 'rotationSpeed', 0, 0.5);
+        gui.add(controls, 'bouncingSpeed', 0, 0.5);
+        gui.add(controls, 'scalingSpeed', 0, 0.5);
 
         render();
 
@@ -138,17 +138,17 @@
             cube.rotation.z += controls.rotationSpeed;
 
             // bounce the sphere up and down
-            step+=controls.bouncingSpeed;
-            sphere.position.x = 20+( 10*(Math.cos(step)));
-            sphere.position.y = 2 +( 10*Math.abs(Math.sin(step)));
+            step += controls.bouncingSpeed;
+            sphere.position.x = 20 + ( 10 * (Math.cos(step)));
+            sphere.position.y = 2 + ( 10 * Math.abs(Math.sin(step)));
 
             // scale the cylinder
 
-            scalingStep+=controls.scalingSpeed;
-            var scaleX=Math.abs(Math.sin(scalingStep/4));
-            var scaleY=Math.abs(Math.cos(scalingStep/5));
-            var scaleZ=Math.abs(Math.sin(scalingStep/7));
-            cylinder.scale.set(scaleX,scaleY,scaleZ);
+            scalingStep += controls.scalingSpeed;
+            var scaleX = Math.abs(Math.sin(scalingStep / 4));
+            var scaleY = Math.abs(Math.cos(scalingStep / 5));
+            var scaleZ = Math.abs(Math.sin(scalingStep / 7));
+            cylinder.scale.set(scaleX, scaleY, scaleZ);
 
             // render using requestAnimationFrame
             renderer.render(scene, camera);
@@ -167,12 +167,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

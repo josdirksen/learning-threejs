@@ -3,14 +3,14 @@
 <html>
 
 <head>
-    <title>Example 07.09 - Load stl model </title>
+    <title>Example 08.09 - Load stl model </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/STLLoader.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -49,24 +49,23 @@
         camera.position.x = 150;
         camera.position.y = 150;
         camera.position.z = 150;
-        camera.lookAt(new THREE.Vector3(0,40,0));
+        camera.lookAt(new THREE.Vector3(0, 40, 0));
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 150, 150, 150 );
-        scene.add( spotLight );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(150, 150, 150);
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
-
 
 
         }
@@ -78,14 +77,14 @@
         // model from http://www.thingiverse.com/thing:69709
         var loader = new THREE.STLLoader();
         var group = new THREE.Object3D();
-        loader.load( "../assets/models/SolidHead_2_lowPoly_42k.stl", function ( geometry ) {
+        loader.load("../assets/models/SolidHead_2_lowPoly_42k.stl", function (geometry) {
             console.log(geometry);
-            var mat = new THREE.MeshLambertMaterial({color:0x7777ff});
+            var mat = new THREE.MeshLambertMaterial({color: 0x7777ff});
             group = new THREE.Mesh(geometry, mat);
-            group.rotation.x=-0.5*Math.PI;
-            group.scale.set(0.6,0.6,0.6);
+            group.rotation.x = -0.5 * Math.PI;
+            group.scale.set(0.6, 0.6, 0.6);
             scene.add(group);
-        } );
+        });
 
 
         render();
@@ -95,7 +94,7 @@
             stats.update();
 
             if (group) {
-                group.rotation.z+=0.006;
+                group.rotation.z += 0.006;
                 // group.rotation.x+=0.006;
             }
 
@@ -114,12 +113,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

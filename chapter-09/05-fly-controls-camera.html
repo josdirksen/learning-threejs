@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 07.07 - Load OBJ and MTL </title>
+    <title>Example 09.05 - Fly controls </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/OBJLoader.js"></script>
     <script type="text/javascript" src="../libs/MTLLoader.js"></script>
@@ -15,7 +15,7 @@
     <script type="text/javascript" src="../libs/FlyControls.js"></script>
 
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -58,13 +58,13 @@
         camera.position.x = 100;
         camera.position.y = 100;
         camera.position.z = 300;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 
-        var flyControls = new THREE.FlyControls( camera );
+        var flyControls = new THREE.FlyControls(camera);
 
         flyControls.movementSpeed = 25;
-        flyControls.domElement = $("#WebGL-output")[0];
+        flyControls.domElement = document.querySelector("#WebGL-output");
         flyControls.rollSpeed = Math.PI / 24;
         flyControls.autoForward = true;
         flyControls.dragToLook = false;
@@ -73,22 +73,21 @@
         scene.add(ambientLight);
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 100, 140, 130 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(100, 140, 130);
         spotLight.intensity = 2;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
-
 
 
         }
@@ -97,11 +96,11 @@
         var mesh;
 
         var loader = new THREE.OBJMTLLoader();
-        loader.addEventListener( 'load', function ( event ) {
+        loader.addEventListener('load', function (event) {
 
             var scale = chroma.scale(['red', 'green', 'blue']);
             var object = event.content;
-            setRandomColors(object,scale);
+            setRandomColors(object, scale);
 
 
             mesh = object;
@@ -109,10 +108,9 @@
         });
 
 
-
         var texture = THREE.ImageUtils.loadTexture('../assets/textures/Metro01.JPG');
         //texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        loader.load( '../assets/models/city.obj','../assets/models/city.mtl',{side: THREE.DoubleSide});
+        loader.load('../assets/models/city.obj', '../assets/models/city.mtl', {side: THREE.DoubleSide});
         //texture.repeat.set( 1 , 1);
 
 
@@ -122,18 +120,20 @@
 
         render();
 
-        function setRandomColors(object,scale) {
+        function setRandomColors(object, scale) {
             var children = object.children;
 
 
             if (children && children.length > 0) {
-                children.forEach(function(e){setRandomColors(e,scale)});
+                children.forEach(function (e) {
+                    setRandomColors(e, scale)
+                });
             } else {
                 // no children assume contains a mesh
                 if (object instanceof THREE.Mesh) {
 
                     object.material.color = new THREE.Color(scale(Math.random()).hex());
-                    if (object.material.name.indexOf("building")==0) {
+                    if (object.material.name.indexOf("building") == 0) {
                         object.material.emissive = new THREE.Color(0x444444);
                         object.material.transparent = true;
                         object.material.opacity = 0.8;
@@ -148,15 +148,15 @@
             var delta = clock.getDelta();
 
             if (mesh) {
-             //   mesh.rotation.y+=0.006;
+                //   mesh.rotation.y+=0.006;
             }
 
 
-            flyControls.update( delta );
+            flyControls.update(delta);
             webGLRenderer.clear();
             // render using requestAnimationFrame
             requestAnimationFrame(render);
-            webGLRenderer.render( scene, camera )
+            webGLRenderer.render(scene, camera)
         }
 
         function initStats() {
@@ -169,12 +169,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

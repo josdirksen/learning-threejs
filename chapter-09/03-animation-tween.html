@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 07.13 - Load ply model </title>
+    <title>Example 09.03 - Animation tween </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/PLYLoader.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
@@ -11,7 +11,7 @@
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/tween.min.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -50,63 +50,58 @@
         camera.position.x = 10;
         camera.position.y = 10;
         camera.position.z = 10;
-        camera.lookAt(new THREE.Vector3(0,-2,0));
+        camera.lookAt(new THREE.Vector3(0, -2, 0));
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 20, 20, 20 );
-        scene.add( spotLight );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(20, 20, 20);
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
-
-
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
-
 
 
         }
 
-        var group = new THREE.Object3D();
-        var origGeom;
-
+        var particleSystem = new THREE.Object3D();
+        var loadedGeometry;
 
 
         // create a tween
         // http://sole.github.io/tween.js/examples/03_graphs.html
-        var posSrc = {pos:1}
-        var tween = new TWEEN.Tween(posSrc).to({pos:0},5000);
+        var posSrc = {pos: 1}
+        var tween = new TWEEN.Tween(posSrc).to({pos: 0}, 5000);
         tween.easing(TWEEN.Easing.Sinusoidal.InOut);
 
-        var tweenBack = new TWEEN.Tween(posSrc).to({pos:1},5000);
+        var tweenBack = new TWEEN.Tween(posSrc).to({pos: 1}, 5000);
         tweenBack.easing(TWEEN.Easing.Sinusoidal.InOut);
 
         tween.chain(tweenBack);
         tweenBack.chain(tween);
 
 
-        var onUpdate = function() {
+        var onUpdate = function () {
             var count = 0;
             var pos = this.pos;
 
-            origGeom.vertices.forEach(function(e) {
-                var newY=((e.y+3.22544)*pos)-3.22544;
-                group.geometry.vertices[count++].set(e.x, newY, e.z);
+            loadedGeometry.vertices.forEach(function (e) {
+                var newY = ((e.y + 3.22544) * pos) - 3.22544;
+                particleSystem.geometry.vertices[count++].set(e.x, newY, e.z);
             });
 
-            group.sortParticles = true;
+            particleSystem.sortParticles = true;
         };
 
         tween.onUpdate(onUpdate);
         tweenBack.onUpdate(onUpdate);
-
 
 
         var gui = new dat.GUI();
@@ -114,8 +109,8 @@
 
         var loader = new THREE.PLYLoader();
 
-        loader.load( "../assets/models/test.ply", function ( geometry ) {
-            origGeom = geometry.clone();
+        loader.load("../assets/models/test.ply", function (geometry) {
+            loadedGeometry = geometry.clone();
 
             var material = new THREE.ParticleBasicMaterial({
                 color: 0xffffff,
@@ -126,12 +121,12 @@
                 map: generateSprite()
             });
 
-            group = new THREE.ParticleSystem(geometry, material);
-            group.sortParticles = true;
+            particleSystem = new THREE.ParticleSystem(geometry, material);
+            particleSystem.sortParticles = true;
 
             tween.start();
-            scene.add(group);
-        } );
+            scene.add(particleSystem);
+        });
 
 
         render();
@@ -139,19 +134,19 @@
         // from THREE.js examples
         function generateSprite() {
 
-            var canvas = document.createElement( 'canvas' );
+            var canvas = document.createElement('canvas');
             canvas.width = 16;
             canvas.height = 16;
 
-            var context = canvas.getContext( '2d' );
-            var gradient = context.createRadialGradient( canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2 );
-            gradient.addColorStop( 0, 'rgba(255,255,255,1)' );
-            gradient.addColorStop( 0.2, 'rgba(0,255,255,1)' );
-            gradient.addColorStop( 0.4, 'rgba(0,0,64,1)' );
-            gradient.addColorStop( 1, 'rgba(0,0,0,1)' );
+            var context = canvas.getContext('2d');
+            var gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+            gradient.addColorStop(0, 'rgba(255,255,255,1)');
+            gradient.addColorStop(0.2, 'rgba(0,255,255,1)');
+            gradient.addColorStop(0.4, 'rgba(0,0,64,1)');
+            gradient.addColorStop(1, 'rgba(0,0,0,1)');
 
             context.fillStyle = gradient;
-            context.fillRect( 0, 0, canvas.width, canvas.height );
+            context.fillRect(0, 0, canvas.width, canvas.height);
 
             var texture = new THREE.Texture(canvas);
             texture.needsUpdate = true;
@@ -164,7 +159,7 @@
             TWEEN.update();
 
 
-            if (group) {
+            if (particleSystem) {
 
 //               group.rotation.y+=0.006;
 //                 group.rotation.y+=0.006;
@@ -177,14 +172,10 @@
 //                        v.applyMatrix3(sMatrix);
 //                    })
 //                }
-;
+                ;
 
 
             }
-
-
-
-
 
 
             // render using requestAnimationFrame
@@ -202,12 +193,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

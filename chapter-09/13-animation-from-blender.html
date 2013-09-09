@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -48,48 +48,47 @@
         camera.position.x = 0;
         camera.position.y = 0;
         camera.position.z = 4;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 0, 50, 30 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(0, 50, 30);
         spotLight.intensity = 2;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
         var mesh;
         var clock = new THREE.Clock();
 
         var loader = new THREE.JSONLoader();
-        loader.load( '../assets/models/hand-2.js', function ( geometry, mat ) {
+        loader.load('../assets/models/hand-2.js', function (geometry, mat) {
 
             // register the animation
-            THREE.AnimationHandler.add( geometry.animation );
+            THREE.AnimationHandler.add(geometry.animation);
 
             // create a material
-            var mat = new THREE.MeshLambertMaterial({color:0xF0C8C9, skinning:true});
+            var mat = new THREE.MeshLambertMaterial({color: 0xF0C8C9, skinning: true});
 
             // create and position the mesh
-            mesh = new THREE.SkinnedMesh( geometry, mat);
-            mesh.rotation.x=0.5*Math.PI;
-            mesh.rotation.z=0.7*Math.PI;
+            mesh = new THREE.SkinnedMesh(geometry, mat);
+            mesh.rotation.x = 0.5 * Math.PI;
+            mesh.rotation.z = 0.7 * Math.PI;
             scene.add(mesh);
 
-           // create the animation
-           var animation = new THREE.Animation( mesh, "wave" );
+            // create the animation
+            var animation = new THREE.Animation(mesh, "wave");
 
 
-           // start the animation
-           animation.play();
+            // start the animation
+            animation.play();
 
-        },'../assets/models' );
-
+        }, '../assets/models');
 
 
         render();
@@ -123,12 +122,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

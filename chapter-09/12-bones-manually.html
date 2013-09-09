@@ -3,14 +3,14 @@
 <html>
 
 <head>
-    <title>Example 07.05 - Load blender model </title>
+    <title>Example 09.12 - Load blender model </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/tween.min.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -49,35 +49,37 @@
         camera.position.x = 0;
         camera.position.y = 0;
         camera.position.z = 4;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 0, 50, 30 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(0, 50, 30);
         spotLight.intensity = 2;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
         var mesh;
         var clock = new THREE.Clock();
 
         var loader = new THREE.JSONLoader();
-        loader.load( '../assets/models/hand-1.js', function ( geometry, mat ) {
-            var mat = new THREE.MeshLambertMaterial({color:0xF0C8C9, skinning: true});
-            mesh = new THREE.SkinnedMesh( geometry, mat);
+        loader.load('../assets/models/hand-1.js', function (geometry, mat) {
+            var mat = new THREE.MeshLambertMaterial({color: 0xF0C8C9, skinning: true});
+            mesh = new THREE.SkinnedMesh(geometry, mat);
 
             // rotate the complete hand
-            mesh.rotation.x=0.5*Math.PI;
-            mesh.rotation.z=0.7*Math.PI;
+            mesh.rotation.x = 0.5 * Math.PI;
+            mesh.rotation.z = 0.7 * Math.PI;
 
             // make sure to set quaternation to false for easy rotation
-            mesh.bones.forEach(function(e){e.useQuaternion=false;})
+            mesh.bones.forEach(function (e) {
+                e.useQuaternion = false;
+            })
 
             // add the mesh
             scene.add(mesh);
@@ -85,36 +87,34 @@
             // and start the animation
             tween.start();
 
-        },'../assets/models' );
+        }, '../assets/models');
 
-        var posSrc = {pos:-1}
-        var tween = new TWEEN.Tween(posSrc).to({pos:0},3000);
+        var posSrc = {pos: -1}
+        var tween = new TWEEN.Tween(posSrc).to({pos: 0}, 3000);
         tween.easing(TWEEN.Easing.Cubic.InOut);
 
-        var tweenBack = new TWEEN.Tween(posSrc).to({pos:-1},3000);
+        var tweenBack = new TWEEN.Tween(posSrc).to({pos: -1}, 3000);
         tweenBack.easing(TWEEN.Easing.Cubic.InOut);
 
         tween.chain(tweenBack);
         tweenBack.chain(tween);
 
 
-
-
-        var onUpdate = function() {
+        var onUpdate = function () {
             var pos = this.pos;
 
             // rotate the fingers
-            mesh.bones[5].rotation.set(0,0,pos);
-            mesh.bones[6].rotation.set(0,0,pos);
-            mesh.bones[10].rotation.set(0,0,pos);
-            mesh.bones[11].rotation.set(0,0,pos);
-            mesh.bones[15].rotation.set(0,0,pos);
-            mesh.bones[16].rotation.set(0,0,pos);
-            mesh.bones[20].rotation.set(0,0,pos);
-            mesh.bones[21].rotation.set(0,0,pos);
+            mesh.bones[5].rotation.set(0, 0, pos);
+            mesh.bones[6].rotation.set(0, 0, pos);
+            mesh.bones[10].rotation.set(0, 0, pos);
+            mesh.bones[11].rotation.set(0, 0, pos);
+            mesh.bones[15].rotation.set(0, 0, pos);
+            mesh.bones[16].rotation.set(0, 0, pos);
+            mesh.bones[20].rotation.set(0, 0, pos);
+            mesh.bones[21].rotation.set(0, 0, pos);
 
             // rotate the wrist
-            mesh.bones[1].rotation.set(pos,0,0);
+            mesh.bones[1].rotation.set(pos, 0, 0);
         };
 
         tween.onUpdate(onUpdate);
@@ -133,7 +133,7 @@
             if (mesh) {
 
 
-              //  THREE.AnimationHandler.update(delta);
+                //  THREE.AnimationHandler.update(delta);
 
             }
 
@@ -153,12 +153,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

@@ -3,14 +3,14 @@
 <html>
 
 <head>
-    <title>Example 07.13 - Load ply model </title>
+    <title>Example 08.13 - Load ply model </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/PLYLoader.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -49,24 +49,23 @@
         camera.position.x = 10;
         camera.position.y = 10;
         camera.position.z = 10;
-        camera.lookAt(new THREE.Vector3(0,-2,0));
+        camera.lookAt(new THREE.Vector3(0, -2, 0));
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 20, 20, 20 );
-        scene.add( spotLight );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(20, 20, 20);
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             // we need the first child, since it's a multimaterial
-
 
 
         }
@@ -77,7 +76,7 @@
 
         var loader = new THREE.PLYLoader();
         var group = new THREE.Object3D();
-        loader.load( "../assets/models/test.ply", function ( geometry ) {
+        loader.load("../assets/models/test.ply", function (geometry) {
             var material = new THREE.ParticleBasicMaterial({
                 color: 0xffffff,
                 size: 0.4,
@@ -92,7 +91,7 @@
 
             console.log(group);
             scene.add(group);
-        } );
+        });
 
 
         render();
@@ -100,19 +99,19 @@
         // from THREE.js examples
         function generateSprite() {
 
-            var canvas = document.createElement( 'canvas' );
+            var canvas = document.createElement('canvas');
             canvas.width = 16;
             canvas.height = 16;
 
-            var context = canvas.getContext( '2d' );
-            var gradient = context.createRadialGradient( canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2 );
-            gradient.addColorStop( 0, 'rgba(255,255,255,1)' );
-            gradient.addColorStop( 0.2, 'rgba(0,255,255,1)' );
-            gradient.addColorStop( 0.4, 'rgba(0,0,64,1)' );
-            gradient.addColorStop( 1, 'rgba(0,0,0,1)' );
+            var context = canvas.getContext('2d');
+            var gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2);
+            gradient.addColorStop(0, 'rgba(255,255,255,1)');
+            gradient.addColorStop(0.2, 'rgba(0,255,255,1)');
+            gradient.addColorStop(0.4, 'rgba(0,0,64,1)');
+            gradient.addColorStop(1, 'rgba(0,0,0,1)');
 
             context.fillStyle = gradient;
-            context.fillRect( 0, 0, canvas.width, canvas.height );
+            context.fillRect(0, 0, canvas.width, canvas.height);
 
             var texture = new THREE.Texture(canvas);
             texture.needsUpdate = true;
@@ -124,8 +123,8 @@
             stats.update();
 
             if (group) {
-               // group.rotation.y+=0.006;
-                 group.rotation.y+=0.006;
+                // group.rotation.y+=0.006;
+                group.rotation.y += 0.006;
 //                if (group.geometry) {
 //                    group.geometry.vertices.forEach(function(v) {
 ////                        var scale = 1.001 + Math.random()/100;
@@ -135,14 +134,10 @@
 //                        v.applyMatrix3(sMatrix);
 //                    })
 //                }
-;
+                ;
 
 
             }
-
-
-
-
 
 
             // render using requestAnimationFrame
@@ -160,12 +155,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

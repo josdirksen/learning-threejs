@@ -3,14 +3,13 @@
 <html>
 
 <head>
-    <title>Example 05.11 - Basic 3D geometries - Sphere</title>
+    <title>Example 06.08 - Binary operations</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/spin.js"></script>
-    <script type="text/javascript" src="../libs/coffee-script.js"></script>
-    <script type="text/coffeescript" src="../libs/ThreeBSP.coffee"></script>
+    <script type="text/javascript" src="../libs/ThreeBSP.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -32,9 +31,7 @@
 <script type="text/javascript">
 
 // once everything is loaded, we run our Three.js stuff.
-function onReady() {
-
-    console.log(ThreeBSP);
+$(function () {
 
     var stats = initStats();
 
@@ -182,51 +179,63 @@ function onReady() {
 
     render();
 
+    var spinner;
     function redrawResult() {
-        scene.remove(result);
-        var sphere1BSP = new ThreeBSP(sphere1);
-        var sphere2BSP = new ThreeBSP(sphere2);
-        var cube2BSP = new ThreeBSP(cube);
 
-        var resultBSP;
+        showSpinner();
 
-        // first do the sphere
-        switch (controls.actionSphere) {
-            case "subtract":
-                resultBSP = sphere1BSP.subtract(sphere2BSP);
-                break;
-            case "intersect":
-                resultBSP = sphere1BSP.intersect(sphere2BSP);
-                break;
-            case "union":
-                resultBSP = sphere1BSP.union(sphere2BSP);
-                break;
-            case "none": // noop;
-        }
+        // make the call async to avoid blocking the thread. Need
+        // to set timeout > 1, if not executed immediately.
+        setTimeout(function() {
+            scene.remove(result);
+            var sphere1BSP = new ThreeBSP(sphere1);
+            var sphere2BSP = new ThreeBSP(sphere2);
+            var cube2BSP = new ThreeBSP(cube);
 
-        // next do the cube
-        if (!resultBSP) resultBSP = sphere1BSP;
-        switch (controls.actionCube) {
-            case "subtract":
-                resultBSP = resultBSP.subtract(cube2BSP);
-                break;
-            case "intersect":
-                resultBSP = resultBSP.intersect(cube2BSP);
-                break;
-            case "union":
-                resultBSP = resultBSP.union(cube2BSP);
-                break;
-            case "none": // noop;
-        }
+            var resultBSP;
 
 
-        if (controls.actionCube == "none" && controls.actionSphere == "none") {
-            // do nothing
-        } else {
-            result = resultBSP.toMesh();
-            result.geometry.computeVertexNormals();
-            scene.add(result);
-        }
+            // first do the sphere
+            switch (controls.actionSphere) {
+                case "subtract":
+                    resultBSP = sphere1BSP.subtract(sphere2BSP);
+                    break;
+                case "intersect":
+                    resultBSP = sphere1BSP.intersect(sphere2BSP);
+                    break;
+                case "union":
+                    resultBSP = sphere1BSP.union(sphere2BSP);
+                    break;
+                case "none": // noop;
+            }
+
+            // next do the cube
+            if (!resultBSP) resultBSP = sphere1BSP;
+            switch (controls.actionCube) {
+                case "subtract":
+                    resultBSP = resultBSP.subtract(cube2BSP);
+                    break;
+                case "intersect":
+                    resultBSP = resultBSP.intersect(cube2BSP);
+                    break;
+                case "union":
+                    resultBSP = resultBSP.union(cube2BSP);
+                    break;
+                case "none": // noop;
+            }
+
+
+            if (controls.actionCube === "none" && controls.actionSphere === "none") {
+                // do nothing
+            } else {
+                result = resultBSP.toMesh();
+                result.geometry.computeFaceNormals();
+                result.geometry.computeVertexNormals();
+                scene.add(result);
+            }
+
+            hideSpinner(spinner);
+        },200);
     }
 
     function createMesh(geom) {
@@ -243,8 +252,40 @@ function onReady() {
         return mesh;
     }
 
+
+    function showSpinner() {
+
+        var opts = {
+            lines: 13, // The number of lines to draw
+            length: 20, // The length of each line
+            width: 10, // The line thickness
+            radius: 30, // The radius of the inner circle
+            corners: 1, // Corner roundness (0..1)
+            rotate: 0, // The rotation offset
+            direction: 1, // 1: clockwise, -1: counterclockwise
+            color: '#000', // #rgb or #rrggbb or array of colors
+            speed: 1, // Rounds per second
+            trail: 60, // Afterglow percentage
+            shadow: false, // Whether to render a shadow
+            hwaccel: false, // Whether to use hardware acceleration
+            className: 'spinner', // The CSS class to assign to the spinner
+            zIndex: 2e9, // The z-index (defaults to 2000000000)
+            top: 'auto', // Top position relative to parent in px
+            left: 'auto' // Left position relative to parent in px
+        };
+        var target = document.getElementById('WebGL-output');
+        spinner = new Spinner(opts).spin(target);
+        return spinner;
+    }
+
+    function hideSpinner(spinner) {
+       spinner.stop();
+    }
+
     function render() {
         stats.update();
+
+
 
 //            sphere.rotation.y=step+=0.01;
 
@@ -277,12 +318,9 @@ function onReady() {
         return stats;
     }
 
-}
+});
 
 
-</script>
-<script type="text/coffeescript">
-    onReady();
 </script>
 </body>
 </html>

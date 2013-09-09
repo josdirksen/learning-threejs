@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 09.## - Path Controls</title>
+    <title>Example 09.09 - Path Controls</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../libs/OBJMTLLoader.js"></script>
     <script type="text/javascript" src="../libs/PathControls.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -31,26 +31,25 @@
 <!-- Javascript code that runs our Three.js examples -->
 <script type="text/javascript">
 
-    // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+// once everything is loaded, we run our Three.js stuff.
+$(function () {
 
 
+    var stats = initStats();
 
-        var stats = initStats();
+    var clock = new THREE.Clock();
 
-        var clock = new THREE.Clock();
+    // create a scene, that will hold all our elements such as objects, cameras and lights.
+    var scene = new THREE.Scene();
 
-        // create a scene, that will hold all our elements such as objects, cameras and lights.
-        var scene = new THREE.Scene();
+    // create a camera, which defines where we're looking at.
+    var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-        // create a camera, which defines where we're looking at.
-        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-        // create a render and set the size
-        var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColorHex(0xEEEEEE, 1.0);
-        webGLRenderer.setSize(window.innerWidth, window.innerHeight);
-        webGLRenderer.shadowMapEnabled = true;
+    // create a render and set the size
+    var webGLRenderer = new THREE.WebGLRenderer();
+    webGLRenderer.setClearColorHex(0xEEEEEE, 1.0);
+    webGLRenderer.setSize(window.innerWidth, window.innerHeight);
+    webGLRenderer.shadowMapEnabled = true;
 
 //        // position and point the camera to the center of the scene
 //        camera.position.x = 80;
@@ -58,198 +57,196 @@
 //        camera.position.z = 80;
 //        camera.lookAt(new THREE.Vector3(0,0,0));
 
-        // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 0, 140, 50 );
-        spotLight.intensity = 3;
-        scene.add( spotLight );
+    // add spotlight for the shadows
+    var spotLight = new THREE.SpotLight(0xffffff);
+    spotLight.position.set(0, 140, 50);
+    spotLight.intensity = 3;
+    scene.add(spotLight);
 
-        // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+    // add the output of the renderer to the html element
+    $("#WebGL-output").append(webGLRenderer.domElement);
 
-        // call the render function
-        var step=0;
+    // call the render function
+    var step = 0;
 
-        // the points group
-        var spGroup;
-        // the mesh
-        var tubeMesh;
+    // the points group
+    var spGroup;
+    // the mesh
+    var tubeMesh;
 
 
-        var cubeGeom = new THREE.CubeGeometry(5,40,5);
-        var cube = new THREE.Mesh(cubeGeom,new THREE.MeshNormalMaterial());
-        //scene.add(cube);
+    var cubeGeom = new THREE.CubeGeometry(5, 40, 5);
+    var cube = new THREE.Mesh(cubeGeom, new THREE.MeshNormalMaterial());
+    //scene.add(cube);
 
-        var loader = new THREE.OBJMTLLoader();
-        loader.addEventListener( 'load', function ( event ) {
+    var loader = new THREE.OBJMTLLoader();
+    loader.addEventListener('load', function (event) {
 
-            var object = event.content;
+        var object = event.content;
 
-            // fix for incorrect uvs.
-            var geom = object.children[0].geometry;
-            var uv3 = geom.faceVertexUvs[0][0];
-            var uv4 = geom.faceVertexUvs[0][10];
+        // fix for incorrect uvs.
+        var geom = object.children[0].geometry;
+        var uv3 = geom.faceVertexUvs[0][0];
+        var uv4 = geom.faceVertexUvs[0][10];
 
-            // fill in the missing ones
-            for (var j = 0 ; j < 7616-7206 ; j++) {
-                if (geom.faces[j+7206] instanceof THREE.Face4 ) {
-                    geom.faceVertexUvs[0].push(uv4);
-                } else {
-                    geom.faceVertexUvs[0].push(uv4);
-                }
+        // fill in the missing ones
+        for (var j = 0; j < 7616 - 7206; j++) {
+            if (geom.faces[j + 7206] instanceof THREE.Face4) {
+                geom.faceVertexUvs[0].push(uv4);
+            } else {
+                geom.faceVertexUvs[0].push(uv4);
             }
-
-            // correct the ones where 3 vertices are listed but four are needed
-            // and vice versa
-            for (var j = 0 ; j < geom.faces.length ; j++) {
-                if (geom.faces[j] instanceof THREE.Face4) {
-                    if (geom.faceVertexUvs[0][j].length == 3) {
-                        geom.faceVertexUvs[0][j] = uv4;
-                    }
-
-                }  else {
-                    if (geom.faceVertexUvs[0][j].length == 4) {
-                        geom.faceVertexUvs[0][j] = uv3;
-                    }
-                }
-            }
-
-            object.scale.set(30,30,30);
-
-            scene.add(object);
-        });
-
-
-        loader.load( '../assets/models/sol/libertStatue.obj','../assets/models/sol/libertStatue.mtl',{side: THREE.DoubleSide});
-
-
-        // setup the control gui
-        var controls = new function() {
-
-            this.numberOfPoints = 5;
-            this.segments = 64;
-            this.radius = 1;
-            this.radiusSegments = 1;
-            this.closed = false;
-            this.points = [];
-            // we need the first child, since it's a multimaterial
-
-            this.newPoints = function () {
-                var points = [];
-                var r=20;
-                var cX = 0;
-                var cY = 0;
-
-
-                for (var i = 0 ; i < 1440 ; i+=5) {
-
-                    var x = r*Math.cos(i*(Math.PI/180)) + cX;
-                    var z = r*Math.sin(i*(Math.PI/180)) + cY;
-                    var y = i/30;
-
-                    points.push(new THREE.Vector3(x,y,z));
-                }
-
-                controls.points = points;
-                controls.redraw();
-            }
-
-            this.redraw = function() {
-                scene.remove(spGroup);
-                scene.remove(tubeMesh);
-                generatePoints(controls.points, controls.segments, controls.radius, controls.radiusSegments, controls.closed);
-            };
-
         }
 
+        // correct the ones where 3 vertices are listed but four are needed
+        // and vice versa
+        for (var j = 0; j < geom.faces.length; j++) {
+            if (geom.faces[j] instanceof THREE.Face4) {
+                if (geom.faceVertexUvs[0][j].length == 3) {
+                    geom.faceVertexUvs[0][j] = uv4;
+                }
 
-
-        controls.newPoints();
-
-
-
-        var pathControls = new THREE.PathControls( camera );
-
-        //pathControls.waypoints = controls.points;
-        pathControls.duration = 70
-        pathControls.useConstantSpeed = true;
-        pathControls.lookSpeed = 0.1;
-        pathControls.lookVertical = true;
-        pathControls.lookHorizontal = true;
-        pathControls.verticalAngleMap = { srcRange: [ 0, 2 * Math.PI ], dstRange: [ 1.1, 3.8 ] };
-        pathControls.horizontalAngleMap = { srcRange: [ 0, 2 * Math.PI ], dstRange: [ 0.3, Math.PI - 0.3 ] };
-        pathControls.lon = 300;
-        pathControls.lat = 40;
-
-        controls.points.forEach(function(e) {pathControls.waypoints.push([e.x, e.y, e.z])});
-        pathControls.init();
-
-        scene.add(pathControls.animationParent);
-        pathControls.animation.play( true, 0 );
-
-        render();
-
-        function generatePoints(points, segments, radius, radiusSegments, closed) {
-            // add n random spheres
-
-
-
-            // use the same points to create a convexgeometry
-            var tubeGeometry = new THREE.TubeGeometry(new THREE.SplineCurve3(points),segments,radius,radiusSegments,closed);
-            tubeMesh = createMesh(tubeGeometry);
-            scene.add(tubeMesh);
+            } else {
+                if (geom.faceVertexUvs[0][j].length == 4) {
+                    geom.faceVertexUvs[0][j] = uv3;
+                }
+            }
         }
 
-        function createMesh(geom) {
+        object.scale.set(30, 30, 30);
 
-            // assign two materials
-            //var meshMaterial = new THREE.MeshNormalMaterial();
-            var meshMaterial = new THREE.MeshBasicMaterial({color:0x00ff00, transparent:true, opacity:0.2, side: THREE.DoubleSide});
+        scene.add(object);
+    });
 
-            var wireFrameMat = new THREE.MeshBasicMaterial();
-            wireFrameMat.wireframe = true;
 
-            // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[wireFrameMat]);
+    loader.load('../assets/models/sol/libertStatue.obj', '../assets/models/sol/libertStatue.mtl', {side: THREE.DoubleSide});
 
-            return mesh;
+
+    // setup the control gui
+    var controls = new function () {
+
+        this.numberOfPoints = 5;
+        this.segments = 64;
+        this.radius = 1;
+        this.radiusSegments = 1;
+        this.closed = false;
+        this.points = [];
+        // we need the first child, since it's a multimaterial
+
+        this.newPoints = function () {
+            var points = [];
+            var r = 20;
+            var cX = 0;
+            var cY = 0;
+
+
+            for (var i = 0; i < 1440; i += 5) {
+
+                var x = r * Math.cos(i * (Math.PI / 180)) + cX;
+                var z = r * Math.sin(i * (Math.PI / 180)) + cY;
+                var y = i / 30;
+
+                points.push(new THREE.Vector3(x, y, z));
+            }
+
+            controls.points = points;
+            controls.redraw();
         }
 
-        function render() {
-            stats.update();
+        this.redraw = function () {
+            scene.remove(spGroup);
+            scene.remove(tubeMesh);
+            generatePoints(controls.points, controls.segments, controls.radius, controls.radiusSegments, controls.closed);
+        };
 
-            var delta = clock.getDelta();
-            THREE.AnimationHandler.update( delta );
-            pathControls.update( delta );
+    }
+
+
+    controls.newPoints();
+
+
+    var pathControls = new THREE.PathControls(camera);
+
+    //pathControls.waypoints = controls.points;
+    pathControls.duration = 70
+    pathControls.useConstantSpeed = true;
+    pathControls.lookSpeed = 0.1;
+    pathControls.lookVertical = true;
+    pathControls.lookHorizontal = true;
+    pathControls.verticalAngleMap = { srcRange: [ 0, 2 * Math.PI ], dstRange: [ 1.1, 3.8 ] };
+    pathControls.horizontalAngleMap = { srcRange: [ 0, 2 * Math.PI ], dstRange: [ 0.3, Math.PI - 0.3 ] };
+    pathControls.lon = 300;
+    pathControls.lat = 40;
+
+    controls.points.forEach(function (e) {
+        pathControls.waypoints.push([e.x, e.y, e.z])
+    });
+    pathControls.init();
+
+    scene.add(pathControls.animationParent);
+    pathControls.animation.play(true, 0);
+
+    render();
+
+    function generatePoints(points, segments, radius, radiusSegments, closed) {
+        // add n random spheres
+
+
+        // use the same points to create a convexgeometry
+        var tubeGeometry = new THREE.TubeGeometry(new THREE.SplineCurve3(points), segments, radius, radiusSegments, closed);
+        tubeMesh = createMesh(tubeGeometry);
+        scene.add(tubeMesh);
+    }
+
+    function createMesh(geom) {
+
+        // assign two materials
+        //var meshMaterial = new THREE.MeshNormalMaterial();
+        var meshMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00, transparent: true, opacity: 0.2, side: THREE.DoubleSide});
+
+        var wireFrameMat = new THREE.MeshBasicMaterial();
+        wireFrameMat.wireframe = true;
+
+        // create a multimaterial
+        var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [wireFrameMat]);
+
+        return mesh;
+    }
+
+    function render() {
+        stats.update();
+
+        var delta = clock.getDelta();
+        THREE.AnimationHandler.update(delta);
+        pathControls.update(delta);
 
 //            console.log(camera.position);
 //            console.log(pathControls.lat + ": " + pathControls.lon);
 
 
-         //   spGroup.rotation.y=step;
-         //   tubeMesh.rotation.y=step+=0.01;
+        //   spGroup.rotation.y=step;
+        //   tubeMesh.rotation.y=step+=0.01;
 
-            // render using requestAnimationFrame
-            requestAnimationFrame(render);
-            webGLRenderer.render(scene, camera);
-        }
+        // render using requestAnimationFrame
+        requestAnimationFrame(render);
+        webGLRenderer.render(scene, camera);
+    }
 
-        function initStats() {
+    function initStats() {
 
-            var stats = new Stats();
-            stats.setMode(0); // 0: fps, 1: ms
+        var stats = new Stats();
+        stats.setMode(0); // 0: fps, 1: ms
 
-            // Align top-left
-            stats.domElement.style.position = 'absolute';
-            stats.domElement.style.left = '0px';
-            stats.domElement.style.top = '0px';
+        // Align top-left
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0px';
+        stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+        $("#Stats-output").append(stats.domElement);
 
-            return stats;
-        }
-    });
-
+        return stats;
+    }
+});
 
 
 </script>

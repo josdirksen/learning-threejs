@@ -3,13 +3,13 @@
 <html>
 
 <head>
-    <title>Example 06.05 - Particles - Canvas based texture - WebGL</title>
+    <title>Example 07.08 - Particles - Sprites</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -53,20 +53,18 @@
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         var material = new THREE.MeshNormalMaterial();
-        var geom = new THREE.SphereGeometry(15,20,20);
-        var mesh = new THREE.Mesh(geom,material);
+        var geom = new THREE.SphereGeometry(15, 20, 20);
+        var mesh = new THREE.Mesh(geom, material);
 
         scene.add(mesh);
 
-        var getTexture = function() {
+        var getTexture = function () {
             var texture = new THREE.ImageUtils.loadTexture("../assets/textures/particles/sprite-sheet.png");
             return texture;
         }
 
 
-
-
-        var controls = new function() {
+        var controls = new function () {
             this.size = 30;
             this.sprite = 0;
             this.transparent = true;
@@ -75,8 +73,8 @@
             this.rotateSystem = true;
             this.sizeAttenuation = true;
 
-            this.redraw = function() {
-                scene.children.forEach(function(child) {
+            this.redraw = function () {
+                scene.children.forEach(function (child) {
                     if (child instanceof THREE.Sprite) scene.remove(child);
                 })
                 createSprite(controls.size, controls.transparent, controls.opacity, controls.color, controls.sprite);
@@ -84,54 +82,52 @@
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'sprite',0,4).step(1).onChange(controls.redraw);
-        gui.add(controls,'size',0,120).onChange(controls.redraw);
-        gui.add(controls,'transparent').onChange(controls.redraw);
-        gui.add(controls,'opacity',0,1).onChange(controls.redraw);
-        gui.addColor(controls,'color').onChange(controls.redraw);
-        gui.add(controls,'sizeAttenuation').onChange(controls.redraw);
+        gui.add(controls, 'sprite', 0, 4).step(1).onChange(controls.redraw);
+        gui.add(controls, 'size', 0, 120).onChange(controls.redraw);
+        gui.add(controls, 'transparent').onChange(controls.redraw);
+        gui.add(controls, 'opacity', 0, 1).onChange(controls.redraw);
+        gui.addColor(controls, 'color').onChange(controls.redraw);
+        gui.add(controls, 'sizeAttenuation').onChange(controls.redraw);
 
         controls.redraw();
 
         render();
 
 
-        function createSprite(size,transparent,opacity,color, spriteNumber) {
+        function createSprite(size, transparent, opacity, color, spriteNumber) {
             var spriteMaterial = new THREE.SpriteMaterial({
-                  opacity: opacity,
-                  color:color,
-                  transparent: transparent,
-                  useScreenCoordinates:true,
-                  map: getTexture()}
+                        opacity: opacity,
+                        color: color,
+                        transparent: transparent,
+                        useScreenCoordinates: true,
+                        map: getTexture()}
             );
 
             // we have 1 row, with five sprites
-            spriteMaterial.uvOffset.set(1/5*spriteNumber,0);
-            spriteMaterial.uvScale.set(1/5,1);
+            spriteMaterial.uvOffset.set(1 / 5 * spriteNumber, 0);
+            spriteMaterial.uvScale.set(1 / 5, 1);
             spriteMaterial.alignment = THREE.SpriteAlignment.bottomCenter;
             spriteMaterial.scaleByViewport = true;
             spriteMaterial.blending = THREE.AdditiveBlending;
 
             var sprite = new THREE.Sprite(spriteMaterial);
-            sprite.scale.set(size,size,size);
-            sprite.position.set(200,window.innerHeight-2,0);
+            sprite.scale.set(size, size, size);
+            sprite.position.set(200, window.innerHeight - 2, 0);
             sprite.velocityX = 5;
 
             scene.add(sprite);
         }
 
 
-
-
-
         var step = 0;
+
         function render() {
 
             stats.update();
 
-            camera.position.y=Math.sin(step+=0.01)*20;
+            camera.position.y = Math.sin(step += 0.01) * 20;
 
-            scene.children.forEach(function(e) {
+            scene.children.forEach(function (e) {
                 if (e instanceof THREE.Sprite) {
                     // move the sprite along the bottom
                     e.position.x = e.position.x + e.velocityX;
@@ -139,7 +135,7 @@
                         e.velocityX = -5;
                         //controls.sprite=(controls.sprite++)%5;
                         console.log(controls.sprite++);
-                        e.material.uvOffset.set(1/5*(controls.sprite%4),0);
+                        e.material.uvOffset.set(1 / 5 * (controls.sprite % 4), 0);
                     }
                     if (e.position.x < 0) {
                         e.velocityX = 5;
@@ -162,14 +158,13 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
 
 
     });
-
 
 
 </script>

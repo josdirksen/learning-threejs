@@ -3,13 +3,13 @@
 <html>
 
 <head>
-    <title>Example 06.06 - Particles - Rainy scene</title>
+    <title>Example 07.06 - Particles - Rainy scene</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -48,7 +48,7 @@
         camera.position.x = 20;
         camera.position.y = 40;
         camera.position.z = 110;
-        camera.lookAt(new THREE.Vector3(20,30,0));
+        camera.lookAt(new THREE.Vector3(20, 30, 0));
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
@@ -56,7 +56,7 @@
         var system1;
         var system2;
 
-        var controls = new function() {
+        var controls = new function () {
             this.size = 3;
             this.transparent = true;
             this.opacity = 0.6;
@@ -64,7 +64,7 @@
 
             this.sizeAttenuation = true;
 
-            this.redraw = function() {
+            this.redraw = function () {
                 scene.remove(scene.getChildByName("particles1"));
                 scene.remove(scene.getChildByName("particles2"));
 
@@ -73,18 +73,18 @@
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,'size',0,20).onChange(controls.redraw);
-        gui.add(controls,'transparent').onChange(controls.redraw);
-        gui.add(controls,'opacity',0,1).onChange(controls.redraw);
-        gui.addColor(controls,'color').onChange(controls.redraw);
-        gui.add(controls,'sizeAttenuation').onChange(controls.redraw);
+        gui.add(controls, 'size', 0, 20).onChange(controls.redraw);
+        gui.add(controls, 'transparent').onChange(controls.redraw);
+        gui.add(controls, 'opacity', 0, 1).onChange(controls.redraw);
+        gui.addColor(controls, 'color').onChange(controls.redraw);
+        gui.add(controls, 'sizeAttenuation').onChange(controls.redraw);
 
         controls.redraw();
 
         render();
 
 
-        function createParticles(size,transparent,opacity,sizeAttenuation,color) {
+        function createParticles(size, transparent, opacity, sizeAttenuation, color) {
 
 
             var texture1 = THREE.ImageUtils.loadTexture("../assets/textures/particles/raindrop-1.png");
@@ -95,21 +95,21 @@
 
             var material1 = new THREE.ParticleBasicMaterial({
                 size: size,
-                transparent:transparent,
-                opacity:opacity,
+                transparent: transparent,
+                opacity: opacity,
                 map: texture1,
                 blending: THREE.AdditiveBlending,
                 sizeAttenuation: sizeAttenuation,
-                color:color});
+                color: color});
 
             var material2 = new THREE.ParticleBasicMaterial({
                 size: size,
-                transparent:transparent,
-                opacity:opacity,
+                transparent: transparent,
+                opacity: opacity,
                 map: texture2,
                 blending: THREE.AdditiveBlending,
                 sizeAttenuation: sizeAttenuation,
-                color:color});
+                color: color});
 
 
             var range = 40;
@@ -120,13 +120,13 @@
 
             // y is from 0 to 60
             // x is from -20 to 20
-            for (var i = 0 ; i < 1500 ; i++) {
+            for (var i = 0; i < 1500; i++) {
                 var particle = new THREE.Vector3(
-                        Math.random()*range-range/2,
-                        Math.random()*range*1.5,
-                        Math.random()*range-range/2);
-                particle.velocityY = 0.1+Math.random()/5;
-                particle.velocityX = (Math.random()-0.5)/3;
+                        Math.random() * range - range / 2,
+                        Math.random() * range * 1.5,
+                        Math.random() * range - range / 2);
+                particle.velocityY = 0.1 + Math.random() / 5;
+                particle.velocityX = (Math.random() - 0.5) / 3;
                 geom2.vertices.push(particle);
             }
 
@@ -134,8 +134,7 @@
 //            system1 = new THREE.ParticleSystem(geom1,material1);
 
 
-
-            system2 = new THREE.ParticleSystem(geom2,material2);
+            system2 = new THREE.ParticleSystem(geom2, material2);
 
 //            system1.sortParticles = true;
 //            system1.name = "particles1";
@@ -149,17 +148,18 @@
 
 
         var step = 0;
+
         function render() {
 
             stats.update();
 
             var vertices = system2.geometry.vertices;
-            vertices.forEach(function(v) {
-                v.y= v.y-(v.velocityY);
-                v.x= v.x-(v.velocityX);
+            vertices.forEach(function (v) {
+                v.y = v.y - (v.velocityY);
+                v.x = v.x - (v.velocityX);
 
                 if (v.y <= 0) v.y = 60;
-                if (v.x <=-20 || v.x >= 20) v.velocityX = v.velocityX * -1;
+                if (v.x <= -20 || v.x >= 20) v.velocityX = v.velocityX * -1;
             });
 
 
@@ -178,14 +178,13 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
 
 
     });
-
 
 
 </script>

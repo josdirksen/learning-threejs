@@ -3,14 +3,14 @@
 <html>
 
 <head>
-    <title>Example 07.08 - Load collada model </title>
+    <title>Example 08.08 - Load collada model </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/ColladaLoader.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -49,13 +49,13 @@
         camera.position.x = 150;
         camera.position.y = 150;
         camera.position.z = 150;
-        camera.lookAt(new THREE.Vector3(0,20,0));
+        camera.lookAt(new THREE.Vector3(0, 20, 0));
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 150, 150, 150 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(150, 150, 150);
         spotLight.intensity = 2;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
@@ -64,11 +64,11 @@
         var loader = new THREE.ColladaLoader();
 
         var mesh;
-        loader.load( "../assets/models/dae/Truck_dae.dae", function ( result ) {
+        loader.load("../assets/models/dae/Truck_dae.dae", function (result) {
             mesh = result.scene.children[0].children[0].clone();
-            mesh.scale.set(4,4,4);
+            mesh.scale.set(4, 4, 4);
             scene.add(mesh);
-        } );
+        });
 
 
         render();
@@ -91,12 +91,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

@@ -3,14 +3,14 @@
 <html>
 
 <head>
-    <title>Example 09.13 - Animation from collada</title>
+    <title>Example 09.14 - Animation from collada</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/ColladaLoader.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -49,26 +49,26 @@
         camera.position.x = 400;
         camera.position.y = 50;
         camera.position.z = 150;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 300, 500, 100 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(300, 500, 100);
         spotLight.intensity = 3;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
         var meshAnim;
         var clock = new THREE.Clock();
 
         var loader = new THREE.ColladaLoader();
-        loader.load( '../assets/models/monster.dae', function ( collada ) {
+        loader.load('../assets/models/monster.dae', function (collada) {
 
             var geom = collada.skins[0].geometry;
             var mat = collada.skins[0].material;
@@ -78,19 +78,18 @@
             mat.morphNormals = true;
 
             // create the animation
-            meshAnim = new THREE.MorphAnimMesh( geom, mat );
+            meshAnim = new THREE.MorphAnimMesh(geom, mat);
 
             // position the mesh
-            meshAnim.scale.set(0.15,0.15,0.15);
-            meshAnim.rotation.x=-0.5*Math.PI;
-            meshAnim.position.x=-100;
-            meshAnim.position.y=-60;
+            meshAnim.scale.set(0.15, 0.15, 0.15);
+            meshAnim.rotation.x = -0.5 * Math.PI;
+            meshAnim.position.x = -100;
+            meshAnim.position.y = -60;
 
             scene.add(meshAnim);
             meshAnim.duration = 5000;
 
-        } );
-
+        });
 
 
         render();
@@ -103,7 +102,7 @@
             var delta = clock.getDelta();
             if (meshAnim) {
                 if (meshAnim) {
-                    meshAnim.updateAnimation( delta *1000 );
+                    meshAnim.updateAnimation(delta * 1000);
                 }
             }
 
@@ -122,12 +121,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

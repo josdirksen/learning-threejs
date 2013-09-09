@@ -3,15 +3,14 @@
 <html>
 
 <head>
-    <title>Example 07.04 - Load and save scene</title>
+    <title>Example 08.04 - Load and save scene</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/SceneExporter.js"></script>
-    <script type="text/javascript" src="../libs/SceneLoader.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -45,46 +44,46 @@
 
         renderer.setClearColorHex(0xEEEEEE, 1.0);
         renderer.setSize(window.innerWidth, window.innerHeight);
-    //    renderer.shadowMapEnabled = true;
+        //    renderer.shadowMapEnabled = true;
 
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(60,20,1,1);
-        var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});
-        var plane = new THREE.Mesh(planeGeometry,planeMaterial);
-      //  plane.receiveShadow  = true;
+        var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        //  plane.receiveShadow  = true;
 
         // rotate and position the plane
-        plane.rotation.x=-0.5*Math.PI;
-        plane.position.x=15
-        plane.position.y=0
-        plane.position.z=0
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 15
+        plane.position.y = 0
+        plane.position.z = 0
 
         // add the plane to the scene
         scene.add(plane);
 
         // create a cube
-        var cubeGeometry = new THREE.CubeGeometry(4,4,4);
+        var cubeGeometry = new THREE.CubeGeometry(4, 4, 4);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-       // cube.castShadow = true;
+        // cube.castShadow = true;
 
         // position the cube
-        cube.position.x=-4;
-        cube.position.y=3;
-        cube.position.z=0;
+        cube.position.x = -4;
+        cube.position.y = 3;
+        cube.position.z = 0;
 
         // add the cube to the scene
         scene.add(cube);
 
-        var sphereGeometry = new THREE.SphereGeometry(4,20,20);
+        var sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
         var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
-        var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+        var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
         // position the sphere
-        sphere.position.x=20;
-        sphere.position.y=0;
-        sphere.position.z=2;
-      //  sphere.castShadow=true;
+        sphere.position.x = 20;
+        sphere.position.y = 0;
+        sphere.position.z = 2;
+        //  sphere.castShadow=true;
 
         // add the sphere to the scene
         scene.add(sphere);
@@ -100,43 +99,43 @@
         scene.add(ambientLight);
 
         // add spotlight for the shadows
-        var spotLight = new THREE.PointLight( 0xffffff );
-        spotLight.position.set( -40, 60, -10 );
-      //  spotLight.castShadow = true;
-        scene.add( spotLight );
+        var spotLight = new THREE.PointLight(0xffffff);
+        spotLight.position.set(-40, 60, -10);
+        //  spotLight.castShadow = true;
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(renderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
-        var controls = new function() {
-            this.exportScene = function() {
+        var controls = new function () {
+            this.exportScene = function () {
                 var exporter = new THREE.SceneExporter();
                 var sceneJson = JSON.stringify(exporter.parse(scene));
-                localStorage.setItem('scene',sceneJson);
+                localStorage.setItem('scene', sceneJson);
             }
 
-            this.clearScene = function() {
+            this.clearScene = function () {
                 scene = new THREE.Scene();
             }
 
-            this.importScene = function() {
+            this.importScene = function () {
                 var json = (localStorage.getItem('scene'));
                 var sceneLoader = new THREE.SceneLoader();
 
-                sceneLoader.parse(JSON.parse(json),function(e) {
+                sceneLoader.parse(JSON.parse(json), function (e) {
                     console.log(e);
                     scene = e.scene;
-                },'.');
+                }, '.');
             }
         }
 
         var gui = new dat.GUI();
-        gui.add(controls,"exportScene");
-        gui.add(controls,"clearScene");
-        gui.add(controls,"importScene");
+        gui.add(controls, "exportScene");
+        gui.add(controls, "clearScene");
+        gui.add(controls, "importScene");
 
 
         render();
@@ -162,12 +161,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>
