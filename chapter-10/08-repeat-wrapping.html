@@ -3,13 +3,13 @@
 <html>
 
 <head>
-    <title>Example 10.01 - Basic textures</title>
+    <title>Example 10.08 - Repeat mapping</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -44,12 +44,12 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var sphere = createMesh(new THREE.SphereGeometry(5,20,20),"floor-wood.jpg");
+        var sphere = createMesh(new THREE.SphereGeometry(5, 20, 20), "floor-wood.jpg");
         scene.add(sphere);
-        sphere.position.x=7;
+        sphere.position.x = 7;
 
-        var cube = createMesh(new THREE.CubeGeometry(6,6,6),"brick-wall.jpg");
-        cube.position.x=-7;
+        var cube = createMesh(new THREE.CubeGeometry(6, 6, 6), "brick-wall.jpg");
+        cube.position.x = -7;
         scene.add(cube);
         console.log(cube.geometry.faceVertexUvs);
 
@@ -57,40 +57,40 @@
         camera.position.x = 00;
         camera.position.y = 12;
         camera.position.z = 20;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         var ambiLight = new THREE.AmbientLight(0x141414)
         scene.add(ambiLight);
 
         var light = new THREE.DirectionalLight();
-        light.position.set(0,30,20);
+        light.position.set(0, 30, 20);
         scene.add(light);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 //        var polyhedron = createMesh(new THREE.PolyhedronGeometry(vertices, faces, controls.radius, controls.detail));
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             this.repeatX = 1;
             this.repeatY = 1;
             this.repeatWrapping = true;
 
-            this.updateRepeat = function(e) {
+            this.updateRepeat = function (e) {
 
-                cube.material.map.repeat.set(controls.repeatX,controls.repeatY);
-                sphere.material.map.repeat.set(controls.repeatX,controls.repeatY);
+                cube.material.map.repeat.set(controls.repeatX, controls.repeatY);
+                sphere.material.map.repeat.set(controls.repeatX, controls.repeatY);
 
                 if (controls.repeatWrapping) {
                     cube.material.map.wrapS = THREE.RepeatWrapping;
                     cube.material.map.wrapT = THREE.RepeatWrapping;
                     sphere.material.map.wrapS = THREE.RepeatWrapping;
                     sphere.material.map.wrapT = THREE.RepeatWrapping;
-                }  else {
+                } else {
                     cube.material.map.wrapS = THREE.ClampToEdgeWrapping;
                     cube.material.map.wrapT = THREE.ClampToEdgeWrapping;
                     sphere.material.map.wrapS = THREE.ClampToEdgeWrapping;
@@ -105,10 +105,9 @@
 
 
         var gui = new dat.GUI();
-        gui.add(controls,"repeatX",-4,4).onChange(controls.updateRepeat);
-        gui.add(controls,"repeatY",-4,4).onChange(controls.updateRepeat);
-        gui.add(controls,"repeatWrapping").onChange(controls.updateRepeat);
-
+        gui.add(controls, "repeatX", -4, 4).onChange(controls.updateRepeat);
+        gui.add(controls, "repeatY", -4, 4).onChange(controls.updateRepeat);
+        gui.add(controls, "repeatWrapping").onChange(controls.updateRepeat);
 
 
         render();
@@ -124,18 +123,18 @@
 
 
             // create a multimaterial
-            var mesh = new THREE.Mesh(geom,mat);
+            var mesh = new THREE.Mesh(geom, mat);
 
             return mesh;
         }
 
         function render() {
             stats.update();
-            step+=0.01;
-            cube.rotation.y=step;
-            cube.rotation.x=step;
-            sphere.rotation.y=step;
-            sphere.rotation.x=step;
+            step += 0.01;
+            cube.rotation.y = step;
+            cube.rotation.x = step;
+            sphere.rotation.y = step;
+            sphere.rotation.x = step;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -152,12 +151,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

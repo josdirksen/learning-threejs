@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 10.01 - Basic textures</title>
+    <title>Example 10.09 - Canvas texture</title>
     <link href="../libs/literally/css/literally.css" rel="stylesheet">
     <script type="text/javascript" src="../libs/three.js"></script>
     <!--<script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>-->
@@ -15,18 +15,22 @@
     <script type="text/javascript" src="../libs/literally/js/literallycanvas.js"></script>
 
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
+
         .fs-container {
             width: 300px;
             height: 300px;
             margin: auto;
             bottom: 20px;
-            position: absolute; x:0; y:0;"
+            position: absolute;
+            x: 0;
+            y: 0;
+        "
         }
 
         #canvas-output {
@@ -43,8 +47,8 @@
 <!-- Div which will hold the Output -->
 
 <div class="fs-container">
-<div id="canvas-output" style="float:left">
-</div>
+    <div id="canvas-output" style="float:left">
+    </div>
 </div>
 
 
@@ -56,13 +60,9 @@
 <script type="text/javascript">
 
 
-
-
     var canvas = document.createElement("canvas");
     $('#canvas-output')[0].appendChild(canvas);
     $('#canvas-output').literallycanvas({imageURLPrefix: '../libs/literally/img'});
-
-
 
 
     // once everything is loaded, we run our Three.js stuff.
@@ -74,7 +74,7 @@
         var scene = new THREE.Scene();
 
         // create a camera, which defines where we're looking at.
-        var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
@@ -83,9 +83,8 @@
         webGLRenderer.shadowMapEnabled = true;
 
 
-
-        var cube = createMesh(new THREE.CubeGeometry(10,10,10),"floor-wood.jpg");
-        cube.position.x=0;
+        var cube = createMesh(new THREE.CubeGeometry(10, 10, 10), "floor-wood.jpg");
+        cube.position.x = 0;
         scene.add(cube);
 
 
@@ -93,29 +92,29 @@
         camera.position.x = 00;
         camera.position.y = 12;
         camera.position.z = 28;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         var ambiLight = new THREE.AmbientLight(0x141414)
         scene.add(ambiLight);
 
         var light = new THREE.DirectionalLight();
-        light.position.set(0,30,20);
+        light.position.set(0, 30, 20);
         scene.add(light);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 //        var polyhedron = createMesh(new THREE.PolyhedronGeometry(vertices, faces, controls.radius, controls.detail));
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
 
             this.showTexture = true;
 
-            this.showCanvas = function() {
+            this.showCanvas = function () {
                 if (controls.showTexture) {
                     $('.fs-container').show();
                 } else {
@@ -123,15 +122,15 @@
                 }
             }
 
-            this.regenerateMap = function() {
+            this.regenerateMap = function () {
                 var date = new Date();
                 pn = new Perlin('rnd' + date.getTime());
-                fillWithPerlin(pn,ctx);
+                fillWithPerlin(pn, ctx);
                 cube.material.map.needsUpdate = true;
                 $('#cv').sketch();
             };
 
-            this.applyTexture = function() {
+            this.applyTexture = function () {
                 cube.material.map.needsUpdate = true;
             }
 
@@ -139,8 +138,7 @@
 
 
         var gui = new dat.GUI();
-        gui.add(controls,"showTexture").onChange(controls.showCanvas);
-
+        gui.add(controls, "showTexture").onChange(controls.showCanvas);
 
 
         render();
@@ -150,7 +148,7 @@
             var canvasMap = new THREE.Texture(canvas);
             var mat = new THREE.MeshPhongMaterial();
             mat.map = canvasMap;
-            var mesh = new THREE.Mesh(geom,mat);
+            var mesh = new THREE.Mesh(geom, mat);
 
             return mesh;
         }
@@ -158,8 +156,8 @@
         function render() {
             stats.update();
 
-            cube.rotation.y+=0.01;
-            cube.rotation.x+=0.01;
+            cube.rotation.y += 0.01;
+            cube.rotation.x += 0.01;
 
             cube.material.map.needsUpdate = true;
             // render using requestAnimationFrame
@@ -177,12 +175,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

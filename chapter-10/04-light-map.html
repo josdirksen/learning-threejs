@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -49,7 +49,7 @@
         canvasRenderer.setSize(window.innerWidth, window.innerHeight);
         renderer = webGLRenderer;
 
-        var groundGeom = new THREE.PlaneGeometry(95,95,1,1);
+        var groundGeom = new THREE.PlaneGeometry(95, 95, 1, 1);
         var lm = THREE.ImageUtils.loadTexture('../assets/textures/lightmap/lm-1.png');
         var wood = THREE.ImageUtils.loadTexture('../assets/textures/general/floor-wood.jpg');
         var groundMaterial = new THREE.MeshBasicMaterial(
@@ -70,27 +70,25 @@
 //        console.log(groundGeom.faceVertexUvs[1]);
 
 
+        var groundMesh = new THREE.Mesh(groundGeom, groundMaterial);
 
-
-        var groundMesh = new THREE.Mesh(groundGeom,groundMaterial);
-
-        groundMesh.rotation.x=-Math.PI/2;
-        groundMesh.position.y=0;
+        groundMesh.rotation.x = -Math.PI / 2;
+        groundMesh.position.y = 0;
         scene.add(groundMesh);
 
 
-        var cubeGeometry = new THREE.CubeGeometry(12,12,12);
-        var cubeGeometry2 = new THREE.CubeGeometry(6,6,6);
+        var cubeGeometry = new THREE.CubeGeometry(12, 12, 12);
+        var cubeGeometry2 = new THREE.CubeGeometry(6, 6, 6);
 
 
         var meshMaterial = new THREE.MeshBasicMaterial();
         meshMaterial.map = THREE.ImageUtils.loadTexture('../assets/textures/general/stone.jpg');
 
 
-        var cube = new THREE.Mesh(cubeGeometry,meshMaterial);
-        var cube2 = new THREE.Mesh(cubeGeometry2,meshMaterial);
-        cube.position.set(0.9,6,-12);
-        cube2.position.set(-13.2,3,-6);
+        var cube = new THREE.Mesh(cubeGeometry, meshMaterial);
+        var cube2 = new THREE.Mesh(cubeGeometry2, meshMaterial);
+        cube.position.set(0.9, 6, -12);
+        cube2.position.set(-13.2, 3, -6);
 
 
         // add the sphere to the scene
@@ -101,7 +99,7 @@
         camera.position.x = -20;
         camera.position.y = 20;
         camera.position.z = 30;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         // add subtle ambient lighting
         var ambientLight = new THREE.AmbientLight(0x0c0c0c);
@@ -134,12 +132,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

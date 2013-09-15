@@ -3,14 +3,14 @@
 <html>
 
 <head>
-    <title>Example 10.01 - Basic textures</title>
+    <title>Example 10.10 - Canvas texture bumpmap</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/perlin.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -45,21 +45,20 @@
     var pn = new Perlin('rnd' + date.getTime());
 
 
-    fillWithPerlin(pn,ctx);
+    fillWithPerlin(pn, ctx);
 
     function fillWithPerlin(perlin, ctx) {
 
-        for (var x = 0 ; x < 512 ; x++) {
-            for (var y = 0 ; y < 512 ; y++) {
+        for (var x = 0; x < 512; x++) {
+            for (var y = 0; y < 512; y++) {
                 var base = new THREE.Color(0xffffff);
-                var value = perlin.noise(x/10, y/10, 0);
+                var value = perlin.noise(x / 10, y / 10, 0);
                 base.multiplyScalar(value);
-                ctx.fillStyle="#" + base.getHexString();
-                ctx.fillRect(x,y,1,1);
+                ctx.fillStyle = "#" + base.getHexString();
+                ctx.fillRect(x, y, 1, 1);
             }
         }
     }
-
 
 
     // once everything is loaded, we run our Three.js stuff.
@@ -71,7 +70,7 @@
         var scene = new THREE.Scene();
 
         // create a camera, which defines where we're looking at.
-        var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
@@ -80,9 +79,8 @@
         webGLRenderer.shadowMapEnabled = true;
 
 
-
-        var cube = createMesh(new THREE.CubeGeometry(12,12,12),"floor-wood.jpg");
-        cube.position.x=3;
+        var cube = createMesh(new THREE.CubeGeometry(12, 12, 12), "floor-wood.jpg");
+        cube.position.x = 3;
         scene.add(cube);
 
 
@@ -90,43 +88,42 @@
         camera.position.x = 00;
         camera.position.y = 12;
         camera.position.z = 28;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         var ambiLight = new THREE.AmbientLight(0x141414)
         scene.add(ambiLight);
 
         var light = new THREE.DirectionalLight();
-        light.position.set(0,30,20);
+        light.position.set(0, 30, 20);
         scene.add(light);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 //        var polyhedron = createMesh(new THREE.PolyhedronGeometry(vertices, faces, controls.radius, controls.detail));
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             this.bumpScale = cube.material.bumpScale;
-            this.regenerateMap = function() {
+            this.regenerateMap = function () {
                 var date = new Date();
                 pn = new Perlin('rnd' + date.getTime());
-                fillWithPerlin(pn,ctx);
+                fillWithPerlin(pn, ctx);
                 cube.material.bumpMap.needsUpdate = true;
             };
 
-            this.updateScale = function() {
+            this.updateScale = function () {
                 cube.material.bumpScale = controls.bumpScale;
             }
         };
 
 
         var gui = new dat.GUI();
-        gui.add(controls,"regenerateMap");
-        gui.add(controls,"bumpScale",-2,2).onChange(controls.updateScale);
-
+        gui.add(controls, "regenerateMap");
+        gui.add(controls, "bumpScale", -2, 2).onChange(controls.updateScale);
 
 
         render();
@@ -142,15 +139,15 @@
             bumpMap.needsUpdate = true;
 
             // create a multimaterial
-            var mesh = new THREE.Mesh(geom,mat);
+            var mesh = new THREE.Mesh(geom, mat);
             return mesh;
         }
 
         function render() {
             stats.update();
 
-            cube.rotation.y+=0.01;
-            cube.rotation.x+=0.01;
+            cube.rotation.y += 0.01;
+            cube.rotation.x += 0.01;
 
 
             // render using requestAnimationFrame
@@ -168,12 +165,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>

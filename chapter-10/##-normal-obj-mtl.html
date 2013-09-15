@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 10.07 - Load OBJ and MTL </title>
+    <title>Example ##.07 - Load OBJ and MTL </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/OBJLoader.js"></script>
     <script type="text/javascript" src="../libs/MTLLoader.js"></script>
@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -54,35 +54,34 @@
         camera.position.x = 40;
         camera.position.y = 40;
         camera.position.z = 40;
-      //  camera.lookAt(new THREE.Vector3(0,30,0));
+        //  camera.lookAt(new THREE.Vector3(0,30,0));
 
         var ambiLight = new THREE.AmbientLight(0xeeeeee)
         scene.add(ambiLight);
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( 0, 20, 150 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(0, 20, 150);
         spotLight.intensity = 1;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
         var mesh;
 
         var loader = new THREE.OBJMTLLoader();
-        loader.addEventListener( 'load', function ( event ) {
+        loader.addEventListener('load', function (event) {
 
             var object = event.content;
-            object.rotation.x=-0.5*Math.PI;
+            object.rotation.x = -0.5 * Math.PI;
 
 
-
-            object.position.y=-40;
-            object.children[0].material.normalMap= THREE.ImageUtils.loadTexture("../assets/models/jessica/jessica/Jessica Body Normals.png");
-            object.children[0].material.ambient=new THREE.Color(0xffffff);
+            object.position.y = -40;
+            object.children[0].material.normalMap = THREE.ImageUtils.loadTexture("../assets/models/jessica/jessica/Jessica Body Normals.png");
+            object.children[0].material.ambient = new THREE.Color(0xffffff);
             object.children[0].material.shading = THREE.SmoothShading;
 
             object.children[0].geometry.computeVertexNormals(true);
@@ -92,7 +91,7 @@
             console.log(object.children[0].geometry);
 
             var mat = new THREE.MeshPhongMaterial();
-            mat.normalMap= THREE.ImageUtils.loadTexture("../assets/models/jessica/jessica/Jessica Body Normals.png");
+            mat.normalMap = THREE.ImageUtils.loadTexture("../assets/models/jessica/jessica/Jessica Body Normals.png");
             object.children[0].material = mat;
 
             mesh = object;
@@ -101,7 +100,7 @@
         });
 
 
-        loader.load( '../assets/models/jessica/jessica.obj','../assets/models/jessica/jessica.mtl');
+        loader.load('../assets/models/jessica/jessica.obj', '../assets/models/jessica/jessica.mtl');
 
 
         render();
@@ -113,7 +112,7 @@
             orbitControl.update(delta);
 
             if (mesh) {
-                mesh.rotation.z+=0.01;
+                mesh.rotation.z += 0.01;
             }
 
             // render using requestAnimationFrame
@@ -132,12 +131,11 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>
