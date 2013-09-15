@@ -157,28 +157,6 @@
         function render() {
             stats.update();
             TWEEN.update();
-
-
-            if (particleSystem) {
-
-//               group.rotation.y+=0.006;
-//                 group.rotation.y+=0.006;
-//                if (group.geometry) {
-//                    group.geometry.vertices.forEach(function(v) {
-////                        var scale = 1.001 + Math.random()/100;
-//                        var sMatrix = new THREE.Matrix3(1.001 + Math.random()/100,0,0,
-//                                0,1.001 + Math.random()/100,0,
-//                                0,0,1.001 + Math.random()/100);
-//                        v.applyMatrix3(sMatrix);
-//                    })
-//                }
-                ;
-
-
-            }
-
-
-            // render using requestAnimationFrame
             requestAnimationFrame(render);
             webGLRenderer.render(scene, camera);
         }

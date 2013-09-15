@@ -6,758 +6,749 @@ THREE.SceneExporter = function () {};
 
 THREE.SceneExporter.prototype = {
 
-    constructor: THREE.SceneExporter,
+	constructor: THREE.SceneExporter,
 
-    parse: function ( scene ) {
+	parse: function ( scene ) {
 
-        console.log(1);
+		var position = Vector3String( scene.position );
+		var rotation = Vector3String( scene.rotation );
+		var scale = Vector3String( scene.scale );
 
-        var position = Vector3String( scene.position );
-        var rotation = Vector3String( scene.rotation );
-        var scale = Vector3String( scene.scale );
+		var nobjects = 0;
+		var ngeometries = 0;
+		var nmaterials = 0;
+		var ntextures = 0;
 
-        var nobjects = 0;
-        var ngeometries = 0;
-        var nmaterials = 0;
-        var ntextures = 0;
+		var objectsArray = [];
+		var geometriesArray = [];
+		var materialsArray = [];
+		var texturesArray = [];
+		var fogsArray = [];
 
-        var objectsArray = [];
-        var geometriesArray = [];
-        var materialsArray = [];
-        var texturesArray = [];
-        var fogsArray = [];
+		var geometriesMap = {};
+		var materialsMap = {};
+		var texturesMap = {};
 
-        var geometriesMap = {};
-        var materialsMap = {};
-        var texturesMap = {};
+		// extract objects, geometries, materials, textures
 
+		var checkTexture = function ( map ) {
 
-        // extract objects, geometries, materials, textures
+			if ( ! map ) return;
 
-        var checkTexture = function ( map ) {
+			if ( ! ( map.id in texturesMap ) ) {
 
-            if ( ! map ) return;
+				texturesMap[ map.id ] = true;
+				texturesArray.push( TextureString( map ) );
+				ntextures += 1;
 
-            if ( ! ( map.id in texturesMap ) ) {
+			}
 
-                texturesMap[ map.id ] = true;
-                texturesArray.push( TextureString( map ) );
-                ntextures += 1;
+		};
 
-            }
+		var linesArray = [];
 
-        };
+		function createObjectsList( object, pad ) {
 
-        var linesArray = [];
+			for ( var i = 0; i < object.children.length; i ++ ) {
 
-        function createObjectsList( object, pad ) {
+				var node = object.children[ i ];
 
-            for ( var i = 0; i < object.children.length; i ++ ) {
+				if ( node instanceof THREE.Mesh ) {
 
-                var node = object.children[ i ];
+					linesArray.push( MeshString( node, pad ) );
+					nobjects += 1;
 
-                if ( node instanceof THREE.Mesh ) {
+					if ( ! ( node.geometry.id in geometriesMap ) ) {
 
-                    linesArray.push( MeshString( node, pad ) );
-                    nobjects += 1;
+						geometriesMap[ node.geometry.id ] = true;
+						geometriesArray.push( GeometryString( node.geometry ) );
+						ngeometries += 1;
 
-                    if ( ! ( node.geometry.id in geometriesMap ) ) {
+					}
 
-                        geometriesMap[ node.geometry.id ] = true;
-                        geometriesArray.push( GeometryString( node.geometry ) );
-                        ngeometries += 1;
+					if ( ! ( node.material.id in materialsMap ) ) {
 
-                    }
+						materialsMap[ node.material.id ] = true;
+						materialsArray.push( MaterialString( node.material ) );
+						nmaterials += 1;
 
-                    if ( ! ( node.material.id in materialsMap ) ) {
+						checkTexture( node.material.map );
+						checkTexture( node.material.envMap );
+						checkTexture( node.material.lightMap );
+						checkTexture( node.material.specularMap );
+						checkTexture( node.material.bumpMap );
+						checkTexture( node.material.normalMap );
 
-                        materialsMap[ node.material.id ] = true;
-                        materialsArray.push( MaterialString( node.material ) );
-                        nmaterials += 1;
+					}
 
-                        checkTexture( node.material.map );
-                        checkTexture( node.material.envMap );
-                        checkTexture( node.material.lightMap );
-                        checkTexture( node.material.specularMap );
-                        checkTexture( node.material.bumpMap );
-                        checkTexture( node.material.normalMap );
+				} else if ( node instanceof THREE.Light ) {
 
-                    }
+					linesArray.push( LightString( node, pad ) );
+					nobjects += 1;
 
-                } else if ( node instanceof THREE.Light ) {
+				} else if ( node instanceof THREE.Camera ) {
 
-                    linesArray.push( LightString( node, pad ) );
-                    nobjects += 1;
+					linesArray.push( CameraString( node, pad ) );
+					nobjects += 1;
 
-                } else if ( node instanceof THREE.Camera ) {
+				} else if ( node instanceof THREE.Object3D ) {
 
-                    linesArray.push( CameraString( node, pad ) );
-                    nobjects += 1;
+					linesArray.push( ObjectString( node, pad ) );
+					nobjects += 1;
 
-                } else if ( node instanceof THREE.Object3D ) {
+				}
 
-                    linesArray.push( ObjectString( node, pad ) );
-                    nobjects += 1;
+				if ( node.children.length > 0 ) {
 
-                }
+					linesArray.push( PaddingString( pad + 1 ) + '\t\t"children" : {' );
 
-                if ( node.children.length > 0 ) {
+				}
 
-                    linesArray.push( PaddingString( pad + 1 ) + '\t\t"children" : {' );
+				createObjectsList( node, pad + 2 );
 
-                }
+				if ( node.children.length > 0 ) {
 
-                createObjectsList( node, pad + 2 );
+					linesArray.push( PaddingString( pad + 1 ) + "\t\t}" );
 
-                if ( node.children.length > 0 ) {
+				}
 
-                    linesArray.push( PaddingString( pad + 1 ) + "\t\t}" );
+				linesArray.push( PaddingString( pad ) + "\t\t}" + ( i < object.children.length - 1 ? ",\n" : "" ) );
 
-                }
+			}
 
-                linesArray.push( PaddingString( pad ) + "\t\t}" + ( i < object.children.length - 1 ? ",\n" : "" ) );
+		}
 
-            }
+		createObjectsList( scene, 0 );
 
-        }
+		var objects = linesArray.join( "\n" );
 
-        createObjectsList( scene, 0 );
+		// extract fog
 
-        var objects = linesArray.join( "\n" );
+		if ( scene.fog ) {
 
-        // extract fog
+			fogsArray.push( FogString( scene.fog ) );
 
-        if ( scene.fog ) {
+		}
 
-            fogsArray.push( FogString( scene.fog ) );
+		// generate sections
 
-        }
+		var geometries = generateMultiLineString( geometriesArray, ",\n\n\t" );
+		var materials = generateMultiLineString( materialsArray, ",\n\n\t" );
+		var textures = generateMultiLineString( texturesArray, ",\n\n\t" );
+		var fogs = generateMultiLineString( fogsArray, ",\n\n\t" );
 
-        // generate sections
+		// generate defaults
 
-        var geometries = generateMultiLineString( geometriesArray, ",\n\n\t" );
-        var materials = generateMultiLineString( materialsArray, ",\n\n\t" );
-        var textures = generateMultiLineString( texturesArray, ",\n\n\t" );
-        var fogs = generateMultiLineString( fogsArray, ",\n\n\t" );
+		var activeCamera = null;
 
-        // generate defaults
+		scene.traverse( function ( node ) {
 
-        var activeCamera = null;
+			if ( node instanceof THREE.Camera && node.userData.active ) {
 
+				activeCamera = node;
 
-        console.log(2);
+			}
 
-        scene.traverse( function ( node ) {
+		} );
 
-            if ( node instanceof THREE.Camera  ) {
-                activeCamera = node;
-            }
+		var defcamera = LabelString( activeCamera ? getObjectName( activeCamera ) : "" );
+		var deffog = LabelString( scene.fog ? getFogName( scene.fog ) : "" );
 
-        } );
+		// templates
 
+		function Vector2String( v ) {
 
-        console.log(3);
+			return "[" + v.x + "," + v.y + "]";
 
-        var defcamera = LabelString( activeCamera ? getObjectName( activeCamera ) : "" );
-        var deffog = LabelString( scene.fog ? getFogName( scene.fog ) : "" );
+		}
 
-        // templates
+		function Vector3String( v ) {
 
-        function Vector2String( v ) {
+			return "[" + v.x + "," + v.y + "," + v.z + "]";
 
-            return "[" + v.x + "," + v.y + "]";
+		}
 
-        }
+		function ColorString( c ) {
 
-        function Vector3String( v ) {
+			return "[" + c.r.toFixed( 3 ) + "," + c.g.toFixed( 3 ) + "," + c.b.toFixed( 3 ) + "]";
 
-            return "[" + v.x + "," + v.y + "," + v.z + "]";
+		}
 
-        }
+		function LabelString( s ) {
 
-        function ColorString( c ) {
+			return '"' + s + '"';
 
-            return "[" + c.r.toFixed( 3 ) + "," + c.g.toFixed( 3 ) + "," + c.b.toFixed( 3 ) + "]";
+		}
 
-        }
+		function NumConstantString( c ) {
 
-        function LabelString( s ) {
+			var constants = [ "NearestFilter", "NearestMipMapNearestFilter" , "NearestMipMapLinearFilter",
+							  "LinearFilter", "LinearMipMapNearestFilter", "LinearMipMapLinearFilter" ];
 
-            return '"' + s + '"';
+			for ( var i = 0; i < constants.length; i ++ ) {
 
-        }
+				if ( THREE[ constants[ i ] ] === c ) return LabelString( constants[ i ] );
 
-        function NumConstantString( c ) {
+			};
 
-            var constants = [ "NearestFilter", "NearestMipMapNearestFilter" , "NearestMipMapLinearFilter",
-                "LinearFilter", "LinearMipMapNearestFilter", "LinearMipMapLinearFilter" ];
+			return "";
 
-            for ( var i = 0; i < constants.length; i ++ ) {
+		}
 
-                if ( THREE[ constants[ i ] ] === c ) return LabelString( constants[ i ] );
+		function PaddingString( n ) {
 
-            };
+			var output = "";
 
-            return "";
+			for ( var i = 0; i < n; i ++ ) output += "\t";
 
-        }
+			return output;
 
-        function PaddingString( n ) {
+		}
 
-            var output = "";
 
-            for ( var i = 0; i < n; i ++ ) output += "\t";
+		//
 
-            return output;
+		function LightString( o, n ) {
 
-        }
+			if ( o instanceof THREE.AmbientLight ) {
 
+				var output = [
 
-        //
+				'\t\t' + LabelString( getObjectName( o ) ) + ' : {',
+				'	"type"  : "AmbientLight",',
+				'	"color" : ' + o.color.getHex() + ( o.children.length ? ',' : '' )
 
-        function LightString( o, n ) {
+				];
 
-            if ( o instanceof THREE.AmbientLight ) {
+			} else if ( o instanceof THREE.DirectionalLight ) {
 
-                var output = [
+				var output = [
 
-                    '\t\t' + LabelString( getObjectName( o ) ) + ' : {',
-                    '	"type"  : "AmbientLight",',
-                    '	"color" : ' + o.color.getHex() + ( o.children.length ? ',' : '' )
+				'\t\t' + LabelString( getObjectName( o ) ) + ' : {',
+				'	"type"      : "DirectionalLight",',
+				'	"color"     : ' + o.color.getHex() + ',',
+				'	"intensity" : ' + o.intensity + ',',
+				'	"direction" : ' + Vector3String( o.position ) + ',',
+				'	"target"    : ' + LabelString( getObjectName( o.target ) ) + ( o.children.length ? ',' : '' )
 
-                ];
+				];
 
-            } else if ( o instanceof THREE.DirectionalLight ) {
+			} else if ( o instanceof THREE.PointLight ) {
 
-                var output = [
+				var output = [
 
-                    '\t\t' + LabelString( getObjectName( o ) ) + ' : {',
-                    '	"type"      : "DirectionalLight",',
-                    '	"color"     : ' + o.color.getHex() + ',',
-                    '	"intensity" : ' + o.intensity + ',',
-                    '	"direction" : ' + Vector3String( o.position ) + ',',
-                    '	"target"    : ' + LabelString( getObjectName( o.target ) ) + ( o.children.length ? ',' : '' )
+				'\t\t' + LabelString( getObjectName( o ) ) + ' : {',
+				'	"type"      : "PointLight",',
+				'	"color"     : ' + o.color.getHex() + ',',
+				'	"intensity" : ' + o.intensity + ',',
+				'	"position"  : ' + Vector3String( o.position ) + ',',
+				'	"distance"  : ' + o.distance + ( o.children.length ? ',' : '' )
 
-                ];
+				];
 
-            } else if ( o instanceof THREE.PointLight ) {
+			} else if ( o instanceof THREE.SpotLight ) {
 
-                var output = [
+				var output = [
 
-                    '\t\t' + LabelString( getObjectName( o ) ) + ' : {',
-                    '	"type"      : "PointLight",',
-                    '	"color"     : ' + o.color.getHex() + ',',
-                    '	"intensity" : ' + o.intensity + ',',
-                    '	"position"  : ' + Vector3String( o.position ) + ',',
-                    '	"distance"  : ' + o.distance + ( o.children.length ? ',' : '' )
+				'\t\t' + LabelString( getObjectName( o ) ) + ' : {',
+				'	"type"      : "SpotLight",',
+				'	"color"     : ' + o.color.getHex() + ',',
+				'	"intensity" : ' + o.intensity + ',',
+				'	"position"  : ' + Vector3String( o.position ) + ',',
+				'	"distance"  : ' + o.distance + ',',
+				'	"angle"     : ' + o.angle + ',',
+				'	"exponent"  : ' + o.exponent + ',',
+				'	"target"    : ' + LabelString( getObjectName( o.target ) ) + ( o.children.length ? ',' : '' )
 
-                ];
+				];
 
-            } else if ( o instanceof THREE.SpotLight ) {
+			} else if ( o instanceof THREE.HemisphereLight ) {
 
-                var output = [
+				var output = [
 
-                    '\t\t' + LabelString( getObjectName( o ) ) + ' : {',
-                    '	"type"      : "SpotLight",',
-                    '	"color"     : ' + o.color.getHex() + ',',
-                    '	"intensity" : ' + o.intensity + ',',
-                    '	"position"  : ' + Vector3String( o.position ) + ',',
-                    '	"distance"  : ' + o.distance + ',',
-                    '	"angle"     : ' + o.angle + ',',
-                    '	"exponent"  : ' + o.exponent + ',',
-                    '	"target"    : ' + LabelString( getObjectName( o.target ) ) + ( o.children.length ? ',' : '' )
+				'\t\t' + LabelString( getObjectName( o ) ) + ' : {',
+				'	"type"        : "HemisphereLight",',
+				'	"skyColor"    : ' + o.color.getHex() + ',',
+				'	"groundColor" : ' + o.groundColor.getHex() + ',',
+				'	"intensity"   : ' + o.intensity + ',',
+				'	"position"    : ' + Vector3String( o.position ) + ( o.children.length ? ',' : '' )
 
-                ];
+				];
 
-            } else if ( o instanceof THREE.HemisphereLight ) {
+			} else {
 
-                var output = [
+				var output = [];
 
-                    '\t\t' + LabelString( getObjectName( o ) ) + ' : {',
-                    '	"type"        : "HemisphereLight",',
-                    '	"skyColor"    : ' + o.color.getHex() + ',',
-                    '	"groundColor" : ' + o.groundColor.getHex() + ',',
-                    '	"intensity"   : ' + o.intensity + ',',
-                    '	"position"    : ' + Vector3String( o.position ) + ( o.children.length ? ',' : '' )
+			}
 
-                ];
+			return generateMultiLineString( output, '\n\t\t', n );
 
-            } else {
+		}
 
-                var output = [];
+		function CameraString( o, n ) {
 
-            }
+			if ( o instanceof THREE.PerspectiveCamera ) {
 
-            return generateMultiLineString( output, '\n\t\t', n );
+				var output = [
 
-        }
+				'\t\t' + LabelString( getObjectName( o ) ) + ' : {',
+				'	"type"     : "PerspectiveCamera",',
+				'	"fov"      : ' + o.fov + ',',
+				'	"aspect"   : ' + o.aspect + ',',
+				'	"near"     : ' + o.near + ',',
+				'	"far"      : ' + o.far + ',',
+				'	"position" : ' + Vector3String( o.position ) + ( o.children.length ? ',' : '' )
 
-        function CameraString( o, n ) {
+				];
 
-            if ( o instanceof THREE.PerspectiveCamera ) {
+			} else if ( o instanceof THREE.OrthographicCamera ) {
 
-                var output = [
+				var output = [
 
-                    '\t\t' + LabelString( getObjectName( o ) ) + ' : {',
-                    '	"type"     : "PerspectiveCamera",',
-                    '	"fov"      : ' + o.fov + ',',
-                    '	"aspect"   : ' + o.aspect + ',',
-                    '	"near"     : ' + o.near + ',',
-                    '	"far"      : ' + o.far + ',',
-                    '	"position" : ' + Vector3String( o.position ) + ( o.children.length ? ',' : '' )
+				'\t\t' + LabelString( getObjectName( o ) ) + ' : {',
+				'	"type"     : "OrthographicCamera",',
+				'	"left"     : ' + o.left + ',',
+				'	"right"    : ' + o.right + ',',
+				'	"top"      : ' + o.top + ',',
+				'	"bottom"   : ' + o.bottom + ',',
+				'	"near"     : ' + o.near + ',',
+				'	"far"      : ' + o.far + ',',
+				'	"position" : ' + Vector3String( o.position ) + ( o.children.length ? ',' : '' )
 
-                ];
+				];
 
-            } else if ( o instanceof THREE.OrthographicCamera ) {
+			} else {
 
-                var output = [
+				var output = [];
 
-                    '\t\t' + LabelString( getObjectName( o ) ) + ' : {',
-                    '	"type"     : "OrthographicCamera",',
-                    '	"left"     : ' + o.left + ',',
-                    '	"right"    : ' + o.right + ',',
-                    '	"top"      : ' + o.top + ',',
-                    '	"bottom"   : ' + o.bottom + ',',
-                    '	"near"     : ' + o.near + ',',
-                    '	"far"      : ' + o.far + ',',
-                    '	"position" : ' + Vector3String( o.position ) + ( o.children.length ? ',' : '' )
+			}
 
-                ];
+			return generateMultiLineString( output, '\n\t\t', n );
 
-            } else {
+		}
 
-                var output = [];
+		function ObjectString( o, n ) {
 
-            }
+			var output = [
 
-            return generateMultiLineString( output, '\n\t\t', n );
+			'\t\t' + LabelString( getObjectName( o ) ) + ' : {',
+			'	"position" : ' + Vector3String( o.position ) + ',',
+			'	"rotation" : ' + Vector3String( o.rotation ) + ',',
+			'	"scale"	   : ' + Vector3String( o.scale ) + ',',
+			'	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
 
-        }
+			];
 
-        function ObjectString( o, n ) {
+			return generateMultiLineString( output, '\n\t\t', n );
 
-            var output = [
+		}
 
-                '\t\t' + LabelString( getObjectName( o ) ) + ' : {',
-                '	"position" : ' + Vector3String( o.position ) + ',',
-                '	"rotation" : ' + Vector3String( o.rotation ) + ',',
-                '	"scale"	   : ' + Vector3String( o.scale ) + ',',
-                '	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
+		function MeshString( o, n ) {
 
-            ];
+			var output = [
 
-            return generateMultiLineString( output, '\n\t\t', n );
+			'\t\t' + LabelString( getObjectName( o ) ) + ' : {',
+			'	"geometry" : ' + LabelString( getGeometryName( o.geometry ) ) + ',',
+			'	"material" : ' + LabelString( getMaterialName( o.material ) ) + ',',
+			'	"position" : ' + Vector3String( o.position ) + ',',
+			'	"rotation" : ' + Vector3String( o.rotation ) + ',',
+			'	"scale"	   : ' + Vector3String( o.scale ) + ',',
+			'	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
 
-        }
+			];
 
-        function MeshString( o, n ) {
+			return generateMultiLineString( output, '\n\t\t', n );
 
-            var output = [
+		}
 
-                '\t\t' + LabelString( getObjectName( o ) ) + ' : {',
-                '	"geometry" : ' + LabelString( getGeometryName( o.geometry ) ) + ',',
-                '	"material" : ' + LabelString( getMaterialName( o.material ) ) + ',',
-                '	"position" : ' + Vector3String( o.position ) + ',',
-                '	"rotation" : ' + Vector3String( o.rotation ) + ',',
-                '	"scale"	   : ' + Vector3String( o.scale ) + ',',
-                '	"visible"  : ' + o.visible + ( o.children.length ? ',' : '' )
+		//
 
-            ];
+		function GeometryString( g ) {
 
-            return generateMultiLineString( output, '\n\t\t', n );
+			if ( g instanceof THREE.SphereGeometry ) {
 
-        }
+				var output = [
 
-        //
+				'\t' + LabelString( getGeometryName( g ) ) + ': {',
+				'	"type"    : "sphere",',
+				'	"radius"  : ' 		 + g.radius + ',',
+				'	"widthSegments"  : ' + g.widthSegments + ',',
+				'	"heightSegments" : ' + g.heightSegments,
+				'}'
 
-        function GeometryString( g ) {
+				];
 
-            if ( g instanceof THREE.SphereGeometry ) {
+			} else if ( g instanceof THREE.CubeGeometry ) {
 
-                var output = [
+				var output = [
 
-                    '\t' + LabelString( getGeometryName( g ) ) + ': {',
-                    '	"type"    : "sphere",',
-                    '	"radius"  : ' 		 + g.radius + ',',
-                    '	"widthSegments"  : ' + g.widthSegments + ',',
-                    '	"heightSegments" : ' + g.heightSegments,
-                    '}'
+				'\t' + LabelString( getGeometryName( g ) ) + ': {',
+				'	"type"    : "cube",',
+				'	"width"  : '  + g.width  + ',',
+				'	"height"  : ' + g.height + ',',
+				'	"depth"  : '  + g.depth  + ',',
+				'	"widthSegments"  : ' + g.widthSegments + ',',
+				'	"heightSegments" : ' + g.heightSegments + ',',
+				'	"depthSegments" : '  + g.depthSegments,
+				'}'
 
-                ];
+				];
 
-            } else if ( g instanceof THREE.CubeGeometry ) {
+			} else if ( g instanceof THREE.PlaneGeometry ) {
 
-                var output = [
+				var output = [
 
-                    '\t' + LabelString( getGeometryName( g ) ) + ': {',
-                    '	"type"    : "cube",',
-                    '	"width"  : '  + g.width  + ',',
-                    '	"height"  : ' + g.height + ',',
-                    '	"depth"  : '  + g.depth  + ',',
-                    '	"widthSegments"  : ' + g.widthSegments + ',',
-                    '	"heightSegments" : ' + g.heightSegments + ',',
-                    '	"depthSegments" : '  + g.depthSegments,
-                    '}'
+				'\t' + LabelString( getGeometryName( g ) ) + ': {',
+				'	"type"    : "plane",',
+				'	"width"  : '  + g.width  + ',',
+				'	"height"  : ' + g.height + ',',
+				'	"widthSegments"  : ' + g.widthSegments + ',',
+				'	"heightSegments" : ' + g.heightSegments,
+				'}'
 
-                ];
+				];
 
-            } else if ( g instanceof THREE.PlaneGeometry ) {
+			} else if ( g instanceof THREE.Geometry ) {
 
-                var output = [
+				if ( g.sourceType === "ascii" || g.sourceType === "ctm" || g.sourceType === "stl" || g.sourceType === "vtk" ) {
 
-                    '\t' + LabelString( getGeometryName( g ) ) + ': {',
-                    '	"type"    : "plane",',
-                    '	"width"  : '  + g.width  + ',',
-                    '	"height"  : ' + g.height + ',',
-                    '	"widthSegments"  : ' + g.widthSegments + ',',
-                    '	"heightSegments" : ' + g.heightSegments,
-                    '}'
+					var output = [
 
-                ];
+					'\t' + LabelString( getGeometryName( g ) ) + ': {',
+					'	"type" : ' + LabelString( g.sourceType ) + ',',
+					'	"url"  : ' + LabelString( g.sourceFile ),
+					'}'
 
-            } else if ( g instanceof THREE.Geometry ) {
+					];
 
-                if ( g.sourceType === "ascii" || g.sourceType === "ctm" || g.sourceType === "stl" || g.sourceType === "vtk" ) {
+				} else {
 
-                    var output = [
+					var output = [];
 
-                        '\t' + LabelString( getGeometryName( g ) ) + ': {',
-                        '	"type" : ' + LabelString( g.sourceType ) + ',',
-                        '	"url"  : ' + LabelString( g.sourceFile ),
-                        '}'
+				}
 
-                    ];
+			} else {
 
-                } else {
+				var output = [];
 
-                    var output = [];
+			}
 
-                }
+			return generateMultiLineString( output, '\n\t\t' );
 
-            } else {
+		}
 
-                var output = [];
+		function MaterialString( m ) {
 
-            }
+			if ( m instanceof THREE.MeshBasicMaterial ) {
 
-            return generateMultiLineString( output, '\n\t\t' );
+				var output = [
 
-        }
+				'\t' + LabelString( getMaterialName( m ) ) + ': {',
+				'	"type"    : "MeshBasicMaterial",',
+				'	"parameters"  : {',
+				'		"color"  : ' 	+ m.color.getHex() + ',',
 
-        console.log(4);
+				m.map ? 		'		"map" : ' + LabelString( getTextureName( m.map ) ) + ',' : '',
+				m.envMap ? 		'		"envMap" : ' + LabelString( getTextureName( m.envMap ) ) + ',' : '',
+				m.specularMap ? '		"specularMap" : ' + LabelString( getTextureName( m.specularMap ) ) + ',' : '',
+				m.lightMap ? 	'		"lightMap" : ' + LabelString( getTextureName( m.lightMap ) ) + ',' : '',
 
-        function MaterialString( m ) {
+				'		"reflectivity"  : ' + m.reflectivity + ',',
+				'		"transparent" : ' + m.transparent + ',',
+				'		"opacity" : ' 	+ m.opacity + ',',
+				'		"wireframe" : ' + m.wireframe + ',',
+				'		"wireframeLinewidth" : ' + m.wireframeLinewidth,
+				'	}',
+				'}'
 
-            if ( m instanceof THREE.MeshBasicMaterial ) {
+				];
 
-                var output = [
 
-                    '\t' + LabelString( getMaterialName( m ) ) + ': {',
-                    '	"type"    : "MeshBasicMaterial",',
-                    '	"parameters"  : {',
-                    '		"color"  : ' 	+ m.color.getHex() + ',',
+			} else if ( m instanceof THREE.MeshLambertMaterial ) {
 
-                    m.map ? 		'		"map" : ' + LabelString( getTextureName( m.map ) ) + ',' : '',
-                    m.envMap ? 		'		"envMap" : ' + LabelString( getTextureName( m.envMap ) ) + ',' : '',
-                    m.specularMap ? '		"specularMap" : ' + LabelString( getTextureName( m.specularMap ) ) + ',' : '',
-                    m.lightMap ? 	'		"lightMap" : ' + LabelString( getTextureName( m.lightMap ) ) + ',' : '',
+				var output = [
 
-                    '		"reflectivity"  : ' + m.reflectivity + ',',
-                    '		"transparent" : ' + m.transparent + ',',
-                    '		"opacity" : ' 	+ m.opacity + ',',
-                    '		"wireframe" : ' + m.wireframe + ',',
-                    '		"wireframeLinewidth" : ' + m.wireframeLinewidth,
-                    '	}',
-                    '}'
+				'\t' + LabelString( getMaterialName( m ) ) + ': {',
+				'	"type"    : "MeshLambertMaterial",',
+				'	"parameters"  : {',
+				'		"color"  : ' 	+ m.color.getHex() + ',',
+				'		"ambient"  : ' 	+ m.ambient.getHex() + ',',
+				'		"emissive"  : ' + m.emissive.getHex() + ',',
 
-                ];
+				m.map ? 		'		"map" : ' + LabelString( getTextureName( m.map ) ) + ',' : '',
+				m.envMap ? 		'		"envMap" : ' + LabelString( getTextureName( m.envMap ) ) + ',' : '',
+				m.specularMap ? '		"specularMap" : ' + LabelString( getTextureName( m.specularMap ) ) + ',' : '',
+				m.lightMap ? 	'		"lightMap" : ' + LabelString( getTextureName( m.lightMap ) ) + ',' : '',
 
+				'		"reflectivity"  : ' + m.reflectivity + ',',
+				'		"transparent" : ' + m.transparent + ',',
+				'		"opacity" : ' 	+ m.opacity + ',',
+				'		"wireframe" : ' + m.wireframe + ',',
+				'		"wireframeLinewidth" : ' + m.wireframeLinewidth,
+				'	}',
+				'}'
 
-            } else if ( m instanceof THREE.MeshLambertMaterial ) {
+				];
 
-                var output = [
+			} else if ( m instanceof THREE.MeshPhongMaterial ) {
 
-                    '\t' + LabelString( getMaterialName( m ) ) + ': {',
-                    '	"type"    : "MeshLambertMaterial",',
-                    '	"parameters"  : {',
-                    '		"color"  : ' 	+ m.color.getHex() + ',',
-                    '		"ambient"  : ' 	+ m.ambient.getHex() + ',',
-                    '		"emissive"  : ' + m.emissive.getHex() + ',',
+				var output = [
 
-                    m.map ? 		'		"map" : ' + LabelString( getTextureName( m.map ) ) + ',' : '',
-                    m.envMap ? 		'		"envMap" : ' + LabelString( getTextureName( m.envMap ) ) + ',' : '',
-                    m.specularMap ? '		"specularMap" : ' + LabelString( getTextureName( m.specularMap ) ) + ',' : '',
-                    m.lightMap ? 	'		"lightMap" : ' + LabelString( getTextureName( m.lightMap ) ) + ',' : '',
+				'\t' + LabelString( getMaterialName( m ) ) + ': {',
+				'	"type"    : "MeshPhongMaterial",',
+				'	"parameters"  : {',
+				'		"color"  : ' 	+ m.color.getHex() + ',',
+				'		"ambient"  : ' 	+ m.ambient.getHex() + ',',
+				'		"emissive"  : ' + m.emissive.getHex() + ',',
+				'		"specular"  : ' + m.specular.getHex() + ',',
+				'		"shininess" : ' + m.shininess + ',',
 
-                    '		"reflectivity"  : ' + m.reflectivity + ',',
-                    '		"transparent" : ' + m.transparent + ',',
-                    '		"opacity" : ' 	+ m.opacity + ',',
-                    '		"wireframe" : ' + m.wireframe + ',',
-                    '		"wireframeLinewidth" : ' + m.wireframeLinewidth,
-                    '	}',
-                    '}'
+				m.map ? 		'		"map" : ' + LabelString( getTextureName( m.map ) ) + ',' : '',
+				m.envMap ? 		'		"envMap" : ' + LabelString( getTextureName( m.envMap ) ) + ',' : '',
+				m.specularMap ? '		"specularMap" : ' + LabelString( getTextureName( m.specularMap ) ) + ',' : '',
+				m.lightMap ? 	'		"lightMap" : ' + LabelString( getTextureName( m.lightMap ) ) + ',' : '',
+				m.normalMap ? 	'		"normalMap" : ' + LabelString( getTextureName( m.normalMap ) ) + ',' : '',
+				m.bumpMap ? 	'		"bumpMap" : ' + LabelString( getTextureName( m.bumpMap ) ) + ',' : '',
 
-                ];
+				'		"bumpScale"  : ' + m.bumpScale + ',',
+				'		"reflectivity"  : ' + m.reflectivity + ',',
+				'		"transparent" : ' + m.transparent + ',',
+				'		"opacity" : ' 	+ m.opacity + ',',
+				'		"wireframe" : ' + m.wireframe + ',',
+				'		"wireframeLinewidth" : ' + m.wireframeLinewidth,
+				'	}',
+				'}'
 
-            } else if ( m instanceof THREE.MeshPhongMaterial ) {
+				];
 
-                var output = [
+			} else if ( m instanceof THREE.MeshDepthMaterial ) {
 
-                    '\t' + LabelString( getMaterialName( m ) ) + ': {',
-                    '	"type"    : "MeshPhongMaterial",',
-                    '	"parameters"  : {',
-                    '		"color"  : ' 	+ m.color.getHex() + ',',
-                    '		"ambient"  : ' 	+ m.ambient.getHex() + ',',
-                    '		"emissive"  : ' + m.emissive.getHex() + ',',
-                    '		"specular"  : ' + m.specular.getHex() + ',',
-                    '		"shininess" : ' + m.shininess + ',',
+				var output = [
 
-                    m.map ? 		'		"map" : ' + LabelString( getTextureName( m.map ) ) + ',' : '',
-                    m.envMap ? 		'		"envMap" : ' + LabelString( getTextureName( m.envMap ) ) + ',' : '',
-                    m.specularMap ? '		"specularMap" : ' + LabelString( getTextureName( m.specularMap ) ) + ',' : '',
-                    m.lightMap ? 	'		"lightMap" : ' + LabelString( getTextureName( m.lightMap ) ) + ',' : '',
-                    m.normalMap ? 	'		"normalMap" : ' + LabelString( getTextureName( m.normalMap ) ) + ',' : '',
-                    m.bumpMap ? 	'		"bumpMap" : ' + LabelString( getTextureName( m.bumpMap ) ) + ',' : '',
+				'\t' + LabelString( getMaterialName( m ) ) + ': {',
+				'	"type"    : "MeshDepthMaterial",',
+				'	"parameters"  : {',
+				'		"transparent" : ' + m.transparent + ',',
+				'		"opacity" : ' 	+ m.opacity + ',',
+				'		"wireframe" : ' + m.wireframe + ',',
+				'		"wireframeLinewidth" : ' + m.wireframeLinewidth,
+				'	}',
+				'}'
 
-                    '		"bumpScale"  : ' + m.bumpScale + ',',
-                    '		"reflectivity"  : ' + m.reflectivity + ',',
-                    '		"transparent" : ' + m.transparent + ',',
-                    '		"opacity" : ' 	+ m.opacity + ',',
-                    '		"wireframe" : ' + m.wireframe + ',',
-                    '		"wireframeLinewidth" : ' + m.wireframeLinewidth,
-                    '	}',
-                    '}'
+				];
 
-                ];
+			} else if ( m instanceof THREE.MeshNormalMaterial ) {
 
-            } else if ( m instanceof THREE.MeshDepthMaterial ) {
+				var output = [
 
-                var output = [
+				'\t' + LabelString( getMaterialName( m ) ) + ': {',
+				'	"type"    : "MeshNormalMaterial",',
+				'	"parameters"  : {',
+				'		"transparent" : ' + m.transparent + ',',
+				'		"opacity" : ' 	+ m.opacity + ',',
+				'		"wireframe" : ' + m.wireframe + ',',
+				'		"wireframeLinewidth" : ' + m.wireframeLinewidth,
+				'	}',
+				'}'
 
-                    '\t' + LabelString( getMaterialName( m ) ) + ': {',
-                    '	"type"    : "MeshDepthMaterial",',
-                    '	"parameters"  : {',
-                    '		"transparent" : ' + m.transparent + ',',
-                    '		"opacity" : ' 	+ m.opacity + ',',
-                    '		"wireframe" : ' + m.wireframe + ',',
-                    '		"wireframeLinewidth" : ' + m.wireframeLinewidth,
-                    '	}',
-                    '}'
+				];
 
-                ];
+			} else if ( m instanceof THREE.MeshFaceMaterial ) {
 
-            } else if ( m instanceof THREE.MeshNormalMaterial ) {
+				var output = [
 
-                var output = [
+				'\t' + LabelString( getMaterialName( m ) ) + ': {',
+				'	"type"    : "MeshFaceMaterial",',
+				'	"parameters"  : {}',
+				'}'
 
-                    '\t' + LabelString( getMaterialName( m ) ) + ': {',
-                    '	"type"    : "MeshNormalMaterial",',
-                    '	"parameters"  : {',
-                    '		"transparent" : ' + m.transparent + ',',
-                    '		"opacity" : ' 	+ m.opacity + ',',
-                    '		"wireframe" : ' + m.wireframe + ',',
-                    '		"wireframeLinewidth" : ' + m.wireframeLinewidth,
-                    '	}',
-                    '}'
+				];
 
-                ];
+			}
 
-            } else if ( m instanceof THREE.MeshFaceMaterial ) {
+			return generateMultiLineString( output, '\n\t\t' );
 
-                var output = [
+		}
 
-                    '\t' + LabelString( getMaterialName( m ) ) + ': {',
-                    '	"type"    : "MeshFaceMaterial",',
-                    '	"parameters"  : {}',
-                    '}'
+		function TextureString( t ) {
 
-                ];
+			// here would be also an option to use data URI
+			// with embedded image from "t.image.src"
+			// (that's a side effect of using FileReader to load images)
 
-            }
+			var output = [
 
-            return generateMultiLineString( output, '\n\t\t' );
+			'\t' + LabelString( getTextureName( t ) ) + ': {',
+			'	"url"    : "' + t.sourceFile + '",',
+			'	"repeat" : ' + Vector2String( t.repeat ) + ',',
+			'	"offset" : ' + Vector2String( t.offset ) + ',',
+			'	"magFilter" : ' + NumConstantString( t.magFilter ) + ',',
+			'	"minFilter" : ' + NumConstantString( t.minFilter ) + ',',
+			'	"anisotropy" : ' + t.anisotropy,
+			'}'
 
-        }
+			];
 
-        function TextureString( t ) {
+			return generateMultiLineString( output, '\n\t\t' );
 
-            // here would be also an option to use data URI
-            // with embedded image from "t.image.src"
-            // (that's a side effect of using FileReader to load images)
+		}
 
-            var output = [
+		//
 
-                '\t' + LabelString( getTextureName( t ) ) + ': {',
-                '	"url"    : "' + t.sourceFile + '",',
-                '	"repeat" : ' + Vector2String( t.repeat ) + ',',
-                '	"offset" : ' + Vector2String( t.offset ) + ',',
-                '	"magFilter" : ' + NumConstantString( t.magFilter ) + ',',
-                '	"minFilter" : ' + NumConstantString( t.minFilter ) + ',',
-                '	"anisotropy" : ' + t.anisotropy,
-                '}'
+		function FogString( f ) {
 
-            ];
+			if ( f instanceof THREE.Fog ) {
 
-            return generateMultiLineString( output, '\n\t\t' );
+				var output = [
 
-        }
+				'\t' + LabelString( getFogName( f ) ) + ': {',
+				'	"type"  : "linear",',
+				'	"color" : ' + ColorString( f.color ) + ',',
+				'	"near"  : '  + f.near + ',',
+				'	"far"   : '    + f.far,
+				'}'
 
-        console.log(4);
-        //
+				];
 
-        function FogString( f ) {
+			} else if ( f instanceof THREE.FogExp2 ) {
 
-            if ( f instanceof THREE.Fog ) {
+				var output = [
 
-                var output = [
+				'\t' + LabelString( getFogName( f ) ) + ': {',
+				'	"type"    : "exp2",',
+				'	"color"   : '  + ColorString( f.color ) + ',',
+				'	"density" : ' + f.density,
+				'}'
 
-                    '\t' + LabelString( getFogName( f ) ) + ': {',
-                    '	"type"  : "linear",',
-                    '	"color" : ' + ColorString( f.color ) + ',',
-                    '	"near"  : '  + f.near + ',',
-                    '	"far"   : '    + f.far,
-                    '}'
+				];
 
-                ];
+			} else {
 
-            } else if ( f instanceof THREE.FogExp2 ) {
+				var output = [];
 
-                var output = [
+			}
 
-                    '\t' + LabelString( getFogName( f ) ) + ': {',
-                    '	"type"    : "exp2",',
-                    '	"color"   : '  + ColorString( f.color ) + ',',
-                    '	"density" : ' + f.density,
-                    '}'
+			return generateMultiLineString( output, '\n\t\t' );
 
-                ];
+		}
 
-            } else {
+		//
 
-                var output = [];
+		function generateMultiLineString( lines, separator, padding ) {
 
-            }
+			var cleanLines = [];
 
-            return generateMultiLineString( output, '\n\t\t' );
+			for ( var i = 0; i < lines.length; i ++ ) {
 
-        }
+				var line = lines[ i ];
 
-        //
+				if ( line ) {
 
-        function generateMultiLineString( lines, separator, padding ) {
+					if ( padding ) line = PaddingString( padding ) + line;
+					cleanLines.push(  line );
 
-            var cleanLines = [];
+				}
 
-            for ( var i = 0; i < lines.length; i ++ ) {
+			}
 
-                var line = lines[ i ];
+			return cleanLines.join( separator );
 
-                if ( line ) {
+		}
 
-                    if ( padding ) line = PaddingString( padding ) + line;
-                    cleanLines.push(  line );
+		function getObjectName( o ) {
 
-                }
+			return o.name ? o.name : "Object_" + o.id;
 
-            }
+		}
 
-            return cleanLines.join( separator );
+		function getGeometryName( g ) {
 
-        }
+			return g.name ? g.name : "Geometry_" + g.id;
 
-        function getObjectName( o ) {
+		}
 
-            return o.name ? o.name : "Object_" + o.id;
+		function getMaterialName( m ) {
 
-        }
+			return m.name ? m.name : "Material_" + m.id;
 
-        function getGeometryName( g ) {
+		}
 
-            return g.name ? g.name : "Geometry_" + g.id;
+		function getTextureName( t ) {
 
-        }
+			return t.name ? t.name : "Texture_" + t.id;
 
-        function getMaterialName( m ) {
+		}
 
-            return m.name ? m.name : "Material_" + m.id;
+		function getFogName( f ) {
 
-        }
+			return f.name ? f.name : "Default fog";
 
-        function getTextureName( t ) {
+		}
 
-            return t.name ? t.name : "Texture_" + t.id;
+		//
 
-        }
+		var output = [
+			'{',
+			'	"metadata": {',
+			'		"formatVersion" : 3.2,',
+			'		"type"		: "scene",',
+			'		"generatedBy"	: "SceneExporter",',
+			'		"objects"       : ' + nobjects + ',',
+			'		"geometries"    : ' + ngeometries + ',',
+			'		"materials"     : ' + nmaterials + ',',
+			'		"textures"      : ' + ntextures,
+			'	},',
+			'',
+			'	"urlBaseType": "relativeToScene",',
+			'',
 
-        function getFogName( f ) {
+			'	"objects" :',
+			'	{',
+			objects,
+			'	},',
+			'',
 
-            return f.name ? f.name : "Default fog";
+			'	"geometries" :',
+			'	{',
+			'\t' + 	geometries,
+			'	},',
+			'',
 
-        }
-        console.log(3);
+			'	"materials" :',
+			'	{',
+			'\t' + 	materials,
+			'	},',
+			'',
 
-        var output = [
-            '{',
-            '	"metadata": {',
-            '		"formatVersion" : 3.2,',
-            '		"type"		: "scene",',
-            '		"generatedBy"	: "SceneExporter",',
-            '		"objects"       : ' + nobjects + ',',
-            '		"geometries"    : ' + ngeometries + ',',
-            '		"materials"     : ' + nmaterials + ',',
-            '		"textures"      : ' + ntextures,
-            '	},',
-            '',
-            '	"urlBaseType": "relativeToScene",',
-            '',
+			'	"textures" :',
+			'	{',
+			'\t' + 	textures,
+			'	},',
+			'',
 
-            '	"objects" :',
-            '	{',
-            objects,
-            '	},',
-            '',
+			'	"fogs" :',
+			'	{',
+			'\t' + 	fogs,
+			'	},',
+			'',
 
-            '	"geometries" :',
-            '	{',
-            '\t' + 	geometries,
-            '	},',
-            '',
+			'	"transform" :',
+			'	{',
+			'		"position"  : ' + position + ',',
+			'		"rotation"  : ' + rotation + ',',
+			'		"scale"     : ' + scale,
+			'	},',
+			'',
+			'	"defaults" :',
+			'	{',
+			'		"camera"  : ' + defcamera + ',',
+			'		"fog"  	  : ' + deffog,
+			'	}',
+			'}'
+		].join( '\n' );
 
-            '	"materials" :',
-            '	{',
-            '\t' + 	materials,
-            '	},',
-            '',
+		return JSON.parse( output );
 
-            '	"textures" :',
-            '	{',
-            '\t' + 	textures,
-            '	},',
-            '',
-
-            '	"fogs" :',
-            '	{',
-            '\t' + 	fogs,
-            '	},',
-            '',
-
-            '	"transform" :',
-            '	{',
-            '		"position"  : ' + position + ',',
-            '		"rotation"  : ' + rotation + ',',
-            '		"scale"     : ' + scale,
-            '	},',
-            '',
-            '	"defaults" :',
-            '	{',
-            '		"camera"  : ' + defcamera + ',',
-            '		"fog"  	  : ' + deffog,
-            '	}',
-            '}'
-        ].join( '\n' );
-
-        return JSON.parse( output );
-
-    }
+	}
 
 }

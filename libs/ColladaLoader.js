@@ -18,6 +18,7 @@ THREE.ColladaLoader = function () {
 	var materials = {};
 	var effects = {};
 	var cameras = {};
+	var lights = {};
 
 	var animData;
 	var visualScenes;
@@ -135,6 +136,7 @@ THREE.ColladaLoader = function () {
 		effects = parseLib( "//dae:library_effects/dae:effect", Effect, "effect" );
 		geometries = parseLib( "//dae:library_geometries/dae:geometry", Geometry, "geometry" );
 		cameras = parseLib( ".//dae:library_cameras/dae:camera", Camera, "camera" );
+		lights = parseLib( ".//dae:library_lights/dae:light", Light, "light" );
 		controllers = parseLib( "//dae:library_controllers/dae:controller", Controller, "controller" );
 		animations = parseLib( "//dae:library_animations/dae:animation", Animation, "animation" );
 		visualScenes = parseLib( ".//dae:library_visual_scenes/dae:visual_scene", VisualScene, "visual_scene" );
@@ -166,6 +168,7 @@ THREE.ColladaLoader = function () {
 				images: images,
 				materials: materials,
 				cameras: cameras,
+				lights: lights,
 				effects: effects,
 				geometries: geometries,
 				controllers: controllers,
@@ -713,7 +716,6 @@ THREE.ColladaLoader = function () {
 
 		}
 
-		// FIXME: multi-material mesh?
 		// geometries
 
 		var double_sided_materials = {};
@@ -753,15 +755,15 @@ THREE.ColladaLoader = function () {
 
 						if ( geometry.doubleSided ) {
 
-							if ( !( material3js in double_sided_materials ) ) {
+							if ( !( instance_material.symbol in double_sided_materials ) ) {
 
 								var _copied_material = material3js.clone();
 								_copied_material.side = THREE.DoubleSide;
-								double_sided_materials[ material3js ] = _copied_material;
+								double_sided_materials[ instance_material.symbol ] = _copied_material;
 
 							}
 
-							material3js = double_sided_materials[ material3js ];
+							material3js = double_sided_materials[ instance_material.symbol ];
 
 						}
 
@@ -836,18 +838,55 @@ THREE.ColladaLoader = function () {
 			var instance_camera = node.cameras[i];
 			var cparams = cameras[instance_camera.url];
 
-			obj = new THREE.PerspectiveCamera(cparams.fov, cparams.aspect_ratio, cparams.znear, cparams.zfar);
+			obj = new THREE.PerspectiveCamera(cparams.fov, parseFloat(cparams.aspect_ratio), 
+					parseFloat(cparams.znear), parseFloat(cparams.zfar));
+
+		}
+
+		for ( i = 0; i < node.lights.length; i ++ ) {
+
+			var instance_light = node.lights[i];
+			var lparams = lights[instance_light.url];
+
+			if ( lparams && lparams.technique ) {
+
+				var color = lparams.color.getHex();
+				var intensity = lparams.intensity;
+				var distance = 0;
+				var angle = lparams.falloff_angle;
+				var exponent; // Intentionally undefined, don't know what this is yet
+
+				switch ( lparams.technique ) {
+
+					case 'directional':
+
+						obj = new THREE.DirectionalLight( color, intensity, distance );
+						break;
+
+					case 'point':
+
+						obj = new THREE.PointLight( color, intensity, distance );
+						break;
+
+					case 'spot':
+
+						obj = new THREE.SpotLight( color, intensity, distance, angle, exponent );
+						break;
+
+					case 'ambient':
+
+						obj = new THREE.AmbientLight( color );
+						break;
+
+				}
+
+			}
 
 		}
 
 		obj.name = node.name || node.id || "";
 		obj.matrix = node.matrix;
-
-		var props = node.matrix.decompose();
-		obj.position = props[ 0 ];
-		obj.quaternion = props[ 1 ];
-		obj.useQuaternion = true;
-		obj.scale = props[ 2 ];
+		obj.matrix.decompose( obj.position, obj.quaternion, obj.scale );
 
 		if ( options.centerGeometry && obj.geometry ) {
 
@@ -1802,6 +1841,7 @@ THREE.ColladaLoader = function () {
 		this.transforms = [];
 		this.geometries = [];
 		this.cameras = [];
+		this.lights = [];
 		this.controllers = [];
 		this.matrix = new THREE.Matrix4();
 
@@ -1834,6 +1874,7 @@ THREE.ColladaLoader = function () {
 
 				case 'instance_light':
 
+					this.lights.push( ( new InstanceLight() ).parse( child ) );
 					break;
 
 				case 'instance_node':
@@ -1945,37 +1986,43 @@ THREE.ColladaLoader = function () {
 
 	};
 
-	Transform.prototype.apply = function ( matrix ) {
+	Transform.prototype.apply = function () {
 
-		switch ( this.type ) {
+		var m1 = new THREE.Matrix4();
 
-			case 'matrix':
+		return function ( matrix ) {
 
-				matrix.multiply( this.obj );
+			switch ( this.type ) {
 
-				break;
+				case 'matrix':
 
-			case 'translate':
+					matrix.multiply( this.obj );
 
-				matrix.translate( this.obj );
+					break;
 
-				break;
+				case 'translate':
 
-			case 'rotate':
+					matrix.multiply( m1.makeTranslation( this.obj.x, this.obj.y, this.obj.z ) );
 
-				matrix.rotateByAxis( this.obj, this.angle );
+					break;
 
-				break;
+				case 'rotate':
 
-			case 'scale':
+					matrix.multiply( m1.makeRotationAxis( this.obj, this.angle ) );
 
-				matrix.scale( this.obj );
+					break;
 
-				break;
+				case 'scale':
 
-		}
+					matrix.scale( this.obj );
 
-	};
+					break;
+
+			}
+
+		};
+
+	}();
 
 	Transform.prototype.update = function ( data, member ) {
 
@@ -2362,7 +2409,7 @@ THREE.ColladaLoader = function () {
 
 		}
 
-		this.geometry3js.computeBoundingBox();
+		// this.geometry3js.computeBoundingBox();
 
 		return this;
 
@@ -2541,7 +2588,10 @@ THREE.ColladaLoader = function () {
 					faces.push( new THREE.Face3( vs[0], vs[1], vs[2], ns, cs.length ? cs : new THREE.Color() ) );
 
 				} else if ( vcount === 4 ) {
-					faces.push( new THREE.Face4( vs[0], vs[1], vs[2], vs[3], ns, cs.length ? cs : new THREE.Color() ) );
+
+					faces.push( new THREE.Face3( vs[0], vs[1], vs[3], [ns[0], ns[1], ns[3]], cs.length ? [cs[0], cs[1], cs[3]] : new THREE.Color() ) );
+					
+					faces.push( new THREE.Face3( vs[1], vs[2], vs[3], [ns[1], ns[2], ns[3]], cs.length ? [cs[1], cs[2], cs[3]] : new THREE.Color() ) );
 
 				} else if ( vcount > 4 && options.subdivideFaces ) {
 
@@ -2579,7 +2629,15 @@ THREE.ColladaLoader = function () {
 
 							} else if ( vcount === 4 ) {
 
-								uvArr = [ uv[0], uv[1], uv[2], uv[3] ];
+								if ( ndx === 0 ) {
+
+									uvArr = [ uv[0], uv[1], uv[3] ];
+
+								} else {
+
+									uvArr = [ uv[1].clone(), uv[2], uv[3].clone() ];
+
+								}
 
 							} else {
 
@@ -2587,7 +2645,7 @@ THREE.ColladaLoader = function () {
 
 							}
 
-							if ( !geom.faceVertexUvs[k] ) {
+							if ( geom.faceVertexUvs[k] === undefined ) {
 
 								geom.faceVertexUvs[k] = [];
 
@@ -2924,7 +2982,7 @@ THREE.ColladaLoader = function () {
 
 	function ColorOrTexture () {
 
-		this.color = new THREE.Color( 0 );
+		this.color = new THREE.Color();
 		this.color.setRGB( Math.random(), Math.random(), Math.random() );
 		this.color.a = 1.0;
 
@@ -2948,6 +3006,11 @@ THREE.ColladaLoader = function () {
 
 	ColorOrTexture.prototype.parse = function ( element ) {
 
+		if (element.nodeName == 'transparent')
+		{
+			this.opaque = element.getAttribute('opaque');
+		}
+		
 		for ( var i = 0; i < element.childNodes.length; i ++ ) {
 
 			var child = element.childNodes[ i ];
@@ -2958,7 +3021,7 @@ THREE.ColladaLoader = function () {
 				case 'color':
 
 					var rgba = _floats( child.textContent );
-					this.color = new THREE.Color(0);
+					this.color = new THREE.Color();
 					this.color.setRGB( rgba[0], rgba[1], rgba[2] );
 					this.color.a = rgba[3];
 					break;
@@ -3094,8 +3157,25 @@ THREE.ColladaLoader = function () {
 	Shader.prototype.create = function() {
 
 		var props = {};
-		var transparent = ( this['transparency'] !== undefined && this['transparency'] < 1.0 );
 
+		var transparent = false;
+		if (this['transparency'] !== undefined && this['transparent'] !== undefined)
+		{
+			// convert transparent color RBG to average value
+			var transparentColor = this['transparent'];
+			var transparencyLevel = (this.transparent.color.r +
+										this.transparent.color.g + 
+										this.transparent.color.b)
+										/ 3 * this.transparency;
+			
+			if (transparencyLevel > 0)
+			{
+				transparent = true;
+				props[ 'transparent' ] = true;
+				props[ 'opacity' ] = 1 - transparencyLevel;
+			}
+		}
+		
 		for ( var prop in this ) {
 
 			switch ( prop ) {
@@ -3112,11 +3192,11 @@ THREE.ColladaLoader = function () {
 						if ( cot.isTexture() ) {
 
 							var samplerId = cot.texture;
-							var surfaceId = this.effect.sampler[samplerId].source;
+							var surfaceId = this.effect.sampler[samplerId];
 
-							if ( surfaceId ) {
+							if ( surfaceId !== undefined && surfaceId.source !== undefined ) {
 
-								var surface = this.effect.surface[surfaceId];
+								var surface = this.effect.surface[surfaceId.source];
 								var image = images[surface.init_from];
 
 								if (image) {
@@ -3174,15 +3254,7 @@ THREE.ColladaLoader = function () {
 					break;
 
 				case 'transparency':
-
-					if ( transparent ) {
-
-						props[ 'transparent' ] = true;
-						props[ 'opacity' ] = this[ prop ];
-						transparent = true;
-
-					}
-
+					// gets figured out up top
 					break;
 
 				default:
@@ -3910,6 +3982,7 @@ THREE.ColladaLoader = function () {
 
 	};
 
+	// Camera
 	function Camera() {
 
 		this.id = "";
@@ -4037,6 +4110,131 @@ THREE.ColladaLoader = function () {
 	};
 
 	InstanceCamera.prototype.parse = function ( element ) {
+
+		this.url = element.getAttribute('url').replace(/^#/, '');
+
+		return this;
+
+	};
+
+	// Light
+
+	function Light() {
+
+		this.id = "";
+		this.name = "";
+		this.technique = "";
+
+	};
+
+	Light.prototype.parse = function ( element ) {
+
+		this.id = element.getAttribute( 'id' );
+		this.name = element.getAttribute( 'name' );
+
+		for ( var i = 0; i < element.childNodes.length; i ++ ) {
+
+			var child = element.childNodes[ i ];
+			if ( child.nodeType != 1 ) continue;
+
+			switch ( child.nodeName ) {
+
+				case 'technique_common':
+
+					this.parseCommon( child );
+					break;
+
+				case 'technique':
+
+					this.parseTechnique( child );
+					break;
+
+				default:
+					break;
+
+			}
+
+		}
+
+		return this;
+
+	};
+
+	Light.prototype.parseCommon = function ( element ) {
+
+		for ( var i = 0; i < element.childNodes.length; i ++ ) {
+
+			switch ( element.childNodes[ i ].nodeName ) {
+
+				case 'directional':
+				case 'point':
+				case 'spot':
+				case 'ambient':
+
+					this.technique = element.childNodes[ i ].nodeName;
+
+					var light = element.childNodes[ i ];
+
+					for ( var j = 0; j < light.childNodes.length; j ++ ) {
+
+						var child = light.childNodes[j];
+
+						switch ( child.nodeName ) {
+
+							case 'color':
+
+								var rgba = _floats( child.textContent );
+								this.color = new THREE.Color(0);
+								this.color.setRGB( rgba[0], rgba[1], rgba[2] );
+								this.color.a = rgba[3];
+								break;
+
+							case 'falloff_angle':
+
+								this.falloff_angle = parseFloat( child.textContent );
+								break;
+						}
+
+					}
+
+			}
+
+		}
+
+		return this;
+
+	};
+
+	Light.prototype.parseTechnique = function ( element ) {
+
+		this.profile = element.getAttribute( 'profile' );
+
+		for ( var i = 0; i < element.childNodes.length; i ++ ) {
+
+			var child = element.childNodes[ i ];
+
+			switch ( child.nodeName ) {
+
+				case 'intensity':
+
+					this.intensity = parseFloat(child.textContent);
+					break;
+
+			}
+
+		}
+
+		return this;
+
+	};
+
+	function InstanceLight() {
+
+		this.url = "";
+
+	};
+
+	InstanceLight.prototype.parse = function ( element ) {
 
 		this.url = element.getAttribute('url').replace(/^#/, '');
 

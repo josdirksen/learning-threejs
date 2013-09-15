@@ -100,18 +100,18 @@ $(function () {
 
         // correct the ones where 3 vertices are listed but four are needed
         // and vice versa
-        for (var j = 0; j < geom.faces.length; j++) {
-            if (geom.faces[j] instanceof THREE.Face4) {
-                if (geom.faceVertexUvs[0][j].length == 3) {
-                    geom.faceVertexUvs[0][j] = uv4;
-                }
-
-            } else {
-                if (geom.faceVertexUvs[0][j].length == 4) {
-                    geom.faceVertexUvs[0][j] = uv3;
-                }
-            }
-        }
+//        for (var j = 0; j < geom.faces.length; j++) {
+//            if (geom.faces[j] instanceof THREE.Face4) {
+//                if (geom.faceVertexUvs[0][j].length == 3) {
+//                    geom.faceVertexUvs[0][j] = uv4;
+//                }
+//
+//            } else {
+//                if (geom.faceVertexUvs[0][j].length == 4) {
+//                    geom.faceVertexUvs[0][j] = uv3;
+//                }
+//            }
+//        }
 
         object.scale.set(30, 30, 30);
 
