@@ -6,13 +6,11 @@
     <title>Rigid body - Physijs</title>
 
 
-
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/physi.js"></script>
     <script type="text/javascript" src="../libs/chroma.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
-
 
 
     <script type="text/javascript">
@@ -28,29 +26,29 @@
                 ground_material, box_material,
                 projector, renderer, render_stats, physics_stats, scene, ground, light, camera, box, boxes = [];
 
-        initScene = function() {
+        initScene = function () {
             projector = new THREE.Projector;
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.setSize(window.innerWidth, window.innerHeight);
 
             renderer.setClearColorHex(0x000000);
-            document.getElementById( 'viewport' ).appendChild( renderer.domElement );
+            document.getElementById('viewport').appendChild(renderer.domElement);
 
             render_stats = new Stats();
             render_stats.domElement.style.position = 'absolute';
             render_stats.domElement.style.top = '1px';
             render_stats.domElement.style.zIndex = 100;
-            document.getElementById( 'viewport' ).appendChild( render_stats.domElement );
+            document.getElementById('viewport').appendChild(render_stats.domElement);
 
             physics_stats = new Stats();
             physics_stats.domElement.style.position = 'absolute';
             physics_stats.domElement.style.top = '50px';
             physics_stats.domElement.style.zIndex = 100;
-            document.getElementById( 'viewport' ).appendChild( physics_stats.domElement );
+            document.getElementById('viewport').appendChild(physics_stats.domElement);
 
             scene = new Physijs.Scene;
-            scene.setGravity(new THREE.Vector3( 0, -50, 0 ));
+            scene.setGravity(new THREE.Vector3(0, -50, 0));
 
             camera = new THREE.PerspectiveCamera(
                     35,
@@ -58,16 +56,16 @@
                     1,
                     1000
             );
-            camera.position.set( 50, 30, 50 );
-            camera.lookAt( new THREE.Vector3(10,0,10) );
-            scene.add( camera );
+            camera.position.set(50, 30, 50);
+            camera.lookAt(new THREE.Vector3(10, 0, 10));
+            scene.add(camera);
 
             // Light
-            light = new THREE.SpotLight( 0xFFFFFF );
-            light.position.set( 20, 100, 50 );
+            light = new THREE.SpotLight(0xFFFFFF);
+            light.position.set(20, 100, 50);
 
 
-            scene.add( light );
+            scene.add(light);
 
             createGround();
 
@@ -75,36 +73,36 @@
             var stones = [];
 
 
-            requestAnimationFrame( render );
+            requestAnimationFrame(render);
 
-            var controls = new function() {
+            var controls = new function () {
                 this.gravityX = 0;
                 this.gravityY = -50;
                 this.gravityZ = 0;
 
 
-                this.resetScene = function() {
+                this.resetScene = function () {
 
-                    scene.setGravity(new THREE.Vector3(controls.gravityX,controls.gravityY,controls.gravityZ));
-                    stones.forEach(function(st){
+                    scene.setGravity(new THREE.Vector3(controls.gravityX, controls.gravityY, controls.gravityZ));
+                    stones.forEach(function (st) {
                         scene.remove(st)
                     });
-                    stones=[];
+                    stones = [];
 
 
-                    points.forEach(function(point) {
-                        var stoneGeom = new THREE.CubeGeometry(0.6,6,2);
+                    points.forEach(function (point) {
+                        var stoneGeom = new THREE.CubeGeometry(0.6, 6, 2);
 
                         var stone = new Physijs.BoxMesh(stoneGeom, Physijs.createMaterial(new THREE.MeshPhongMaterial(
                                 {
                                     color: scale(Math.random()).hex(),
-                                    transparent:true, opacity:0.8,
+                                    transparent: true, opacity: 0.8,
 //                            map: THREE.ImageUtils.loadTexture( '../assets/textures/general/darker_wood.jpg' )
                                 })));
-                        stone.position=point.clone();
+                        stone.position = point.clone();
                         stone.lookAt(scene.position);
                         stone.__dirtyRotation = true;
-                        stone.position.y=3.5;
+                        stone.position.y = 3.5;
 
                         scene.add(stone);
                         stones.push(stone);
@@ -112,16 +110,16 @@
                     });
 
                     // let the first one fall down
-                    stones[0].rotation.x=0.2;
+                    stones[0].rotation.x = 0.2;
                     stones[0].__dirtyRotation = true;
 
                 };
             }
 
             var gui = new dat.GUI();
-            gui.add(controls, 'gravityX',-100,100);
-            gui.add(controls, 'gravityY',-100,100);
-            gui.add(controls, 'gravityZ',-100,100);
+            gui.add(controls, 'gravityX', -100, 100);
+            gui.add(controls, 'gravityY', -100, 100);
+            gui.add(controls, 'gravityZ', -100, 100);
             gui.add(controls, 'resetScene');
 
             controls.resetScene();
@@ -129,12 +127,12 @@
 
         var stepX;
 
-        render = function() {
-            requestAnimationFrame( render );
-            renderer.render( scene, camera );
+        render = function () {
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
             render_stats.update();
 
-                scene.simulate(undefined,1 );
+            scene.simulate(undefined, 1);
 
 
         };
@@ -142,20 +140,20 @@
 
         function getPoints() {
             var points = [];
-            var r=27;
+            var r = 27;
             var cX = 0;
             var cY = 0;
 
             var circleOffset = 0;
-            for (var i = 0 ; i < 1000 ; i+=6+circleOffset) {
+            for (var i = 0; i < 1000; i += 6 + circleOffset) {
 
-                circleOffset = 4.5*(i/360);
+                circleOffset = 4.5 * (i / 360);
 
-                var x = (r/1440)*(1440-i)*Math.cos(i*(Math.PI/180)) + cX;
-                var z = (r/1440)*(1440-i)*Math.sin(i*(Math.PI/180)) + cY;
+                var x = (r / 1440) * (1440 - i) * Math.cos(i * (Math.PI / 180)) + cX;
+                var z = (r / 1440) * (1440 - i) * Math.sin(i * (Math.PI / 180)) + cY;
                 var y = 0;
 
-                points.push(new THREE.Vector3(x,y,z));
+                points.push(new THREE.Vector3(x, y, z));
             }
 
             return points;
@@ -163,29 +161,29 @@
 
         function createGround() {
             var ground_material = Physijs.createMaterial(
-                    new THREE.MeshPhongMaterial({ map: THREE.ImageUtils.loadTexture( '../assets/textures/general/wood-2.jpg' ) }),
+                    new THREE.MeshPhongMaterial({ map: THREE.ImageUtils.loadTexture('../assets/textures/general/wood-2.jpg') }),
                     .9, .3);
 
             var ground = new Physijs.BoxMesh(new THREE.CubeGeometry(60, 1, 60), ground_material, 0);
 
             var borderLeft = new Physijs.BoxMesh(new THREE.CubeGeometry(2, 3, 60), ground_material, 0);
-            borderLeft.position.x=-31;
-            borderLeft.position.y=2;
+            borderLeft.position.x = -31;
+            borderLeft.position.y = 2;
             ground.add(borderLeft);
 
             var borderRight = new Physijs.BoxMesh(new THREE.CubeGeometry(2, 3, 60), ground_material, 0);
-            borderRight.position.x=31;
-            borderRight.position.y=2;
+            borderRight.position.x = 31;
+            borderRight.position.y = 2;
             ground.add(borderRight);
 
-            var borderBottom = new Physijs.BoxMesh(new THREE.CubeGeometry(64, 3, 2), ground_material,0);
-            borderBottom.position.z=30;
-            borderBottom.position.y=2;
+            var borderBottom = new Physijs.BoxMesh(new THREE.CubeGeometry(64, 3, 2), ground_material, 0);
+            borderBottom.position.z = 30;
+            borderBottom.position.y = 2;
             ground.add(borderBottom);
 
             var borderTop = new Physijs.BoxMesh(new THREE.CubeGeometry(64, 3, 2), ground_material, 0);
-            borderTop.position.z=-30;
-            borderTop.position.y=2;
+            borderTop.position.z = -30;
+            borderTop.position.y = 2;
             ground.add(borderTop);
 
             scene.add(ground);
