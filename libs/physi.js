@@ -1,9 +1,8 @@
-'use strict';
-
 window.Physijs = (function() {
-    var THREE_REVISION = parseInt( THREE.REVISION, 10 ),
-        SUPPORT_TRANSFERABLE,
-        _matrix = new THREE.Matrix4, _is_simulating = false,
+    'use strict';
+
+    var SUPPORT_TRANSFERABLE,
+        _is_simulating = false,
         _Physijs = Physijs, // used for noConflict method
         Physijs = {}, // object assigned to window.Physijs
         Eventable, // class to provide simple event methods
@@ -108,11 +107,7 @@ window.Physijs = (function() {
         _temp_matrix4_1.identity(); // reset temp matrix
 
         // Set the temp matrix's rotation to the object's rotation
-        if ( object.useQuaternion ) {
-            _temp_matrix4_1.identity().setRotationFromQuaternion( object.quaternion );
-        } else {
-            _temp_matrix4_1.identity().setRotationFromEuler( object.rotation );
-        }
+        _temp_matrix4_1.identity().makeRotationFromQuaternion( object.quaternion );
 
         // Invert rotation matrix in order to "unrotate" a point back to object space
         _temp_matrix4_1.getInverse( _temp_matrix4_1 );
@@ -323,7 +318,8 @@ window.Physijs = (function() {
     };
     Physijs.ConeTwistConstraint.prototype.setMotorTarget = function( target ) {
         if ( target instanceof THREE.Vector3 ) {
-//            throw 'Wait for Three.js r50 to setMotorTarget from Vector3 - use Matrix4 or Quaternion instead';
+            target = new THREE.Quaternion().setFromEuler( new THREE.Euler( target.x, target.y, target.z ) );
+        } else if ( target instanceof THREE.Euler ) {
             target = new THREE.Quaternion().setFromEuler( target );
         } else if ( target instanceof THREE.Matrix4 ) {
             target = new THREE.Quaternion().setFromRotationMatrix( target );
@@ -520,21 +516,12 @@ window.Physijs = (function() {
             }
 
             if ( object.__dirtyRotation === false ) {
-                if ( object.useQuaternion ) {
-                    object.quaternion.set(
-                        data[ offset + 4 ],
-                        data[ offset + 5 ],
-                        data[ offset + 6 ],
-                        data[ offset + 7 ]
-                    );
-                } else {
-                    object.rotation = getEulerXYZFromQuaternion(
-                        data[ offset + 4 ],
-                        data[ offset + 5 ],
-                        data[ offset + 6 ],
-                        data[ offset + 7 ]
-                    );
-                }
+                object.quaternion.set(
+                    data[ offset + 4 ],
+                    data[ offset + 5 ],
+                    data[ offset + 6 ],
+                    data[ offset + 7 ]
+                );
             }
 
             object._physijs.linearVelocity.set(
@@ -580,22 +567,12 @@ window.Physijs = (function() {
                 data[ offset + 4 ]
             );
 
-            if ( wheel.useQuaternion ) {
-                wheel.quaternion.set(
-                    data[ offset + 5 ],
-                    data[ offset + 6 ],
-                    data[ offset + 7 ],
-                    data[ offset + 8 ]
-                );
-            } else {
-                wheel.rotation = getEulerXYZFromQuaternion(
-                    data[ offset + 5 ],
-                    data[ offset + 6 ],
-                    data[ offset + 7 ],
-                    data[ offset + 8 ]
-                );
-            }
-
+            wheel.quaternion.set(
+                data[ offset + 5 ],
+                data[ offset + 6 ],
+                data[ offset + 7 ],
+                data[ offset + 8 ]
+            );
         }
 
         if ( SUPPORT_TRANSFERABLE ) {
@@ -724,7 +701,7 @@ window.Physijs = (function() {
         // if A is in B's collision list, then B should be in A's collision list
         for (var id in collisions) {
             if ( collisions.hasOwnProperty( id ) && collisions[id] ) {
-                for (var j=0; j < collisions[id].length; j++) {
+                for ( j = 0; j < collisions[id].length; j++) {
                     if (collisions[id][j]) {
                         collisions[ collisions[id][j] ] = collisions[ collisions[id][j] ] || [];
                         collisions[ collisions[id][j] ].push(id);
@@ -884,10 +861,6 @@ window.Physijs = (function() {
 
                 // Object starting position + rotation
                 object._physijs.position = { x: object.position.x, y: object.position.y, z: object.position.z };
-                if (!object.useQuaternion) {
-                    _matrix.identity().setRotationFromEuler( object.rotation );
-                    object.quaternion.setFromRotationMatrix( _matrix );
-                }
                 object._physijs.rotation = { x: object.quaternion.x, y: object.quaternion.y, z: object.quaternion.z, w: object.quaternion.w };
 
                 // Check for scaling
@@ -923,7 +896,7 @@ window.Physijs = (function() {
                 this.execute( 'removeObject', { id: object._physijs.id } );
             }
         }
-        if ( this._materials_ref_counts.hasOwnProperty( object.material._physijs.id ) ) {
+        if ( object.material && object.material._physijs && this._materials_ref_counts.hasOwnProperty( object.material._physijs.id ) ) {
             this._materials_ref_counts[object.material._physijs.id]--;
             if(this._materials_ref_counts[object.material._physijs.id] == 0) {
                 this.execute( 'unRegisterMaterial', object.material._physijs );
@@ -967,16 +940,12 @@ window.Physijs = (function() {
                 }
 
                 if ( object.__dirtyRotation ) {
-                    if (!object.useQuaternion) {
-                        _matrix.identity().setRotationFromEuler( object.rotation );
-                        object.quaternion.setFromRotationMatrix( _matrix );
-                    };
                     update.quat = { x: object.quaternion.x, y: object.quaternion.y, z: object.quaternion.z, w: object.quaternion.w };
                     object.__dirtyRotation = false;
                 }
 
                 this.execute( 'updateTransform', update );
-            };
+            }
         }
 
         this.execute( 'simulate', { timeStep: timeStep, maxSubSteps: maxSubSteps } );
