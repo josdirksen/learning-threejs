@@ -57,8 +57,9 @@ $(function () {
                 uniforms: shader.uniforms,
                 depthWrite: false,
                 side: THREE.BackSide
-            }),
-            cubeMesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), material);
+            });
+
+    cubeMesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), material);
     sceneCube.add(cubeMesh);
 
     // create the spheres
@@ -200,7 +201,7 @@ $(function () {
         ];
 
 //        var textureCube = THREE.ImageUtils.loadTextureCube( urls );
-        var textureCube = THREE.ImageUtils.loadTextureCube(urls, new THREE.CubeRefractionMapping());
+        var textureCube = THREE.ImageUtils.loadTextureCube(urls, new THREE.CubeReflectionMapping());
         return textureCube;
     }
 

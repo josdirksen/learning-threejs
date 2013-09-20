@@ -113,8 +113,8 @@
 
         render();
 
-        function createMesh(geom, texture, bump) {
-            var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + texture)
+        function createMesh(geom, imageFile, bump) {
+            var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + imageFile)
             geom.computeVertexNormals();
             var mat = new THREE.MeshPhongMaterial();
             mat.map = texture;

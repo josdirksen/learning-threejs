@@ -88,8 +88,8 @@
 
         render();
 
-        function createMesh(geom, texture) {
-            var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + texture)
+        function createMesh(geom, imageFile) {
+            var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + imageFile)
             var mat = new THREE.MeshPhongMaterial();
             mat.map = texture;
 

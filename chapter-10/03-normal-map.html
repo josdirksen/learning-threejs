@@ -134,10 +134,10 @@ $(function () {
 
     render();
 
-    function createMesh(geom, texture, normal) {
+    function createMesh(geom, imageFile, normal) {
 
         if (normal) {
-            var t = THREE.ImageUtils.loadTexture("../assets/textures/general/" + texture);
+            var t = THREE.ImageUtils.loadTexture("../assets/textures/general/" + imageFile);
             var m = THREE.ImageUtils.loadTexture("../assets/textures/general/" + normal);
             var mat2 = new THREE.MeshPhongMaterial({
                 map: t,
@@ -146,18 +146,13 @@ $(function () {
             var mesh = new THREE.Mesh(geom, mat2);
             return mesh;
         } else {
-            var t = THREE.ImageUtils.loadTexture("../assets/textures/general/" + texture);
+            var t = THREE.ImageUtils.loadTexture("../assets/textures/general/" + imageFile);
             var mat1 = new THREE.MeshPhongMaterial({
                 map: t
             })
             var mesh = new THREE.Mesh(geom, mat1);
             return mesh;
         }
-
-
-        // create a multimaterial
-//            geom.computeTangents();
-
 
         return mesh;
     }

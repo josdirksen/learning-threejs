@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -21,7 +20,7 @@
     <script type="text/javascript" src="../libs/postprocessing/RenderPass.js"></script>
 
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -63,7 +62,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var sphere = createMesh(new THREE.SphereGeometry(10,40,40));
+        var sphere = createMesh(new THREE.SphereGeometry(10, 40, 40));
         // add the sphere to the scene
         scene.add(sphere);
 
@@ -72,26 +71,26 @@
         camera.position.y = 15;
         camera.position.z = 25;
 
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         var orbitControls = new THREE.OrbitControls(camera);
-        orbitControls.autoRotate =false;
+        orbitControls.autoRotate = false;
         var clock = new THREE.Clock();
 
         var ambi = new THREE.AmbientLight(0x181818);
         scene.add(ambi);
 
-        var spotLight = new THREE.DirectionalLight( 0xffffff );
-        spotLight.position.set( 550, 100, 550 );
+        var spotLight = new THREE.DirectionalLight(0xffffff);
+        spotLight.position.set(550, 100, 550);
         spotLight.intensity = 0.6;
 
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
-        var renderPass = new THREE.RenderPass(scene,camera);
-        var effectCopy = new THREE.ShaderPass( THREE.CopyShader );
+        var renderPass = new THREE.RenderPass(scene, camera);
+        var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
         effectCopy.renderToScreen = true;
         var shaderPass = new THREE.ShaderPass(THREE.CustomGrayScaleShader);
         shaderPass.enabled = false;
@@ -108,7 +107,7 @@
 
 
         // setup the control gui
-        var controls = new function() {
+        var controls = new function () {
             this.grayScale = false;
             this.rPower = 0.2126;
             this.gPower = 0.7152;
@@ -117,15 +116,15 @@
             this.bitShader = false;
             this.bitSize = 8;
 
-            this.updateEffectFilm = function() {
+            this.updateEffectFilm = function () {
                 shaderPass.enabled = controls.grayScale;
-                shaderPass.uniforms.rPower.value=controls.rPower;
-                shaderPass.uniforms.gPower.value=controls.gPower;
-                shaderPass.uniforms.bPower.value=controls.bPower;
+                shaderPass.uniforms.rPower.value = controls.rPower;
+                shaderPass.uniforms.gPower.value = controls.gPower;
+                shaderPass.uniforms.bPower.value = controls.bPower;
             };
 
-            this.updateBit = function() {
-                bitPass.enabled= controls.bitShader;
+            this.updateBit = function () {
+                bitPass.enabled = controls.bitShader;
                 bitPass.uniforms.bitSize.value = controls.bitSize;
             }
         };
@@ -133,30 +132,30 @@
 
         var gui = new dat.GUI();
         var grayMenu = gui.addFolder('gray scale');
-        grayMenu.add(controls,'grayScale').onChange(controls.updateEffectFilm);
-        grayMenu.add(controls,'rPower',0,1).onChange(controls.updateEffectFilm);
-        grayMenu.add(controls,'gPower',0,1).onChange(controls.updateEffectFilm);
-        grayMenu.add(controls,'bPower',0,1).onChange(controls.updateEffectFilm);
+        grayMenu.add(controls, 'grayScale').onChange(controls.updateEffectFilm);
+        grayMenu.add(controls, 'rPower', 0, 1).onChange(controls.updateEffectFilm);
+        grayMenu.add(controls, 'gPower', 0, 1).onChange(controls.updateEffectFilm);
+        grayMenu.add(controls, 'bPower', 0, 1).onChange(controls.updateEffectFilm);
 
         var bitMenu = gui.addFolder('bit');
-        bitMenu.add(controls,'bitShader').onChange(controls.updateBit);
-        bitMenu.add(controls,'bitSize',2,24).step(1).onChange(controls.updateBit);
+        bitMenu.add(controls, 'bitShader').onChange(controls.updateBit);
+        bitMenu.add(controls, 'bitSize', 2, 24).step(1).onChange(controls.updateBit);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
 
         render();
 
         function createMesh(geom) {
-            var planetTexture   = THREE.ImageUtils.loadTexture( "../assets/textures/planets/Earth.png" );
-            var specularTexture   = THREE.ImageUtils.loadTexture( "../assets/textures/planets/EarthSpec.png" );
-            var normalTexture   = THREE.ImageUtils.loadTexture( "../assets/textures/planets/EarthNormal.png" );
+            var planetTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/Earth.png");
+            var specularTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/EarthSpec.png");
+            var normalTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/EarthNormal.png");
 
 
             var planetMaterial = new THREE.MeshPhongMaterial();
             planetMaterial.specularMap = specularTexture;
-            planetMaterial.specular = new THREE.Color( 0x4444aa );
+            planetMaterial.specular = new THREE.Color(0x4444aa);
 
 
             planetMaterial.normalMap = normalTexture;
@@ -165,7 +164,7 @@
 
 
             // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,[planetMaterial]);
+            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [planetMaterial]);
 
             return mesh;
         }
@@ -177,7 +176,7 @@
             var delta = clock.getDelta();
             orbitControls.update(delta);
 
-            sphere.rotation.y+=0.002;
+            sphere.rotation.y += 0.002;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -195,15 +194,13 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
 
 
-
     });
-
 
 
 </script>

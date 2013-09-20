@@ -22,7 +22,7 @@
     <script type="text/javascript" src="../libs/shaders/FocusShader.js"></script>
 
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -61,24 +61,23 @@
         webGLRenderer.antialias = false;
 
 
-
 //        // position and point the camera to the center of the scene
         camera.position.x = 30;
         camera.position.y = 30;
         camera.position.z = 30;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
 
         var dirLight = new THREE.DirectionalLight(0xffffff);
-        dirLight.position.set(30,30,30);
-        dirLight.intensity=0.8;
+        dirLight.position.set(30, 30, 30);
+        dirLight.intensity = 0.8;
         scene.add(dirLight);
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
+        var spotLight = new THREE.SpotLight(0xffffff);
         spotLight.castShadow = true;
-        spotLight.position.set( -30, 30, -100 );
-        spotLight.target.position.x=-10;
-        spotLight.target.position.z=-10;
+        spotLight.position.set(-30, 30, -100);
+        spotLight.target.position.x = -10;
+        spotLight.target.position.z = -10;
         spotLight.intensity = 0.6;
         spotLight.shadowMapWidth = 4096;
         spotLight.shadowMapHeight = 4096;
@@ -86,43 +85,41 @@
         spotLight.shadowCameraNear = 1;
         spotLight.shadowCameraFar = 200;
 
-        scene.add( spotLight );
-        var plane = new THREE.CubeGeometry(1600,1600,0.1,40,40);
-
-
+        scene.add(spotLight);
+        var plane = new THREE.CubeGeometry(1600, 1600, 0.1, 40, 40);
 
 
         var cube = new THREE.Mesh(plane, new THREE.MeshPhongMaterial(
                 {
-                    color:0xffffff,
+                    color: 0xffffff,
                     map: THREE.ImageUtils.loadTexture("../assets/textures/general/floor-wood.jpg"),
-                    normalScale: new THREE.Vector2(0.6,0.6)
+                    normalScale: new THREE.Vector2(0.6, 0.6)
                 }));
         cube.material.map.wrapS = THREE.RepeatWrapping;
         cube.material.map.wrapT = THREE.RepeatWrapping;
 
-        cube.rotation.x=Math.PI/2;
-        cube.material.map.repeat.set(80,80);
+        cube.rotation.x = Math.PI / 2;
+        cube.material.map.repeat.set(80, 80);
 
         cube.receiveShadow = true;
-        cube.position.z=-150;
-        cube.position.x=-150;
+        cube.position.z = -150;
+        cube.position.x = -150;
         scene.add(cube);
 
         var range = 3;
         var stepX = 8;
         var stepZ = 8;
-        for (var i = -25 ; i < 5 ; i++) {
-            for (var j = -15; j < 15 ; j++) {
-                var cube = new THREE.Mesh(new THREE.CubeGeometry(3,4,3),
+        for (var i = -25; i < 5; i++) {
+            for (var j = -15; j < 15; j++) {
+                var cube = new THREE.Mesh(new THREE.CubeGeometry(3, 4, 3),
                         new THREE.MeshPhongMaterial(
                                 {color: scale(Math.random()).hex(),
                                     opacity: 0.8,
-                                    transparent:true
+                                    transparent: true
                                 }));
-                cube.position.x = i*stepX + (Math.random()-0.5)*range;
-                cube.position.z = j*stepZ + (Math.random()-0.5)*range;
-                cube.position.y = (Math.random()-0.5)*2;
+                cube.position.x = i * stepX + (Math.random() - 0.5) * range;
+                cube.position.z = j * stepZ + (Math.random() - 0.5) * range;
+                cube.position.y = (Math.random() - 0.5) * 2;
                 cube.castShadow = true;
                 scene.add(cube)
             }
@@ -146,8 +143,8 @@
         var focusShader = new THREE.ShaderPass(THREE.FocusShader);
         focusShader.enabled = false;
 
-        var renderPass = new THREE.RenderPass(scene,camera);
-        var effectCopy = new THREE.ShaderPass( THREE.CopyShader );
+        var renderPass = new THREE.RenderPass(scene, camera);
+        var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
         effectCopy.renderToScreen = true;
 
         var composer = new THREE.EffectComposer(webGLRenderer);
@@ -158,7 +155,7 @@
         composer.addPass(focusShader);
         composer.addPass(effectCopy);
 
-        var controls = new function() {
+        var controls = new function () {
 
             this.bleachOpacity = 1;
             this.bleach = false;
@@ -167,25 +164,25 @@
             this.FXAA = false;
 
             this.focus = false;
-            this.sampleDistance=0.94;
-            this.waveFactor=0.00125;
+            this.sampleDistance = 0.94;
+            this.waveFactor = 0.00125;
             this.screenWidth = window.innerWidth;
             this.screenHeight = window.innerHeight;
 
 
-            this.onChange = function() {
+            this.onChange = function () {
                 bleachFilter.enabled = controls.bleach;
                 bleachFilter.uniforms.opacity.value = controls.bleachOpacity;
 
                 edgeShader.enabled = controls.edgeDetect;
-                edgeShader.uniforms.aspect.value = new THREE.Vector2(controls.edgeAspect,controls.edgeAspect);
+                edgeShader.uniforms.aspect.value = new THREE.Vector2(controls.edgeAspect, controls.edgeAspect);
 
                 FXAAShader.enabled = controls.FXAA;
-                FXAAShader.uniforms.resolution.value = new THREE.Vector2( 1 / window.innerWidth, 1 / window.innerHeight );
+                FXAAShader.uniforms.resolution.value = new THREE.Vector2(1 / window.innerWidth, 1 / window.innerHeight);
 
                 focusShader.enabled = controls.focus;
-                focusShader.uniforms.screenWidth.value =  controls.screenWidth;
-                focusShader.uniforms.screenHeight.value =  controls.screenHeight;
+                focusShader.uniforms.screenWidth.value = controls.screenWidth;
+                focusShader.uniforms.screenHeight.value = controls.screenHeight;
                 focusShader.uniforms.waveFactor.value = controls.waveFactor;
                 focusShader.uniforms.sampleDistance.value = controls.sampleDistance;
             }
@@ -193,14 +190,14 @@
         };
 
         var gui = new dat.GUI();
-        gui.add(controls,'bleach').onChange(controls.onChange);
-        gui.add(controls,'bleachOpacity',0,2).onChange(controls.onChange);
-        gui.add(controls,'edgeDetect').onChange(controls.onChange);
-        gui.add(controls,'edgeAspect',128,2048).step(128).onChange(controls.onChange);
-        gui.add(controls,'FXAA').onChange(controls.onChange);
-        gui.add(controls,'focus').onChange(controls.onChange);
-        gui.add(controls,'sampleDistance',0,2).step(0.01).onChange(controls.onChange);
-        gui.add(controls,'waveFactor',0,0.005).step(0.0001).onChange(controls.onChange);
+        gui.add(controls, 'bleach').onChange(controls.onChange);
+        gui.add(controls, 'bleachOpacity', 0, 2).onChange(controls.onChange);
+        gui.add(controls, 'edgeDetect').onChange(controls.onChange);
+        gui.add(controls, 'edgeAspect', 128, 2048).step(128).onChange(controls.onChange);
+        gui.add(controls, 'FXAA').onChange(controls.onChange);
+        gui.add(controls, 'focus').onChange(controls.onChange);
+        gui.add(controls, 'sampleDistance', 0, 2).step(0.01).onChange(controls.onChange);
+        gui.add(controls, 'waveFactor', 0, 0.005).step(0.0001).onChange(controls.onChange);
 
 
         render();
@@ -223,18 +220,16 @@
             stats.setMode(0); // 0: fps, 1: ms
 
 
-
             // Align top-left
             stats.domElement.style.position = 'absolute';
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            $("#Stats-output").append(stats.domElement);
 
             return stats;
         }
     });
-
 
 
 </script>
