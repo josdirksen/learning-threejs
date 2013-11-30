@@ -43,7 +43,7 @@
         // create a render and set the size
         var renderer = new THREE.WebGLRenderer();
 
-        renderer.setClearColorHex(0xEEEEEE, 1.0);
+        renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMapEnabled = true;
 
@@ -99,7 +99,6 @@
 
             // basic cube
             geoms.push(new THREE.CubeGeometry(2,2,2));
-            console.log(new THREE.CubeGeometry(2,2,2));
 
             // basic spherer
             geoms.push(new THREE.SphereGeometry(2));
