@@ -20,6 +20,8 @@
 
 <script id="vertex-shader" type="x-shader/x-vertex">
     uniform float time;
+    varying vec2 vUv;
+
 
     void main()
     {
@@ -81,9 +83,6 @@
 <script id="fragment-shader-2" type="x-shader/x-fragment">
     // from http://glsl.heroku.com/e#7906.0
 
-    #ifdef GL_ES
-    precision mediump float;
-    #endif
 
     uniform float time;
     uniform vec2 resolution;
@@ -164,10 +163,6 @@
 </script>
 
 <script id="fragment-shader-3" type="x-shader/x-fragment">
-    #ifdef GL_ES
-    precision mediump float;
-    #endif
-
     uniform vec2 resolution;
     uniform float time;
 
@@ -211,9 +206,7 @@
 </script>
 
 <script id="fragment-shader-4" type="x-shader/x-fragment">
-    #ifdef GL_ES
-    precision mediump float;
-    #endif
+
 
     uniform float time;
     uniform vec2 resolution;
@@ -263,9 +256,6 @@
 </script>
 
 <script id="fragment-shader-5" type="x-shader/x-fragment">
-    #ifdef GL_ES
-    precision mediump float;
-    #endif
 
     uniform float time;
     uniform vec2 resolution;
@@ -295,9 +285,7 @@
 </script>
 
 <script id="fragment-shader-6" type="x-shader/x-fragment">
-    #ifdef GL_ES
-    precision mediump float;
-    #endif
+
 
     uniform float time;
     uniform vec2 resolution;
@@ -352,7 +340,7 @@
         // create a render and set the size
 
         var renderer = new THREE.WebGLRenderer();
-        renderer.setClearColorHex(0x000000, 1.0);
+        renderer.setClearColor(new THREE.Color(0x000000, 1.0));
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMapEnabled = true;
 
@@ -368,7 +356,7 @@
 
 
         var material = new THREE.MeshFaceMaterial([meshMaterial1, meshMaterial2, meshMaterial3, meshMaterial4, meshMaterial5, meshMaterial6]);
-
+//        var material = new THREE.MeshFaceMaterial([meshMaterial2, meshMaterial2, meshMaterial1, meshMaterial1, meshMaterial1, meshMaterial1]);
 
         var cube = new THREE.Mesh(cubeGeometry, material);
 
