@@ -41,7 +41,7 @@
         // create a render and set the size
         var renderer;
         var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColorHex(0xEEEEEE, 1.0);
+        webGLRenderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
@@ -152,7 +152,7 @@
             meshMaterial.visible = e
         });
         spGui.add(controls, 'side', ["front", "back", "double" ]).onChange(function (e) {
-            console.log(e);
+
             switch (e) {
                 case "front":
                     meshMaterial.side = THREE.FrontSide;
@@ -165,7 +165,6 @@
                     break;
             }
             meshMaterial.needsUpdate = true;
-            console.log(meshMaterial);
         });
         spGui.addColor(controls, 'color').onChange(function (e) {
             meshMaterial.color.setStyle(e)
