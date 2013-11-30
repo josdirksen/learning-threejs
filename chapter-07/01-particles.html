@@ -41,7 +41,7 @@
 
         // create a render and set the size
         var canvasRenderer = new THREE.CanvasRenderer();
-        canvasRenderer.setClearColorHex(0x000000, 1.0);
+        canvasRenderer.setClearColor(new THREE.Color(0x000000, 1.0));
         canvasRenderer.setSize(window.innerWidth, window.innerHeight);
 
         // position and point the camera to the center of the scene

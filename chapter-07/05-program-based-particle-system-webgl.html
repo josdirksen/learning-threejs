@@ -41,7 +41,7 @@
 
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColorHex(0x000000, 1.0);
+        webGLRenderer.setClearColor(new THREE.Color(0x000000, 1.0));
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
 
         // position and point the camera to the center of the scene
@@ -118,8 +118,8 @@
             this.sizeAttenuation = true;
 
             this.redraw = function () {
-                if (scene.getChildByName("particles")) {
-                    scene.remove(scene.getChildByName("particles"));
+                if (scene.getObjectByName("particles")) {
+                    scene.remove(scene.getObjectByName("particles"));
                 }
                 createParticles(controls.size, controls.transparent, controls.opacity, controls.sizeAttenuation, controls.color);
             };
