@@ -35,13 +35,15 @@
 
         // create a scene, that will hold all our elements such as objects, cameras and lights.
         var scene = new THREE.Scene();
+        var sceneOrtho = new THREE.Scene();
 
         // create a camera, which defines where we're looking at.
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
+        var cameraOrtho = new THREE.OrthographicCamera( 0, window.innerWidth, window.innerHeight, 0, - 10, 10 );
 
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColorHex(0x000000, 1.0);
+        webGLRenderer.setClearColor(new THREE.Color(0x000000, 1.0));
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
 
         // position and point the camera to the center of the scene
@@ -71,11 +73,11 @@
             this.opacity = 0.6;
             this.color = 0xffffff;
             this.rotateSystem = true;
-            this.sizeAttenuation = true;
+
 
             this.redraw = function () {
-                scene.children.forEach(function (child) {
-                    if (child instanceof THREE.Sprite) scene.remove(child);
+                sceneOrtho.children.forEach(function (child) {
+                    if (child instanceof THREE.Sprite) sceneOrtho.remove(child);
                 })
                 createSprite(controls.size, controls.transparent, controls.opacity, controls.color, controls.sprite);
             };
@@ -87,35 +89,34 @@
         gui.add(controls, 'transparent').onChange(controls.redraw);
         gui.add(controls, 'opacity', 0, 1).onChange(controls.redraw);
         gui.addColor(controls, 'color').onChange(controls.redraw);
-        gui.add(controls, 'sizeAttenuation').onChange(controls.redraw);
+
 
         controls.redraw();
 
         render();
-
 
         function createSprite(size, transparent, opacity, color, spriteNumber) {
             var spriteMaterial = new THREE.SpriteMaterial({
                         opacity: opacity,
                         color: color,
                         transparent: transparent,
-                        useScreenCoordinates: true,
+//                        useScreenCoordinates: true,
                         map: getTexture()}
             );
 
             // we have 1 row, with five sprites
             spriteMaterial.uvOffset.set(1 / 5 * spriteNumber, 0);
             spriteMaterial.uvScale.set(1 / 5, 1);
-            spriteMaterial.alignment = THREE.SpriteAlignment.bottomCenter;
+
             spriteMaterial.scaleByViewport = true;
             spriteMaterial.blending = THREE.AdditiveBlending;
 
             var sprite = new THREE.Sprite(spriteMaterial);
             sprite.scale.set(size, size, size);
-            sprite.position.set(200, window.innerHeight - 2, 0);
+            sprite.position.set(100, 50, 0);
             sprite.velocityX = 5;
 
-            scene.add(sprite);
+            sceneOrtho.add(sprite);
         }
 
 
@@ -127,7 +128,7 @@
 
             camera.position.y = Math.sin(step += 0.01) * 20;
 
-            scene.children.forEach(function (e) {
+            sceneOrtho.children.forEach(function (e) {
                 if (e instanceof THREE.Sprite) {
                     // move the sprite along the bottom
                     e.position.x = e.position.x + e.velocityX;
@@ -145,7 +146,10 @@
 
 
             requestAnimationFrame(render);
+            webGLRenderer.autoClear = false;
             webGLRenderer.render(scene, camera);
+            webGLRenderer.render(sceneOrtho, cameraOrtho);
+
         }
 
         function initStats() {
