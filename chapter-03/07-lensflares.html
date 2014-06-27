@@ -123,8 +123,6 @@ $(function () {
     var spotLight = new THREE.DirectionalLight(pointColor);
     spotLight.position.set(30, 10, -50);
     spotLight.castShadow = true;
-    spotLight.shadowCameraNear = 0.1;
-    spotLight.shadowCameraFar = 100;
     spotLight.shadowCameraFov = 50;
     spotLight.target = plane;
     spotLight.distance = 0;
