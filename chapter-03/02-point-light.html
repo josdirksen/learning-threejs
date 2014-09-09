@@ -138,6 +138,9 @@
             this.pointColor = pointColor;
             this.intensity = 1;
             this.distance = 100;
+            this.visible = function (){
+                pointLight.visible = !pointLight.visible;
+            };
         }
 
         var gui = new dat.GUI();
@@ -156,6 +159,7 @@
         gui.add(controls, 'distance', 0, 100).onChange(function (e) {
             pointLight.distance = e;
         });
+        gui.add(controls,'visible');
 
 
         render();
