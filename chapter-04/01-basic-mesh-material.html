@@ -43,7 +43,6 @@
         var webGLRenderer = new THREE.WebGLRenderer();
         webGLRenderer.setClearColorHex(0xEEEEEE, 1.0);
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
-        webGLRenderer.shadowMapEnabled = true;
 
         var canvasRenderer = new THREE.CanvasRenderer();
         canvasRenderer.setSize(window.innerWidth, window.innerHeight);
@@ -88,12 +87,6 @@
         // add subtle ambient lighting
         var ambientLight = new THREE.AmbientLight(0x0c0c0c);
         scene.add(ambientLight);
-
-        // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(-40, 60, -10);
-        spotLight.castShadow = true;
-        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(renderer.domElement);
