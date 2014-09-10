@@ -141,12 +141,10 @@ $(function () {
         this.deleteArrows = function(){
             for (var i = sphere.children.length-1;i>=0;i--){
                 var s = sphere.children[i];
-                console.log(s);
                 sphere.remove(s);
             }
             for (var i = cube.children.length-1;i>=0;i--){
                 var s = cube.children[i];
-                console.log(s);
                 cube.remove(s);
             }
         }
