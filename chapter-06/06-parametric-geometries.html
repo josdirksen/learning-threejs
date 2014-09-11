@@ -69,18 +69,21 @@
         // setup the control gui
         var controls = new function () {
             this.type = 'radialWave';
+            this.slices = 50;
+            this.stacks = 50;
 
             this.redraw = function () {
                 // remove the old plane
                 scene.remove(mesh);
                 // create a new one
+                console.log(mesh);
 
                 switch (controls.type) {
                     case 'klein':
-                        mesh = createMesh(new THREE.ParametricGeometry(klein, 120, 120, false));
+                        mesh = createMesh(new THREE.ParametricGeometry(klein, controls.slices, controls.stacks, false));
                         break;
                     case 'radialWave':
-                        mesh = createMesh(new THREE.ParametricGeometry(radialWave, 120, 120, false));
+                        mesh = createMesh(new THREE.ParametricGeometry(radialWave, controls.slices, controls.stacks, false));
                         break;
                 }
 
@@ -91,6 +94,8 @@
         }
 
         var gui = new dat.GUI();
+        gui.add(controls,'slices',0,100).step(1).onChange(controls.redraw);
+        gui.add(controls,'stacks',0,100).step(1).onChange(controls.redraw);
         gui.add(controls, 'type', ['klein', 'radialWave']).onChange(controls.redraw);
 
 
@@ -123,7 +128,7 @@
             return new THREE.Vector3(x, y, z);
         }
 
-        var mesh = createMesh(new THREE.ParametricGeometry(radialWave, 120, 120, false));
+        var mesh = createMesh(new THREE.ParametricGeometry(radialWave, controls.slices, controls.stacks, false));
         scene.add(mesh);
 
         render();
