@@ -108,7 +108,7 @@
 
         var controls = new function () {
             this.rotationSpeed = 0.02;
-            this.numberOfObjects = scene.children.length;
+            //this.numberOfObjects = scene.children.length;
         }
 
         var gui = new dat.GUI();
@@ -120,7 +120,7 @@
             stats.update();
 
 
-            group.rotation.y = step += 0.01;
+            group.rotation.y = step += controls.rotationSpeed;
             // render using requestAnimationFrame
             requestAnimationFrame(render);
             renderer.render(scene, camera);
