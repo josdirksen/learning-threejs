@@ -68,10 +68,30 @@
 
         // setup the control gui
         var controls = new function () {
+            this.type = 'radialWave';
+
+            this.redraw = function () {
+                // remove the old plane
+                scene.remove(mesh);
+                // create a new one
+
+                switch (controls.type) {
+                    case 'klein':
+                        mesh = createMesh(new THREE.ParametricGeometry(klein, 120, 120, false));
+                        break;
+                    case 'radialWave':
+                        mesh = createMesh(new THREE.ParametricGeometry(radialWave, 120, 120, false));
+                        break;
+                }
+
+                // add it to the scene.
+                scene.add(mesh);
+            };
 
         }
 
         var gui = new dat.GUI();
+        gui.add(controls, 'type', ['klein', 'radialWave']).onChange(controls.redraw);
 
 
         klein = function (u, v) {
