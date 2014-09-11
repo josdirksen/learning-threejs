@@ -60,18 +60,6 @@
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
-        // call the render function
-        var step = 0;
-
-
-        // setup the control gui
-        var controls = new function () {
-            // we need the first child, since it's a multimaterial
-
-
-        }
-
-        var gui = new dat.GUI();
         var mesh;
 
         var loader = new THREE.JSONLoader();
