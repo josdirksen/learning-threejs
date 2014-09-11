@@ -7,6 +7,7 @@
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
+    <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -87,13 +88,32 @@ $(function () {
     // add the output of the renderer to the html element
     $("#WebGL-output").append(renderer.domElement);
 
+    var controls = new function() {
+        this.rotationSpeed = 0.02;
+        this.linewidth = 1;
+        this.dashSize = 3;
+        this.gapSize = 1;
+        this.scale=0.1;
+    };
+
+    var gui = new dat.GUI();
+    gui.add(controls, 'rotationSpeed',0,0.5);
+    gui.add(controls, 'linewidth',0,8);
+    gui.add(controls, 'dashSize',0,8);
+    gui.add(controls, 'gapSize',0,2);
+    gui.add(controls, 'scale',0,1);
+
     // call the render function
     var step = 0;
     render();
 
     function render() {
         stats.update();
-        line.rotation.z = step += 0.01;
+        line.rotation.z = step += controls.rotationSpeed;
+        material.linewidth = controls.linewidth;
+        material.dashSize = controls.dashSize;
+        material.gapSize = controls.gapSize;
+        material.scale = controls.scale;
 
         requestAnimationFrame(render);
         renderer.render(scene, camera);
