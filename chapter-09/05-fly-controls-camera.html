@@ -10,7 +10,6 @@
     <script type="text/javascript" src="../libs/OBJMTLLoader.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
-    <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/chroma.js"></script>
     <script type="text/javascript" src="../libs/FlyControls.js"></script>
 
@@ -81,18 +80,6 @@
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
-        // call the render function
-        var step = 0;
-
-
-        // setup the control gui
-        var controls = new function () {
-            // we need the first child, since it's a multimaterial
-
-
-        }
-
-        var gui = new dat.GUI();
         var mesh;
 
         var loader = new THREE.OBJMTLLoader();
