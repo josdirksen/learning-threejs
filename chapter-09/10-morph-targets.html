@@ -67,12 +67,15 @@
         // setup the control gui
         var controls = new function () {
             this.keyframe = 0;
+            this.rotation = 0.01;
         }
 
         var gui = new dat.GUI();
         gui.add(controls, "keyframe", 0, 15).step(1).onChange(function (e) {
             showFrame(e);
         });
+        gui.add(controls, "rotation", 0, 0.1);
+
         var mesh;
         var meshAnim;
         var frames = [];
@@ -156,7 +159,7 @@
             webGLRenderer.clear();
             if (meshAnim) {
                 meshAnim.updateAnimation(delta * 1000);
-                meshAnim.rotation.y += 0.01;
+                meshAnim.rotation.y += controls.rotation;
             }
             // render using requestAnimationFrame
 
