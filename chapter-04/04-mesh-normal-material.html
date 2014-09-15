@@ -70,17 +70,6 @@ $(function () {
     sphere.position.y = 3;
     sphere.position.z = 2;
 
-    for (var f = 0, fl = sphere.geometry.faces.length; f < fl; f++) {
-        var face = sphere.geometry.faces[ f ];
-        var arrow = new THREE.ArrowHelper(
-                face.normal,
-                face.centroid,
-                2,
-                0x3333FF);
-        sphere.add(arrow);
-    }
-
-
     cube.position = sphere.position;
     plane.position = sphere.position;
 
@@ -128,6 +117,37 @@ $(function () {
 
         this.shadow = "flat";
 
+        this.showArrows = function(){
+            for (var f = 0, fl = sphere.geometry.faces.length; f < fl; f++) {
+                var face = sphere.geometry.faces[ f ];
+                var arrow = new THREE.ArrowHelper(
+                        face.normal,
+                        face.centroid,
+                        2,
+                        0x3333FF);
+                sphere.add(arrow);
+            }
+            for (var f = 0, fl = cube.geometry.faces.length; f < fl; f++) {
+                var face = cube.geometry.faces[ f ];
+                var arrow = new THREE.ArrowHelper(
+                        face.normal,
+                        face.centroid,
+                        2,
+                        0x3333FF);
+                cube.add(arrow);
+            }
+        };
+
+        this.deleteArrows = function(){
+            for (var i = sphere.children.length-1;i>=0;i--){
+                var s = sphere.children[i];
+                sphere.remove(s);
+            }
+            for (var i = cube.children.length-1;i>=0;i--){
+                var s = cube.children[i];
+                cube.remove(s);
+            }
+        }
     }
 
     var gui = new dat.GUI();
@@ -231,6 +251,9 @@ $(function () {
 
         scene.add(e);
     });
+
+    spGui.add(controls, 'showArrows');
+    spGui.add(controls, 'deleteArrows');
 
     render();
 

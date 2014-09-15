@@ -62,31 +62,34 @@
         // the mesh
         var hullMesh;
 
-        generatePoints();
+        generatePoints(20);
 
         // setup the control gui
         var controls = new function () {
             // we need the first child, since it's a multimaterial
 
+            this.numberPoints = 20;
+
             this.redraw = function () {
                 scene.remove(spGroup);
                 scene.remove(hullMesh);
-                generatePoints();
+                generatePoints(controls.numberPoints);
 
             };
 
         }
 
         var gui = new dat.GUI();
+        gui.add(controls,'numberPoints',0,50);
         gui.add(controls, 'redraw');
 
 
         render();
 
-        function generatePoints() {
-            // add 10 random spheres
+        function generatePoints(numberpoints) {
+            // add i random spheres (vertices for the convex geometry)
             var points = [];
-            for (var i = 0; i < 20; i++) {
+            for (var i = 0; i < numberpoints; i++) {
                 var randomX = -15 + Math.round(Math.random() * 30);
                 var randomY = -15 + Math.round(Math.random() * 30);
                 var randomZ = -15 + Math.round(Math.random() * 30);

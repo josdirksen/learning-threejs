@@ -108,6 +108,8 @@
             }
 
             system = new THREE.ParticleSystem(geom, material);
+            //needed for correct update of the system
+            system.name = 'particles';
             scene.add(system);
         }
 

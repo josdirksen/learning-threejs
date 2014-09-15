@@ -8,6 +8,7 @@
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
+    <script type="text/javascript" src="../libs/spin.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -58,6 +59,9 @@
         var step = 0;
 
         var cubeMaterial = new THREE.MeshNormalMaterial({color: 0x00ff00, transparent: true, opacity: 0.5 });
+
+        var spinner;
+
         var controls = new function () {
             this.cameraNear = camera.near;
             this.cameraFar = camera.far;
@@ -68,26 +72,33 @@
             this.numberOfObjects = 500;
 
             this.redraw = function () {
-                var toRemove = [];
-                scene.traverse(function (e) {
-                    if (e instanceof THREE.Mesh) toRemove.push(e);
-                });
-                toRemove.forEach(function (e) {
-                    scene.remove(e)
-                });
+                showSpinner();
 
-                // add a large number of cubes
-                if (controls.combined) {
-                var geometry = new THREE.Geometry();
-                for (var i = 0; i < controls.numberOfObjects; i++) {
-                    THREE.GeometryUtils.merge(geometry, controls.addCube());
-                }
-                scene.add(new THREE.Mesh(geometry, cubeMaterial));
-                } else {
+                // make the call async to avoid blocking the thread. Need
+                // to set timeout > 1, if not executed immediately.
+                setTimeout(function() {
+                    var toRemove = [];
+                    scene.traverse(function (e) {
+                        if (e instanceof THREE.Mesh) toRemove.push(e);
+                    });
+                    toRemove.forEach(function (e) {
+                        scene.remove(e)
+                    });
+
+                    // add a large number of cubes
+                    if (controls.combined) {
+                    var geometry = new THREE.Geometry();
                     for (var i = 0; i < controls.numberOfObjects; i++) {
-                        scene.add(controls.addCube());
+                        THREE.GeometryUtils.merge(geometry, controls.addCube());
                     }
-                }
+                    scene.add(new THREE.Mesh(geometry, cubeMaterial));
+                    } else {
+                        for (var i = 0; i < controls.numberOfObjects; i++) {
+                            scene.add(controls.addCube());
+                        }
+                    }
+                    hideSpinner(spinner);
+                },200);
             }
 
 
@@ -127,6 +138,35 @@
             // add the cube to the scene
             return cube;
         };
+
+        function showSpinner() {
+
+            var opts = {
+                lines: 13, // The number of lines to draw
+                length: 20, // The length of each line
+                width: 10, // The line thickness
+                radius: 30, // The radius of the inner circle
+                corners: 1, // Corner roundness (0..1)
+                rotate: 0, // The rotation offset
+                direction: 1, // 1: clockwise, -1: counterclockwise
+                color: '#fff', // #rgb or #rrggbb or array of colors
+                speed: 1, // Rounds per second
+                trail: 60, // Afterglow percentage
+                shadow: false, // Whether to render a shadow
+                hwaccel: false, // Whether to use hardware acceleration
+                className: 'spinner', // The CSS class to assign to the spinner
+                zIndex: 2e9, // The z-index (defaults to 2000000000)
+                top: 'auto', // Top position relative to parent in px
+                left: 'auto' // Left position relative to parent in px
+            };
+            var target = document.getElementById('WebGL-output');
+            spinner = new Spinner(opts).spin(target);
+            return spinner;
+        }
+
+        function hideSpinner(spinner) {
+            spinner.stop();
+        }   
 
         function render() {
 

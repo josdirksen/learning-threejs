@@ -55,7 +55,7 @@ $(function () {
 //        camera.position.x = 80;
 //        camera.position.y = 80;
 //        camera.position.z = 80;
-//        camera.lookAt(new THREE.Vector3(0,0,0));
+      camera.lookAt(new THREE.Vector3(0,0,0));
 
     // add spotlight for the shadows
     var spotLight = new THREE.SpotLight(0xffffff);
@@ -119,7 +119,7 @@ $(function () {
     });
 
 
-    loader.load('../assets/models/sol/libertStatue.obj', '../assets/models/sol/libertStatue.mtl', {side: THREE.DoubleSide});
+    loader.load('../assets/models/sol/LibertStatue.obj', '../assets/models/sol/LibertStatue.mtl', {side: THREE.DoubleSide});
 
 
     // setup the control gui

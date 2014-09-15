@@ -62,14 +62,8 @@
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
-        // call the render function
-        var step = 0;
-
-
         var group;
-        var gui = new dat.GUI();
-
-
+        
         var loader = new THREE.CTMLoader();
         var group = new THREE.Object3D();
 

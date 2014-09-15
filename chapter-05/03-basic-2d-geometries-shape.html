@@ -83,16 +83,17 @@
                 // remove the old plane
                 scene.remove(shape);
                 // create a new one
-                shape = createLine(drawShape(), false);
+                shape = createLine(drawShape(), false,controls.numberPoints);
                 // add it to the scene.
                 scene.add(shape);
             };
+            this.numberPoints = 10;
 
             this.asSpacedPoints = function () {
                 // remove the old plane
                 scene.remove(shape);
                 // create a new one
-                shape = createLine(drawShape(), true);
+                shape = createLine(drawShape(), true,controls.numberPoints);
                 // add it to the scene.
                 scene.add(shape);
             };
@@ -100,7 +101,8 @@
 
         var gui = new dat.GUI();
         gui.add(controls, 'asGeom');
-        gui.add(controls, 'asPoints');
+        gui.add(controls, 'numberPoints',1,100);
+        gui.add(controls, 'asPoints');        
         gui.add(controls, 'asSpacedPoints');
 
 
@@ -163,12 +165,12 @@
             return mesh;
         }
 
-        function createLine(shape, spaced) {
+        function createLine(shape, spaced, number) {
             if (!spaced) {
-                var mesh = new THREE.Line(shape.createPointsGeometry(10), new THREE.LineBasicMaterial({ color: 0xff3333, linewidth: 2 }));
+                var mesh = new THREE.Line(shape.createPointsGeometry(number), new THREE.LineBasicMaterial({ color: 0xff3333, linewidth: 2 }));
                 return mesh;
             } else {
-                var mesh = new THREE.Line(shape.createSpacedPointsGeometry(3), new THREE.LineBasicMaterial({ color: 0xff3333, linewidth: 2 }));
+                var mesh = new THREE.Line(shape.createSpacedPointsGeometry(number), new THREE.LineBasicMaterial({ color: 0xff3333, linewidth: 2 }));
                 return mesh;
             }
 

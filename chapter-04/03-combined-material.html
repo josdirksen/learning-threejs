@@ -45,8 +45,7 @@
 
         renderer.setClearColorHex(0x00000, 1.0);
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMapEnabled = true;
-
+        
         // position and point the camera to the center of the scene
         camera.position.x = -50;
         camera.position.y = 40;
@@ -86,8 +85,7 @@
                 var colorMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00, transparent: true, blending: THREE.MultiplyBlending})
                 var cube = new THREE.SceneUtils.createMultiMaterialObject(cubeGeometry, [colorMaterial, cubeMaterial]);
                 cube.children[1].scale.set(0.99, 0.99, 0.99);
-                cube.castShadow = true;
-
+                
                 // position the cube randomly in the scene
                 cube.position.x = -60 + Math.round((Math.random() * 100));
                 cube.position.y = Math.round((Math.random() * 10));
@@ -113,6 +111,7 @@
         gui.add(controls, 'cameraFar', 50, 200).onChange(function (e) {
             camera.far = e;
         });
+        gui.add(controls, 'outputObjects');
 
 
         render();

@@ -60,20 +60,8 @@
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
-        // call the render function
-        var step = 0;
-
-
-        // setup the control gui
-        var controls = new function () {
-            // we need the first child, since it's a multimaterial
-
-
-        }
-
         var particleSystem = new THREE.Object3D();
         var loadedGeometry;
-
 
         // create a tween
         // http://sole.github.io/tween.js/examples/03_graphs.html
@@ -102,9 +90,6 @@
 
         tween.onUpdate(onUpdate);
         tweenBack.onUpdate(onUpdate);
-
-
-        var gui = new dat.GUI();
 
 
         var loader = new THREE.PLYLoader();

@@ -68,6 +68,9 @@
         var cubeTarget1 = new THREE.CubeGeometry(2, 10, 2);
         var cubeTarget2 = new THREE.CubeGeometry(8, 2, 8);
 
+        scene.add(createMesh(cubeTarget1));
+        scene.add(createMesh(cubeTarget2));
+
         // define morphtargets and compute the morphnormal
         cubeGeometry.morphTargets[0] = {name: 't1', vertices: cubeTarget2.vertices};
         cubeGeometry.morphTargets[1] = {name: 't2', vertices: cubeTarget1.vertices};
@@ -117,6 +120,20 @@
         var gui = new dat.GUI();
         gui.add(controls, 'influence1', 0, 1).onChange(controls.update);
         gui.add(controls, 'influence2', 0, 1).onChange(controls.update);
+
+        function createMesh(geom) {
+
+            // assign two materials
+            var meshMaterial = new THREE.MeshNormalMaterial();
+            meshMaterial.side = THREE.DoubleSide;
+            var wireFrameMat = new THREE.MeshBasicMaterial({transparency: true, opacity: 0.5, wireframeLinewidth: 0.5});
+            wireFrameMat.wireframe = true;
+
+            // create a multimaterial
+            var mesh = new THREE.Mesh(geom, wireFrameMat);
+
+            return mesh;
+        }
 
 
         render();

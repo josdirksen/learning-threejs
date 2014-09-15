@@ -61,12 +61,13 @@
         // the mesh
         var latheMesh;
 
-        generatePoints(12, 2, 2 * Math.PI);
+        generatePoints(30,12, 2, 2 * Math.PI);
 
         // setup the control gui
         var controls = new function () {
             // we need the first child, since it's a multimaterial
 
+            this.numberPoints = 30;
             this.segments = 12;
             this.phiStart = 0;
             this.phiLength = 2 * Math.PI;
@@ -74,11 +75,12 @@
             this.redraw = function () {
                 scene.remove(spGroup);
                 scene.remove(latheMesh);
-                generatePoints(controls.segments, controls.phiStart, controls.phiLength);
+                generatePoints(controls.numberPoints,controls.segments, controls.phiStart, controls.phiLength);
             };
         }
 
         var gui = new dat.GUI();
+        gui.add(controls, 'numberPoints', 0, 50).step(1).onChange(controls.redraw);
         gui.add(controls, 'segments', 0, 50).step(1).onChange(controls.redraw);
         gui.add(controls, 'phiStart', 0, 2 * Math.PI).onChange(controls.redraw);
         gui.add(controls, 'phiLength', 0, 2 * Math.PI).onChange(controls.redraw);
@@ -86,11 +88,11 @@
 
         render();
 
-        function generatePoints(segments, phiStart, phiLength) {
-            // add 10 random spheres
+        function generatePoints(numberPoints,segments, phiStart, phiLength) {
+            // add 'count' random spheres
             var points = [];
             var height = 5;
-            var count = 30;
+            var count = numberPoints;
             for (var i = 0; i < count; i++) {
                 points.push(new THREE.Vector3((Math.sin(i * 0.2) + Math.cos(i * 0.3)) * height + 12, 0, ( i - count ) + count / 2));
             }
