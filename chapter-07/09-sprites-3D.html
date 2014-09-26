@@ -42,7 +42,7 @@
 
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColorHex(0x000000, 1.0);
+        webGLRenderer.setClearColor(new THREE.Color(0x000000, 1.0));
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
 
         // position and point the camera to the center of the scene
@@ -89,7 +89,6 @@
             // we have one row, with five sprites
             spriteMaterial.uvOffset.set(1 / 5 * spriteNumber, 0);
             spriteMaterial.uvScale.set(1 / 5, 1);
-            spriteMaterial.alignment = THREE.SpriteAlignment.bottomCenter;
             spriteMaterial.blending = THREE.AdditiveBlending;
 
             var sprite = new THREE.Sprite(spriteMaterial);

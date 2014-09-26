@@ -35,7 +35,8 @@
         // create a render and set the size
         var renderer = new THREE.WebGLRenderer();
 
-        renderer.setClearColorHex(0xEEEEEE);
+        renderer.setClearColor(new THREE.Color(0xEEEEEE));
+
         renderer.setSize(window.innerWidth, window.innerHeight);
 
         var axes = new THREE.AxisHelper( 20 );

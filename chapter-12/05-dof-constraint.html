@@ -39,7 +39,7 @@ initScene = function () {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    renderer.setClearColorHex(0x000000);
+    renderer.setClearColor(new THREE.Color(0x000000));
     renderer.shadowMapEnabled = true;
 
 

@@ -41,9 +41,9 @@ $(function () {
 
 
     // create a render and set the size
-    var renderer = new THREE.WebGLRenderer();
+    var renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
 
-    renderer.setClearColorHex(0xaaaaff, 1.0);
+    renderer.setClearColor(new THREE.Color(0xaaaaff, 1.0));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMapEnabled = true;
 
