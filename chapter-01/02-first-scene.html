@@ -5,7 +5,6 @@
 <head>
     <title>Example 01.02 - First Scene</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <style>
         body{
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -24,7 +23,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         // create a scene, that will hold all our elements such as objects, cameras and lights.
         var scene = new THREE.Scene();
@@ -34,11 +33,11 @@
 
         // create a render and set the size
         var renderer = new THREE.WebGLRenderer();
-
+        renderer.setClearColorHex()
         renderer.setClearColor(new THREE.Color(0xEEEEEE));
-
         renderer.setSize(window.innerWidth, window.innerHeight);
 
+        // show axes in the screen
         var axes = new THREE.AxisHelper( 20 );
         scene.add(axes);
 
@@ -46,7 +45,6 @@
         var planeGeometry = new THREE.PlaneGeometry(60,20);
         var planeMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc});
         var plane = new THREE.Mesh(planeGeometry,planeMaterial);
-
 
         // rotate and position the plane
         plane.rotation.x=-0.5*Math.PI;
@@ -58,10 +56,9 @@
         scene.add(plane);
 
         // create a cube
-        var cubeGeometry = new THREE.CubeGeometry(4,4,4);
+        var cubeGeometry = new THREE.BoxGeometry(4,4,4);
         var cubeMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-
 
         // position the cube
         cube.position.x=-4;
@@ -71,6 +68,7 @@
         // add the cube to the scene
         scene.add(cube);
 
+        // create a sphere
         var sphereGeometry = new THREE.SphereGeometry(4,20,20);
         var sphereMaterial = new THREE.MeshBasicMaterial({color: 0x7777ff, wireframe: true});
         var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
@@ -79,7 +77,6 @@
         sphere.position.x=20;
         sphere.position.y=4;
         sphere.position.z=2;
-
 
         // add the sphere to the scene
         scene.add(sphere);
@@ -91,13 +88,13 @@
         camera.lookAt(scene.position);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(renderer.domElement);
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
         // render the scene
         renderer.render(scene, camera);
-    });
+    };
 
-
+    window.onload = init;
 
 </script>
 </body>

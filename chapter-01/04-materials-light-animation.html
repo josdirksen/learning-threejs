@@ -27,7 +27,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -46,7 +46,7 @@
 
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(60,20,1,1);
-        var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
         var plane = new THREE.Mesh(planeGeometry,planeMaterial);
         plane.receiveShadow  = true;
 
@@ -60,7 +60,7 @@
         scene.add(plane);
 
         // create a cube
-        var cubeGeometry = new THREE.CubeGeometry(4,4,4);
+        var cubeGeometry = new THREE.BoxGeometry(4,4,4);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
         cube.castShadow = true;
@@ -103,13 +103,13 @@
         scene.add( spotLight );
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(renderer.domElement);
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
         // call the render function
         var step=0;
-        render();
+        renderScene();
 
-        function render() {
+        function renderScene() {
             stats.update();
             // rotate the cube around its axes
             cube.rotation.x += 0.02;
@@ -122,7 +122,7 @@
             sphere.position.y = 2 +( 10*Math.abs(Math.sin(step)));
 
             // render using requestAnimationFrame
-            requestAnimationFrame(render);
+            requestAnimationFrame(renderScene);
             renderer.render(scene, camera);
         }
 
@@ -137,13 +137,13 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            document.getElementById("Stats-output").appendChild( stats.domElement );
 
             return stats;
         }
-    });
+    };
 
-
+    window.onload = init;
 
 </script>
 </body>
