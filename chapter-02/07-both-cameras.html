@@ -62,14 +62,14 @@
         // add the plane to the scene
         scene.add(plane);
 
-        var cubeGeometry = new THREE.CubeGeometry(4,4,4);
+        var cubeGeometry = new THREE.BoxGeometry(4,4,4);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: 0x00ee22});
-        for (var j = 0 ; j < (planeGeometry.height/5) ; j++) {
-            for (var i = 0 ; i < planeGeometry.width/5 ; i++) {
+        for (var j = 0 ; j < (planeGeometry.parameters.height/5) ; j++) {
+            for (var i = 0 ; i < planeGeometry.parameters.width/5 ; i++) {
                 var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
-                cube.position.z=-((planeGeometry.height)/2)+2+(j*5);
-                cube.position.x=-((planeGeometry.width)/2)+2+(i*5);
+                cube.position.z=-((planeGeometry.parameters.height)/2)+2+(j*5);
+                cube.position.x=-((planeGeometry.parameters.width)/2)+2+(i*5);
                 cube.position.y=2;
 
                 scene.add(cube);
