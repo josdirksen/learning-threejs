@@ -89,11 +89,9 @@
 
         var rollControls;
         var loader = new THREE.OBJMTLLoader();
-        loader.addEventListener('load', function (event) {
+        var load = function(object) {
 
             var scale = chroma.scale(['#aaffaa', '#ffff00', '#ffffff']);
-
-            var object = event.content;
             setRandomColors(object, scale);
 
             mesh = object;
@@ -102,12 +100,12 @@
 
             rollControls.movementSpeed = 25;
             rollControls.lookSpeed = 3;
-        });
+        };
 
 
         var texture = THREE.ImageUtils.loadTexture('../assets/textures/Metro01.JPG');
         //texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        loader.load('../assets/models/city.obj', '../assets/models/city.mtl', {side: THREE.DoubleSide});
+        loader.load('../assets/models/city.obj', '../assets/models/city.mtl', load);
         //texture.repeat.set( 1 , 1);
 
 

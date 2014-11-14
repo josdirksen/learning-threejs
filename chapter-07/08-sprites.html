@@ -38,7 +38,7 @@
         var sceneOrtho = new THREE.Scene();
 
         // create a camera, which defines where we're looking at.
-        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 250);
         var cameraOrtho = new THREE.OrthographicCamera( 0, window.innerWidth, window.innerHeight, 0, - 10, 10 );
 
         // create a render and set the size
@@ -67,13 +67,12 @@
 
 
         var controls = new function () {
-            this.size = 30;
+            this.size = 150;
             this.sprite = 0;
             this.transparent = true;
             this.opacity = 0.6;
             this.color = 0xffffff;
             this.rotateSystem = true;
-
 
             this.redraw = function () {
                 sceneOrtho.children.forEach(function (child) {
@@ -100,20 +99,19 @@
                         opacity: opacity,
                         color: color,
                         transparent: transparent,
-//                        useScreenCoordinates: true,
                         map: getTexture()}
             );
 
             // we have 1 row, with five sprites
-            spriteMaterial.uvOffset.set(1 / 5 * spriteNumber, 0);
-            spriteMaterial.uvScale.set(1 / 5, 1);
+            spriteMaterial.map.offset = new THREE.Vector2(0.2*spriteNumber, 0);
+            spriteMaterial.map.repeat = new THREE.Vector2(1/5, 1);
+            spriteMaterial.depthTest = false;
 
-            spriteMaterial.scaleByViewport = true;
             spriteMaterial.blending = THREE.AdditiveBlending;
 
             var sprite = new THREE.Sprite(spriteMaterial);
             sprite.scale.set(size, size, size);
-            sprite.position.set(100, 50, 0);
+            sprite.position.set(100, 50, -10);
             sprite.velocityX = 5;
 
             sceneOrtho.add(sprite);
@@ -134,9 +132,7 @@
                     e.position.x = e.position.x + e.velocityX;
                     if (e.position.x > window.innerWidth) {
                         e.velocityX = -5;
-                        //controls.sprite=(controls.sprite++)%5;
-                        console.log(controls.sprite++);
-                        e.material.uvOffset.set(1 / 5 * (controls.sprite % 4), 0);
+                        e.material.map.offset.set(1 / 5 * (controls.sprite % 4), 0);
                     }
                     if (e.position.x < 0) {
                         e.velocityX = 5;
@@ -146,8 +142,9 @@
 
 
             requestAnimationFrame(render);
-            webGLRenderer.autoClear = false;
+
             webGLRenderer.render(scene, camera);
+            webGLRenderer.autoClear = false;
             webGLRenderer.render(sceneOrtho, cameraOrtho);
 
         }

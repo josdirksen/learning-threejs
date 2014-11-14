@@ -5,8 +5,6 @@
 <head>
     <title>Example 08.03 - Save & Load</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/GeometryExporter.js"></script>
-    <script type="text/javascript" src="../libs/JSONLoader.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
@@ -46,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var knot = createMesh(new THREE.TorusKnotGeometry(10, 1));
+        var knot = createMesh(new THREE.TorusKnotGeometry(10, 1, 64, 8, 2, 3, 1));
         // add the sphere to the scene
         scene.add(knot);
 
@@ -67,14 +65,16 @@
 
         // setup the control gui
         var controls = new function () {
+
+            console.log(knot.geometry.parameters);
             // we need the first child, since it's a multimaterial
-            this.radius = knot.geometry.radius;
+            this.radius = knot.geometry.parameters.radius;
             this.tube = 0.3;
-            this.radialSegments = knot.geometry.radialSegments;
-            this.tubularSegments = knot.geometry.tubularSegments;
-            this.p = knot.geometry.p;
-            this.q = knot.geometry.q;
-            this.heightScale = knot.geometry.heightScale;
+            this.radialSegments = knot.geometry.parameters.radialSegments;
+            this.tubularSegments = knot.geometry.parameters.tubularSegments;
+            this.p = knot.geometry.parameters.p;
+            this.q = knot.geometry.parameters.q;
+            this.heightScale = knot.geometry.parameters.heightScale;
 
             this.redraw = function () {
                 // remove the old plane
@@ -86,8 +86,7 @@
             };
 
             this.save = function () {
-                var exporter = new THREE.GeometryExporter();
-                var result = exporter.parse(knot.geometry);
+                var result = knot.toJSON();
                 localStorage.setItem("json", JSON.stringify(result));
             }
 
@@ -99,12 +98,10 @@
 
                 if (json) {
                     var loadedGeometry = JSON.parse(json);
+                    var loader = new THREE.ObjectLoader();
 
-                    var loader = new THREE.JSONLoader();
-                    var geom = loader.parse(loadedGeometry);
-                    loadedMesh = createMesh(geom.geometry);
-                    loadedMesh.position.x = -35;
-                    loadedMesh.position.z = -5;
+                    loadedMesh = loader.parse(loadedGeometry);
+                    loadedMesh.position.x-=50;
                     scene.add(loadedMesh);
                 }
             }

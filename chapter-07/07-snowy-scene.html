@@ -67,14 +67,14 @@
             this.redraw = function () {
                 var toRemove = [];
                 scene.children.forEach(function (child) {
-                    if (child instanceof THREE.ParticleSystem) {
+                    if (child instanceof THREE.PointCloud) {
                         toRemove.push(child);
                     }
                 });
                 toRemove.forEach(function (child) {
                     scene.remove(child)
                 })
-                createParticles(controls.size, controls.transparent, controls.opacity, controls.sizeAttenuation, controls.color);
+                createPointClouds(controls.size, controls.transparent, controls.opacity, controls.sizeAttenuation, controls.color);
             };
         }
 
@@ -89,7 +89,7 @@
 
         render();
 
-        function createSystem(name, texture, size, transparent, opacity, sizeAttenuation, color) {
+        function createPointCloud(name, texture, size, transparent, opacity, sizeAttenuation, color) {
             var geom = new THREE.Geometry();
 
             var color = new THREE.Color(color);
@@ -97,7 +97,7 @@
                     color.getHSL().s,
                     (Math.random()) * color.getHSL().l);
 
-            var material = new THREE.ParticleBasicMaterial({
+            var material = new THREE.PointCloudMaterial({
                 size: size,
                 transparent: transparent,
                 opacity: opacity,
@@ -119,23 +119,23 @@
                 geom.vertices.push(particle);
             }
 
-            var system = new THREE.ParticleSystem(geom, material);
+            var system = new THREE.PointCloud(geom, material);
             system.name = name;
             system.sortParticles = true;
             return system;
         }
 
-        function createParticles(size, transparent, opacity, sizeAttenuation, color) {
+        function createPointClouds(size, transparent, opacity, sizeAttenuation, color) {
 
             var texture1 = THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake1.png");
             var texture2 = THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake2.png");
             var texture3 = THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake3.png");
             var texture4 = THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake5.png");
 
-            scene.add(createSystem("system1", texture1, size, transparent, opacity, sizeAttenuation, color));
-            scene.add(createSystem("system2", texture2, size, transparent, opacity, sizeAttenuation, color));
-            scene.add(createSystem("system3", texture3, size, transparent, opacity, sizeAttenuation, color));
-            scene.add(createSystem("system4", texture4, size, transparent, opacity, sizeAttenuation, color));
+            scene.add(createPointCloud("system1", texture1, size, transparent, opacity, sizeAttenuation, color));
+            scene.add(createPointCloud("system2", texture2, size, transparent, opacity, sizeAttenuation, color));
+            scene.add(createPointCloud("system3", texture3, size, transparent, opacity, sizeAttenuation, color));
+            scene.add(createPointCloud("system4", texture4, size, transparent, opacity, sizeAttenuation, color));
         }
 
 
@@ -144,7 +144,7 @@
             stats.update();
 
             scene.children.forEach(function (child) {
-                if (child instanceof THREE.ParticleSystem) {
+                if (child instanceof THREE.PointCloud) {
                     var vertices = child.geometry.vertices;
                     vertices.forEach(function (v) {
                         v.y = v.y - (v.velocityY);

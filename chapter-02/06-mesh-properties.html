@@ -100,6 +100,8 @@
             this.translateY = 0;
             this.translateZ = 0;
 
+            this.visible = true;
+
             this.translate = function() {
                 cube.translateX(this.translateX);
                 cube.translateY(this.translateX);
@@ -159,6 +161,8 @@
         guiTranslate.add(controls,'translateZ',-10,10);
         guiTranslate.add(controls,'translate');
 
+        gui.add(controls,'visible');
+
         render();
 
         function render() {
@@ -167,6 +171,7 @@
             // render using requestAnimationFrame
 
 
+            cube.visible = controls.visible;
 
 
             cube.rotation.x=controls.rotationX;

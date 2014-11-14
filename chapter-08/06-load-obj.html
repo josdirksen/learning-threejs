@@ -47,15 +47,15 @@
         webGLRenderer.shadowMapEnabled = true;
 
         // position and point the camera to the center of the scene
-        camera.position.x = -30;
+        camera.position.x = 130;
         camera.position.y = 40;
         camera.position.z = 50;
-        camera.lookAt(new THREE.Vector3(0, 0, 0));
-
+        camera.lookAt(scene.position);
+        scene.add(camera);
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(-30, 40, 50);
+        var spotLight = new THREE.DirectionalLight(0xffffff);
+        spotLight.position.set(30, 40, 50);
         spotLight.intensity = 1;
         scene.add(spotLight);
 
@@ -77,22 +77,22 @@
         var mesh;
 
         var loader = new THREE.OBJLoader();
-        loader.load('../assets/models/pinecone.obj', function (geometry) {
+        loader.load('../assets/models/pinecone.obj', function (loadedMesh) {
             var material = new THREE.MeshLambertMaterial({color: 0x5C3A21});
 
-            // geometry is a group of children. If a child has one additional child it's probably a mesh
-            geometry.children.forEach(function (child) {
-                if (child.children.length == 1) {
-                    if (child.children[0] instanceof THREE.Mesh) {
-                        child.children[0].material = material;
-                    }
-                }
+            // loadedMesh is a group of meshes. For
+            // each mesh set the material, and compute the information
+            // three.js needs for rendering.
+            loadedMesh.children.forEach(function (child) {
+                child.material = material;
+                child.geometry.computeFaceNormals();
+                child.geometry.computeVertexNormals();
             });
 
-            mesh = geometry;
-            geometry.scale.set(100, 100, 100);
-            geometry.rotation.x = -0.3;
-            scene.add(geometry);
+            mesh = loadedMesh;
+            loadedMesh.scale.set(100, 100, 100);
+            loadedMesh.rotation.x = -0.3;
+            scene.add(loadedMesh);
         });
 
 

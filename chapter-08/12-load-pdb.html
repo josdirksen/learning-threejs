@@ -51,9 +51,21 @@
         camera.position.z = 6;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
+        var dir1 = new THREE.DirectionalLight(0.4);
+        dir1.position.set(-30,30,-30);
+        scene.add(dir1);
+
+        var dir2 = new THREE.DirectionalLight(0.4);
+        dir2.position.set(-30,30,30);
+        scene.add(dir2);
+
+        var dir3 = new THREE.DirectionalLight(0.4);
+        dir3.position.set(30,30,-30);
+        scene.add(dir3);
+
         // add spotlight for the shadows
         var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(17, 10, 10);
+        spotLight.position.set(30, 30, 30);
         scene.add(spotLight);
 
         // add the output of the renderer to the html element
@@ -75,14 +87,15 @@
 
         var loader = new THREE.PDBLoader();
         var group = new THREE.Object3D();
-        loader.load("../assets/models/diamond.pdb", function (geometry, geometryBonds) {
+        loader.load("../assets/models/aspirin.pdb", function (geometry, geometryBonds) {
+//        loader.load("../assets/models/diamond.pdb", function (geometry, geometryBonds) {
             var i = 0;
 
             geometry.vertices.forEach(function (position) {
                 var sphere = new THREE.SphereGeometry(0.2);
                 var material = new THREE.MeshPhongMaterial({color: geometry.colors[i++]});
                 var mesh = new THREE.Mesh(sphere, material);
-                mesh.position = position;
+                mesh.position.copy(position);
                 group.add(mesh);
             });
 

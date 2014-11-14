@@ -100,22 +100,19 @@
         var mesh;
 
         var loader = new THREE.OBJMTLLoader();
-        loader.addEventListener('load', function (event) {
-
+        var load = function (object) {
             var scale = chroma.scale(['red', 'green', 'blue']);
-            var object = event.content;
             setRandomColors(object, scale);
-
-
             mesh = object;
             scene.add(mesh);
-        });
+        };
 
 
         var texture = THREE.ImageUtils.loadTexture('../assets/textures/Metro01.JPG');
         //texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        loader.load('../assets/models/city.obj', '../assets/models/city.mtl', {side: THREE.DoubleSide});
+        loader.load('../assets/models/city.obj', '../assets/models/city.mtl', load);
         //texture.repeat.set( 1 , 1);
+
 
 
         function setCamControls() {

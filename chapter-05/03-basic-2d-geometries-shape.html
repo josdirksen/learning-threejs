@@ -164,6 +164,7 @@
         }
 
         function createLine(shape, spaced) {
+            console.log(shape);
             if (!spaced) {
                 var mesh = new THREE.Line(shape.createPointsGeometry(10), new THREE.LineBasicMaterial({ color: 0xff3333, linewidth: 2 }));
                 return mesh;

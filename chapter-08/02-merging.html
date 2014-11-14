@@ -57,7 +57,7 @@
         // call the render function
         var step = 0;
 
-        var cubeMaterial = new THREE.MeshNormalMaterial({color: 0x00ff00, transparent: true, opacity: 0.5 });
+        var cubeMaterial = new THREE.MeshNormalMaterial({color: 0x00ff00, transparent: true, opacity: 0.5});
         var controls = new function () {
             this.cameraNear = camera.near;
             this.cameraFar = camera.far;
@@ -78,11 +78,14 @@
 
                 // add a large number of cubes
                 if (controls.combined) {
-                var geometry = new THREE.Geometry();
-                for (var i = 0; i < controls.numberOfObjects; i++) {
-                    THREE.GeometryUtils.merge(geometry, controls.addCube());
-                }
-                scene.add(new THREE.Mesh(geometry, cubeMaterial));
+                    var geometry = new THREE.Geometry();
+                    for (var i = 0; i < controls.numberOfObjects; i++) {
+                        var cubeMesh = addcube();
+                        cubeMesh.updateMatrix();
+                        geometry.merge(cubeMesh.geometry,cubeMesh.matrix);
+                    }
+                    scene.add(new THREE.Mesh(geometry, cubeMaterial));
+
                 } else {
                     for (var i = 0; i < controls.numberOfObjects; i++) {
                         scene.add(controls.addCube());
@@ -114,7 +117,7 @@
         function addcube() {
 
             var cubeSize = 1.0;
-            var cubeGeometry = new THREE.CubeGeometry(cubeSize, cubeSize, cubeSize);
+            var cubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
 
             var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
             cube.castShadow = true;

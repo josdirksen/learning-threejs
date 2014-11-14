@@ -45,7 +45,6 @@ $(function () {
     webGLRenderer.shadowMapEnabled = true;
 
     // add the sphere to the scene
-    scene.add(sphere);
 
     // position and point the camera to the center of the scene
     camera.position.x = 30;
@@ -54,7 +53,6 @@ $(function () {
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     var ground = new THREE.PlaneGeometry(100, 100, 50, 50);
-
 
     var groundMesh = THREE.SceneUtils.createMultiMaterialObject(ground,
             [new THREE.MeshBasicMaterial({wireframe: true, overdraw: true, color: 000000}),
@@ -108,14 +106,14 @@ $(function () {
 
             // create a new one
             sphere = createMesh(new THREE.SphereGeometry(5, 10, 10));
-            cube = createMesh(new THREE.CubeGeometry(6, 6, 6));
+            cube = createMesh(new THREE.BoxGeometry(6, 6, 6));
 
             sphere.position.set(controls.spherePosX, controls.spherePosY, controls.spherePosZ);
             cube.position.set(controls.cubePosX, controls.cubePosY, controls.cubePosZ);
             // add it to the scene.
 
             // also create a group, only used for rotating
-            group = new THREE.Object3D();
+            group = new THREE.Group();
             group.add(sphere);
             group.add(cube);
 
@@ -135,9 +133,9 @@ $(function () {
             var height = box.max.y - box.min.y;
             var depth = box.max.z - box.min.z;
 
-            var bbox = new THREE.CubeGeometry(width, height, depth);
+            var bbox = new THREE.BoxGeometry(width, height, depth);
             bboxMesh = new THREE.Mesh(bbox, new THREE.MeshBasicMaterial({color: 0x000000, vertexColors: THREE.VertexColors, wireframeLinewidth: 2, wireframe: true}));
-            // scene.add(bboxMesh);
+//            scene.add(bboxMesh);
 
             bboxMesh.position.x = ((box.min.x + box.max.x) / 2);
             bboxMesh.position.y = ((box.min.y + box.max.y) / 2);
@@ -232,7 +230,7 @@ $(function () {
             cube.rotation.y += step;
         }
 
-        controls.positionBoundingBox();
+//        controls.positionBoundingBox();
         // render using requestAnimationFrame
         requestAnimationFrame(render);
         webGLRenderer.render(scene, camera);

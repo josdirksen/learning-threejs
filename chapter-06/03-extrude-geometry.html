@@ -155,7 +155,7 @@
             geom.applyMatrix(new THREE.Matrix4().makeTranslation(-20, 0, 0));
 
             // assign two materials
-            var meshMaterial = new THREE.MeshNormalMaterial({transparent: true, opacity: 0.7});
+            var meshMaterial = new THREE.MeshNormalMaterial({shading: THREE.FlatShading, transparent: true, opacity: 0.7});
 
             //  meshMaterial.side = THREE.DoubleSide;
             var wireFrameMat = new THREE.MeshBasicMaterial();

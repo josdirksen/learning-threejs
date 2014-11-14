@@ -355,7 +355,13 @@
         var meshMaterial6 = createMaterial("vertex-shader", "fragment-shader-6");
 
 
-        var material = new THREE.MeshFaceMaterial([meshMaterial1, meshMaterial2, meshMaterial3, meshMaterial4, meshMaterial5, meshMaterial6]);
+        var material = new THREE.MeshFaceMaterial(
+                [meshMaterial1,
+                 meshMaterial2,
+                 meshMaterial3,
+                 meshMaterial4,
+                 meshMaterial5,
+                 meshMaterial6]);
 //        var material = new THREE.MeshFaceMaterial([meshMaterial2, meshMaterial2, meshMaterial1, meshMaterial1, meshMaterial1, meshMaterial1]);
 
         var cube = new THREE.Mesh(cubeGeometry, material);

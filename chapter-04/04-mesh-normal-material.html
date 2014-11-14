@@ -72,11 +72,19 @@ $(function () {
 
     for (var f = 0, fl = sphere.geometry.faces.length; f < fl; f++) {
         var face = sphere.geometry.faces[ f ];
+        var centroid = new THREE.Vector3(0, 0, 0);
+        centroid.add(sphere.geometry.vertices[face.a]);
+        centroid.add(sphere.geometry.vertices[face.b]);
+        centroid.add(sphere.geometry.vertices[face.c]);
+        centroid.divideScalar(3);
+
         var arrow = new THREE.ArrowHelper(
                 face.normal,
-                face.centroid,
+                centroid,
                 2,
-                0x3333FF);
+                0x3333FF,
+                0.5,
+                0.5);
         sphere.add(arrow);
     }
 

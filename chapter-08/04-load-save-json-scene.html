@@ -5,6 +5,7 @@
 <head>
     <title>Example 08.04 - Load and save scene</title>
     <script type="text/javascript" src="../libs/three.js"></script>
+    <script type="text/javascript" src="../libs/SceneLoader.js"></script>
     <script type="text/javascript" src="../libs/SceneExporter.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
@@ -54,9 +55,9 @@
 
         // rotate and position the plane
         plane.rotation.x = -0.5 * Math.PI;
-        plane.position.x = 15
-        plane.position.y = 0
-        plane.position.z = 0
+        plane.position.x = 15;
+        plane.position.y = 0;
+        plane.position.z = 0;
 
         // add the plane to the scene
         scene.add(plane);
@@ -126,7 +127,6 @@
                 var sceneLoader = new THREE.SceneLoader();
 
                 sceneLoader.parse(JSON.parse(json), function (e) {
-                    console.log(e);
                     scene = e.scene;
                 }, '.');
             }

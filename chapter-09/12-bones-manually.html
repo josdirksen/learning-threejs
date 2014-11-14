@@ -76,11 +76,6 @@
             mesh.rotation.x = 0.5 * Math.PI;
             mesh.rotation.z = 0.7 * Math.PI;
 
-            // make sure to set quaternation to false for easy rotation
-            mesh.bones.forEach(function (e) {
-                e.useQuaternion = false;
-            })
-
             // add the mesh
             scene.add(mesh);
 
@@ -104,17 +99,17 @@
             var pos = this.pos;
 
             // rotate the fingers
-            mesh.bones[5].rotation.set(0, 0, pos);
-            mesh.bones[6].rotation.set(0, 0, pos);
-            mesh.bones[10].rotation.set(0, 0, pos);
-            mesh.bones[11].rotation.set(0, 0, pos);
-            mesh.bones[15].rotation.set(0, 0, pos);
-            mesh.bones[16].rotation.set(0, 0, pos);
-            mesh.bones[20].rotation.set(0, 0, pos);
-            mesh.bones[21].rotation.set(0, 0, pos);
+            mesh.skeleton.bones[5].rotation.set(0, 0, pos);
+            mesh.skeleton.bones[6].rotation.set(0, 0, pos);
+            mesh.skeleton.bones[10].rotation.set(0, 0, pos);
+            mesh.skeleton.bones[11].rotation.set(0, 0, pos);
+            mesh.skeleton.bones[15].rotation.set(0, 0, pos);
+            mesh.skeleton.bones[16].rotation.set(0, 0, pos);
+            mesh.skeleton.bones[20].rotation.set(0, 0, pos);
+            mesh.skeleton.bones[21].rotation.set(0, 0, pos);
 
             // rotate the wrist
-            mesh.bones[1].rotation.set(pos, 0, 0);
+            mesh.skeleton.bones[1].rotation.set(pos, 0, 0);
         };
 
         tween.onUpdate(onUpdate);
@@ -128,15 +123,7 @@
             stats.update();
             TWEEN.update();
 
-
             var delta = clock.getDelta();
-            if (mesh) {
-
-
-                //  THREE.AnimationHandler.update(delta);
-
-            }
-
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);

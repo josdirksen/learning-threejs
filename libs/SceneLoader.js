@@ -2,7 +2,7 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.SceneLoader = function () {
+THREE.SceneLoader = function ( manager ) {
 
 	this.onLoadStart = function () {};
 	this.onLoadProgress = function() {};
@@ -15,6 +15,8 @@ THREE.SceneLoader = function () {
 	this.hierarchyHandlers = {};
 
 	this.addGeometryHandler( "ascii", THREE.JSONLoader );
+
+	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
 
 };
 
@@ -32,7 +34,7 @@ THREE.SceneLoader.prototype = {
 
 			scope.parse( JSON.parse( text ), onLoad, url );
 
-		} );
+		}, onProgress, onError );
 
 	},
 
@@ -149,7 +151,7 @@ THREE.SceneLoader.prototype = {
 
 			} else {
 
-				return urlBase + "/" + source_url;
+				return urlBase + source_url;
 
 			}
 
@@ -361,40 +363,52 @@ THREE.SceneLoader.prototype = {
 
 					// lights
 
-					} else if ( objJSON.type === "DirectionalLight" || objJSON.type === "PointLight" || objJSON.type === "AmbientLight" ) {
+					} else if ( objJSON.type === "AmbientLight" || objJSON.type === "PointLight" ||
+						objJSON.type === "DirectionalLight" || objJSON.type === "SpotLight" ||
+						objJSON.type === "HemisphereLight" || objJSON.type === "AreaLight" ) {
 
-						hex = ( objJSON.color !== undefined ) ? objJSON.color : 0xffffff;
-						intensity = ( objJSON.intensity !== undefined ) ? objJSON.intensity : 1;
+						var color = objJSON.color;
+						var intensity = objJSON.intensity;
+						var distance = objJSON.distance;
+						var position = objJSON.position;
+						var rotation = objJSON.rotation;
 
-						if ( objJSON.type === "DirectionalLight" ) {
+						switch ( objJSON.type ) {
 
-							pos = objJSON.direction;
+							case 'AmbientLight':
+								light = new THREE.AmbientLight( color );
+								break;
 
-							light = new THREE.DirectionalLight( hex, intensity );
-							light.position.fromArray( pos );
+							case 'PointLight':
+								light = new THREE.PointLight( color, intensity, distance );
+								light.position.fromArray( position );
+								break;
 
-							if ( objJSON.target ) {
+							case 'DirectionalLight':
+								light = new THREE.DirectionalLight( color, intensity );
+								light.position.fromArray( objJSON.direction );
+								break;
 
-								target_array.push( { "object": light, "targetName" : objJSON.target } );
+							case 'SpotLight':
+								light = new THREE.SpotLight( color, intensity, distance, 1 );
+								light.angle = objJSON.angle;
+								light.position.fromArray( position );
+								light.target.set( position[ 0 ], position[ 1 ] - distance, position[ 2 ] );
+								light.target.applyEuler( new THREE.Euler( rotation[ 0 ], rotation[ 1 ], rotation[ 2 ], 'XYZ' ) );
+								break;
 
-								// kill existing default target
-								// otherwise it gets added to scene when parent gets added
+							case 'HemisphereLight':
+								light = new THREE.DirectionalLight( color, intensity, distance );
+								light.target.set( position[ 0 ], position[ 1 ] - distance, position[ 2 ] );
+								light.target.applyEuler( new THREE.Euler( rotation[ 0 ], rotation[ 1 ], rotation[ 2 ], 'XYZ' ) );
+								break;
 
-								light.target = null;
-
-							}
-
-						} else if ( objJSON.type === "PointLight" ) {
-
-							pos = objJSON.position;
-							dst = objJSON.distance;
-
-							light = new THREE.PointLight( hex, intensity, dst );
-							light.position.fromArray( pos );
-
-						} else if ( objJSON.type === "AmbientLight" ) {
-
-							light = new THREE.AmbientLight( hex );
+							case 'AreaLight':
+								light = new THREE.AreaLight(color, intensity);
+								light.position.fromArray( position );
+								light.width = objJSON.size;
+								light.height = objJSON.size_y;
+								break;
 
 						}
 
@@ -432,6 +446,10 @@ THREE.SceneLoader.prototype = {
 						} else if ( rot !== undefined ) {
 
 							camera.rotation.fromArray( rot );
+
+						} else if ( objJSON.target ) {
+
+						    camera.lookAt( new THREE.Vector3().fromArray( objJSON.target ) );
 
 						}
 
@@ -818,7 +836,7 @@ THREE.SceneLoader.prototype = {
 
 			if ( geoJSON.type === "cube" ) {
 
-				geometry = new THREE.CubeGeometry( geoJSON.width, geoJSON.height, geoJSON.depth, geoJSON.widthSegments, geoJSON.heightSegments, geoJSON.depthSegments );
+				geometry = new THREE.BoxGeometry( geoJSON.width, geoJSON.height, geoJSON.depth, geoJSON.widthSegments, geoJSON.heightSegments, geoJSON.depthSegments );
 				geometry.name = geoID;
 				result.geometries[ geoID ] = geometry;
 
@@ -932,22 +950,25 @@ THREE.SceneLoader.prototype = {
 
 			}
 
+			var texture;
+
 			if ( textureJSON.url instanceof Array ) {
 
 				var count = textureJSON.url.length;
 				var url_array = [];
 
-				for( var i = 0; i < count; i ++ ) {
+				for ( var i = 0; i < count; i ++ ) {
 
 					url_array[ i ] = get_url( textureJSON.url[ i ], data.urlBaseType );
 
 				}
 
-				var isCompressed = /\.dds$/i.test( url_array[ 0 ] );
+				var loader = THREE.Loader.Handlers.get( url_array[ 0 ] );
 
-				if ( isCompressed ) {
+				if ( loader !== null ) {
 
-					texture = THREE.ImageUtils.loadCompressedTextureCube( url_array, textureJSON.mapping, generateTextureCallback( count ) );
+					texture = loader.load( url_array, generateTextureCallback( count ) );
+					texture.mapping = textureJSON.mapping;
 
 				} else {
 
@@ -957,19 +978,37 @@ THREE.SceneLoader.prototype = {
 
 			} else {
 
-				var isCompressed = /\.dds$/i.test( textureJSON.url );
 				var fullUrl = get_url( textureJSON.url, data.urlBaseType );
 				var textureCallback = generateTextureCallback( 1 );
 
-				if ( isCompressed ) {
+				var loader = THREE.Loader.Handlers.get( fullUrl );
 
-					texture = THREE.ImageUtils.loadCompressedTexture( fullUrl, textureJSON.mapping, textureCallback );
+				if ( loader !== null ) {
+
+					texture = loader.load( fullUrl, textureCallback );
 
 				} else {
 
-					texture = THREE.ImageUtils.loadTexture( fullUrl, textureJSON.mapping, textureCallback );
+					texture = new THREE.Texture();
+					loader = new THREE.ImageLoader();
+
+					( function ( texture ) {
+
+						loader.load( fullUrl, function ( image ) {
+
+							texture.image = image;
+							texture.needsUpdate = true;
+
+							textureCallback();
+
+						} );
+
+					} )( texture )
+
 
 				}
+
+				texture.mapping = textureJSON.mapping;
 
 				if ( THREE[ textureJSON.minFilter ] !== undefined )
 					texture.minFilter = THREE[ textureJSON.minFilter ];
@@ -1025,7 +1064,7 @@ THREE.SceneLoader.prototype = {
 
 			for ( parID in matJSON.parameters ) {
 
-				if ( parID === "envMap" || parID === "map" || parID === "lightMap" || parID === "bumpMap" ) {
+				if ( parID === "envMap" || parID === "map" || parID === "lightMap" || parID === "bumpMap" || parID === "alphaMap" ) {
 
 					matJSON.parameters[ parID ] = result.textures[ matJSON.parameters[ parID ] ];
 
@@ -1115,7 +1154,7 @@ THREE.SceneLoader.prototype = {
 
 					uniforms[ "tCube" ].value = matJSON.parameters.envMap;
 					uniforms[ "enableReflection" ].value = true;
-					uniforms[ "uReflectivity" ].value = matJSON.parameters.reflectivity;
+					uniforms[ "reflectivity" ].value = matJSON.parameters.reflectivity;
 
 				}
 
@@ -1143,15 +1182,15 @@ THREE.SceneLoader.prototype = {
 
 				}
 
-				uniforms[ "uDiffuseColor" ].value.setHex( diffuse );
-				uniforms[ "uSpecularColor" ].value.setHex( specular );
-				uniforms[ "uAmbientColor" ].value.setHex( ambient );
+				uniforms[ "diffuse" ].value.setHex( diffuse );
+				uniforms[ "specular" ].value.setHex( specular );
+				uniforms[ "ambient" ].value.setHex( ambient );
 
-				uniforms[ "uShininess" ].value = shininess;
+				uniforms[ "shininess" ].value = shininess;
 
 				if ( matJSON.parameters.opacity ) {
 
-					uniforms[ "uOpacity" ].value = matJSON.parameters.opacity;
+					uniforms[ "opacity" ].value = matJSON.parameters.opacity;
 
 				}
 

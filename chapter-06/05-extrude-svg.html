@@ -9,6 +9,7 @@
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/d3-threeD.js"></script>
+    <script type="text/javascript" src="../libs/OrbitControls.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -36,6 +37,8 @@
 
 <!-- Javascript code that runs our Three.js examples -->
 <script type="text/javascript">
+
+    var orbit;
 
     // once everything is loaded, we run our Three.js stuff.
     $(function () {
@@ -65,14 +68,18 @@
         camera.position.z = 80;
         camera.lookAt(new THREE.Vector3(60, -60, 0));
 
-        var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position = new THREE.Vector3(-70, 70, 70);
-        spotLight.intensity = 1.7;
+        var spotLight = new THREE.DirectionalLight(0xffffff);
+        spotLight.position = new THREE.Vector3(70, 170, 70);
+        spotLight.intensity = 0.7;
+
         spotLight.target = shape;
+
         scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
+
+        orbit = new THREE.OrbitControls(camera, webGLRenderer.domElement);
 
         // call the render function
         var step = 0;
@@ -126,7 +133,8 @@
 
         function drawShape() {
 
-            var svgString = $("#batman-path").attr("d");
+
+            var svgString = document.querySelector("#batman-path").getAttribute("d");
 
             var shape = transformSVGPathExposed(svgString);
 
@@ -140,16 +148,10 @@
 
 
             // assign two materials
-//          var meshMaterial = new THREE.MeshNormalMaterial({transparent:true, opacity:0.7});
-
-            var meshMaterial = new THREE.MeshPhongMaterial({specular: 0xffffff, color: 0x444444, shininess: 100, metal: true});
-
-            //  meshMaterial.side = THREE.DoubleSide;
-            // create a multimaterial
-            var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);
+            var meshMaterial = new THREE.MeshPhongMaterial({color: 0x333333, shininess: 100, metal: true});
+            var mesh = new THREE.Mesh(geom, meshMaterial);
             mesh.scale.x = 0.1;
             mesh.scale.y = 0.1;
-
 
             mesh.rotation.z = Math.PI;
             mesh.rotation.x = -1.1;
@@ -161,6 +163,8 @@
             stats.update();
 
             shape.rotation.y = step += 0.005;
+
+            orbit.update();
 
 
             // render using requestAnimationFrame

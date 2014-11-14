@@ -44,7 +44,7 @@
 
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+        webGLRenderer.setClearColor(new THREE.Color(0x000000, 1.0));
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
@@ -54,14 +54,14 @@
         camera.position.z = 600;
         camera.lookAt(new THREE.Vector3(400, 0, -300));
 
-        var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position = new THREE.Vector3(734, 582, 279);
-        spotLight.target.position.x = 0;
-        spotLight.target.position.y = 0;
-        spotLight.target.position.z = 0;
-        spotLight.intensity = 2.4;
+        var dirLight = new THREE.DirectionalLight();
+        dirLight.position.set(25,23,15);
+        scene.add(dirLight);
 
-        scene.add(spotLight);
+
+        var dirLight2 = new THREE.DirectionalLight();
+        dirLight2.position.set(-25,23,15);
+        scene.add(dirLight2);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
@@ -142,7 +142,7 @@
             // assign two materials
 //            var meshMaterial = new THREE.MeshLambertMaterial({color: 0xff5555});
 //            var meshMaterial = new THREE.MeshNormalMaterial();
-            var meshMaterial = new THREE.MeshPhongMaterial({specular: 0xffffff, color: 0xff5555, shininess: 100, metal: true});
+            var meshMaterial = new THREE.MeshPhongMaterial({specular: 0xffffff, color: 0xeeffff, shininess: 100, metal: true});
 //            meshMaterial.side=THREE.DoubleSide;
             // create a multimaterial
             var plane = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);

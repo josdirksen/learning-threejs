@@ -67,23 +67,17 @@
         var clock = new THREE.Clock();
 
         var loader = new THREE.JSONLoader();
-        loader.load('../assets/models/hand-2.js', function (geometry, mat) {
+        loader.load('../assets/models/hand-2.js', function (model, mat) {
 
-            // register the animation
-            THREE.AnimationHandler.add(geometry.animation);
-
-            // create a material
             var mat = new THREE.MeshLambertMaterial({color: 0xF0C8C9, skinning: true});
+            mesh = new THREE.SkinnedMesh(model, mat);
 
-            // create and position the mesh
-            mesh = new THREE.SkinnedMesh(geometry, mat);
+            var animation = new THREE.Animation(mesh, model.animation);
+            animation.play();
+
             mesh.rotation.x = 0.5 * Math.PI;
             mesh.rotation.z = 0.7 * Math.PI;
             scene.add(mesh);
-
-            // create the animation
-            var animation = new THREE.Animation(mesh, "wave");
-
 
             // start the animation
             animation.play();

@@ -79,7 +79,7 @@
                 var geom = new THREE.TorusKnotGeometry(controls.radius, controls.tube, Math.round(controls.radialSegments), Math.round(controls.tubularSegments), Math.round(controls.p), Math.round(controls.q), controls.heightScale);
 
                 if (controls.asParticles) {
-                    knot = createParticleSystem(geom);
+                    knot = createPointCloud(geom);
                 } else {
                     knot = createMesh(geom);
                 }
@@ -128,8 +128,8 @@
 
         }
 
-        function createParticleSystem(geom) {
-            var material = new THREE.ParticleBasicMaterial({
+        function createPointCloud(geom) {
+            var material = new THREE.PointCloudMaterial({
                 color: 0xffffff,
                 size: 3,
                 transparent: true,
@@ -137,9 +137,9 @@
                 map: generateSprite()
             });
 
-            var system = new THREE.ParticleSystem(geom, material);
-            system.sortParticles = true;
-            return system;
+            var cloud = new THREE.PointCloud(geom, material);
+            cloud.sortParticles = true;
+            return cloud;
         }
 
         function createMesh(geom) {

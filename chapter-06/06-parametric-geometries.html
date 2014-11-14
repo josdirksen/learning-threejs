@@ -50,12 +50,12 @@
         camera.position.z = 50;
         camera.lookAt(new THREE.Vector3(10, -20, 0));
 
-        var spotLight = new THREE.SpotLight(0xffffff);
+        var spotLight = new THREE.DirectionalLight();
         spotLight.position = new THREE.Vector3(-20, 250, -50);
         spotLight.target.position.x = 30;
         spotLight.target.position.y = -40;
         spotLight.target.position.z = -20;
-        spotLight.intensity = 0.7;
+        spotLight.intensity = 0.3;
 
         scene.add(spotLight);
 
@@ -114,7 +114,7 @@
             // assign two materials
 //            var meshMaterial = new THREE.MeshLambertMaterial({color: 0xff5555});
             //var meshMaterial = new THREE.MeshNormalMaterial();
-            var meshMaterial = new THREE.MeshPhongMaterial({specular: 0xffffff, color: 0x3399ff, shininess: 100, metal: true});
+            var meshMaterial = new THREE.MeshPhongMaterial({specular: 0xaaaafff, color: 0x3399ff, shininess: 40, metal: true});
             meshMaterial.side = THREE.DoubleSide;
             // create a multimaterial
             var plane = THREE.SceneUtils.createMultiMaterialObject(geom, [meshMaterial]);

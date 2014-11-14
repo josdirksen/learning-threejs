@@ -118,7 +118,7 @@
 
                 var spGeom = new THREE.SphereGeometry(0.2);
                 var spMesh = new THREE.Mesh(spGeom, material);
-                spMesh.position = point;
+                spMesh.position.copy(point);
                 spGroup.add(spMesh);
             });
             // add the points as a group to the scene

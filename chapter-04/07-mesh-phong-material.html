@@ -117,6 +117,12 @@
 
             this.color = meshMaterial.color.getStyle();
 
+            this.metal = false;
+            this.wrapAround = false;
+            this.wrapR = 1;
+            this.wrapG = 1;
+            this.wrapB = 1;
+
 
             this.selectedMesh = "cube";
 
@@ -186,6 +192,31 @@
             }
 
             scene.add(e);
+        });
+
+        spGui.add(controls, 'metal').onChange(function(e){
+
+            meshMaterial.metal = e;
+            meshMaterial.needsUpdate = true;
+        });
+
+        spGui.add(controls, 'wrapAround').onChange(function(e){
+
+            meshMaterial.wrapAround = e;
+            meshMaterial.needsUpdate = true;
+        });
+
+        spGui.add(controls, 'wrapR', 0, 1).step(0.01).onChange(function(e){
+            meshMaterial.wrapRGB.x = e;
+        });
+
+        spGui.add(controls, 'wrapG', 0, 1).step(0.01).onChange(function(e){
+            meshMaterial.wrapRGB.y = e;
+        });
+
+        spGui.add(controls, 'wrapB', 0, 1).step(0.01).onChange(function(e){
+            meshMaterial.wrapRGB.z = e;
+
         });
 
         render();

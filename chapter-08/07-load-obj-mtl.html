@@ -78,20 +78,22 @@
         var mesh;
 
         var loader = new THREE.OBJMTLLoader();
-        loader.addEventListener('load', function (event) {
 
-            var object = event.content;
+        loader.load('../assets/models/butterfly.obj', '../assets/models/butterfly.mtl',  function(object) {
 
+            // configure the wings
             var wing2 = object.children[5].children[0];
             var wing1 = object.children[4].children[0];
 
-            wing1.material.alphaTest = 0.5;
             wing1.material.opacity = 0.6;
             wing1.material.transparent = true;
+            wing1.material.depthTest = false;
+            wing1.material.side = THREE.DoubleSide;
 
-            wing2.material.alphaTest = 0.4;
-            wing2.material.opacity = 0.7;
+            wing2.material.opacity = 0.6;
+            wing2.material.depthTest = false;
             wing2.material.transparent = true;
+            wing2.material.side = THREE.DoubleSide;
 
             object.scale.set(140, 140, 140);
             mesh = object;
@@ -102,47 +104,6 @@
         });
 
 
-        loader.load('../assets/models/butterfly.obj', '../assets/models/butterfly.mtl', {side: THREE.DoubleSide});
-
-//                function ( geometry ) {
-//
-//
-//            geometry.morphTargets = [];
-//            geometry.morphNormals = [];
-//
-//            geometry.children.forEach(function(e) {
-//                e.morphTargets = [];
-//                e.morphNormals = [];
-//
-//                console.log(e);
-//            });
-//
-//           geometry.scale.set(200,200,200);
-////           scene.add(geometry);
-//
-//            console.log(geometry.position);
-//
-//
-////            mesh.position.x = 0;
-////            mesh.position.y = 0;
-////            mesh.position.z = 0;
-//////            mesh.rotation.x = 0;
-//////            mesh.rotation.y = 0;
-////
-////            //mesh.matrixAutoUpdate = false;
-////            // mesh.updateMatrix();
-////
-////            console.log(geometry);
-////
-////            mesh.scale.x=1;
-////            mesh.scale.y=1;
-////            mesh.scale.z=1;
-//            mesh = geometry;
-//            scene.add(mesh);
-//
-//        });
-
-
         render();
 
 
@@ -150,7 +111,7 @@
             stats.update();
 
             if (mesh) {
-                //      mesh.rotation.y+=0.006;
+                      mesh.rotation.y+=0.006;
             }
 
 
@@ -163,6 +124,8 @@
 
             var stats = new Stats();
             stats.setMode(0); // 0: fps, 1: ms
+
+
 
             // Align top-left
             stats.domElement.style.position = 'absolute';

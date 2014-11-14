@@ -77,24 +77,27 @@
 
 
         function createSprite(size, transparent, opacity, color, spriteNumber, range) {
+
+
             var spriteMaterial = new THREE.SpriteMaterial({
                         opacity: opacity,
                         color: color,
                         transparent: transparent,
-                        useScreenCoordinates: false,
-                        sizeAttenuation: true,
                         map: getTexture()}
             );
 
-            // we have one row, with five sprites
-            spriteMaterial.uvOffset.set(1 / 5 * spriteNumber, 0);
-            spriteMaterial.uvScale.set(1 / 5, 1);
+            // we have 1 row, with five sprites
+            spriteMaterial.map.offset = new THREE.Vector2(0.2*spriteNumber, 0);
+            spriteMaterial.map.repeat = new THREE.Vector2(1/5, 1);
+            spriteMaterial.depthTest = false;
+
             spriteMaterial.blending = THREE.AdditiveBlending;
 
             var sprite = new THREE.Sprite(spriteMaterial);
             sprite.scale.set(size, size, size);
-            sprite.position = new THREE.Vector3(Math.random() * range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2);
+            sprite.position.set(Math.random() * range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2);
             sprite.velocityX = 5;
+
 
             return sprite;
         }

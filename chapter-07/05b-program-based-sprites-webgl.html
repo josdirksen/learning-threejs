@@ -41,7 +41,8 @@
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
         // create a render and set the size
-        var canvasRenderer = new THREE.CanvasRenderer();
+        var canvasRenderer = new THREE.WebGLRenderer();
+
         canvasRenderer.setClearColor(new THREE.Color(0x000000, 1.0));
         canvasRenderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -53,8 +54,13 @@
         // add the output of the renderer to the html element
         $("#WebGL-output").append(canvasRenderer.domElement);
 
-        var draw = function (ctx) {
+        var getTexture = function () {
 
+            var canvas = document.createElement('canvas');
+            canvas.width = 32;
+            canvas.height = 32;
+
+            var ctx = canvas.getContext('2d');
             // the body
             ctx.translate(-81, -84);
 
@@ -97,25 +103,29 @@
             ctx.arc(89, 102, 2, 0, Math.PI * 2, true);
             ctx.fill();
 
+
+            var texture = new THREE.Texture(canvas);
+            texture.needsUpdate = true;
+            return texture;
+
         }
 
-
-        createParticles();
+        createSprites();
         render();
 
 
-        function createParticles() {
+        function createSprites() {
+            var material = new THREE.SpriteMaterial({
+                map: getTexture(),
+                color: 0xffffff
+                });
 
-            var material = new THREE.ParticleCanvasMaterial({
-                program: draw,
-                color: 0xffffff});
             var range = 500;
-            for (var i = 0; i < 1000; i++) {
-                var particle = new THREE.Particle(material);
-                particle.position = new THREE.Vector3(Math.random() * range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2);
-                particle.scale = 0.1;
-                particle.rotation.z = Math.PI;
-                scene.add(particle);
+            for (var i = 0; i < 1500; i++) {
+                var sprite = new THREE.Sprite(material);
+                sprite.position.set(Math.random() * range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2);
+                sprite.scale.set(4,4,4);
+                scene.add(sprite);
             }
         }
 

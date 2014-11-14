@@ -113,11 +113,9 @@
         var geom = new THREE.Geometry();
         geom.vertices = vertices;
         geom.faces = faces;
+        geom.computeFaceNormals();
 
 
-
-        geom.computeCentroids();
-        geom.mergeVertices();
 
         var materials = [
             new THREE.MeshLambertMaterial( { opacity:0.6, color: 0x44ff44, transparent:true } ),
@@ -125,14 +123,14 @@
 
         ];
 
+
+
         var mesh = THREE.SceneUtils.createMultiMaterialObject(geom,materials);
         mesh.children.forEach(function(e) {e.castShadow=true});
 //        mesh.children[0].translateX(0.5);
 //        mesh.children[0].translateZ(0.5);
 
         scene.add(mesh);
-
-
 
         function addControl(x,y,z) {
             var controls = new function() {
