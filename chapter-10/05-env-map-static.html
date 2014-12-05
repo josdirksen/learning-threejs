@@ -93,15 +93,9 @@ $(function () {
     light.intensity = 1.2;
     scene.add(light);
 
-
-//        var pointColor = "#ff5808";
     var pointColor = "#ff5808";
     var directionalLight = new THREE.PointLight(pointColor);
     directionalLight.intensity = 4.5;
-
-//        directionalLight.distance = 0;
-//        directionalLight.intensity = 0.5;
-
 
     scene.add(directionalLight);
 
@@ -112,7 +106,7 @@ $(function () {
     var sphereLightMesh = new THREE.Mesh(sphereLight, sphereLightMaterial);
     sphereLightMesh.castShadow = true;
 
-    sphereLightMesh.position = new THREE.Vector3(3, 3, 3);
+    sphereLightMesh.position.copy(new THREE.Vector3(3, 3, 3));
     scene.add(sphereLightMesh);
 
     // add the output of the renderer to the html element
@@ -270,7 +264,7 @@ $(function () {
             sphereLightMesh.position.x = (invert * (sphereLightMesh.position.x - pivot)) + pivot;
         }
 
-        directionalLight.position = sphereLightMesh.position;
+        directionalLight.position.copy(sphereLightMesh.position);
 
         camera.position.x = (mouseX * .018);
         camera.position.y = 6 + (mouseY * .018);

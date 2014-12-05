@@ -45,8 +45,6 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var canvasRenderer = new THREE.CanvasRenderer();
-        canvasRenderer.setSize(window.innerWidth, window.innerHeight);
         renderer = webGLRenderer;
 
         var groundGeom = new THREE.PlaneGeometry(95, 95, 1, 1);

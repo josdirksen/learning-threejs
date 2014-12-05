@@ -53,12 +53,6 @@
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 
-        // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(-30, 60, 50);
-        spotLight.intensity = 1.5;
-        scene.add(spotLight);
-
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
 
@@ -74,14 +68,11 @@
                 var loader = new THREE.OBJLoader();
                 loader.load('../assets/models/UVCube1.obj', function (geometry) {
                     if (mesh) scene.remove(mesh);
-                    var material = new THREE.MeshLambertMaterial({color: 0xffffff});
+                    var material = new THREE.MeshBasicMaterial({color: 0xffffff});
                     var texture = THREE.ImageUtils.loadTexture("../assets/textures/ash_uvgrid01.jpg");
                     material.map = texture;
 
-                    geometry.children[0].children[0].material = material;
-                    geometry.children[0].children[1].material = material;
-
-
+                    geometry.children[0].material = material;
                     mesh = geometry;
 
                     geometry.scale.set(15, 15, 15);
@@ -95,13 +86,11 @@
                 var loader = new THREE.OBJLoader();
                 loader.load('../assets/models/UVCube2.obj', function (geometry) {
                     if (mesh) scene.remove(mesh);
-                    var material = new THREE.MeshLambertMaterial({color: 0xffffff});
+                    var material = new THREE.MeshBasicMaterial({color: 0xffffff});
                     var texture = THREE.ImageUtils.loadTexture("../assets/textures/ash_uvgrid01.jpg");
                     material.map = texture;
 
-                    geometry.children[0].children[0].material = material;
-                    geometry.children[0].children[1].material = material;
-
+                    geometry.children[0].material = material;
 
                     mesh = geometry;
                     geometry.scale.set(15, 15, 15);
