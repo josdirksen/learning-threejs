@@ -34,7 +34,6 @@ var initScene, render, applyForce, setMousePosition, mouse_position,
         projector, renderer, render_stats, physics_stats, scene, ground, light, camera, box, boxes = [];
 
 initScene = function () {
-    projector = new THREE.Projector;
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -146,7 +145,7 @@ function createWheel(position) {
 
     wheel.rotation.x = Math.PI / 2;
     wheel.castShadow = true;
-    wheel.position = position;
+    wheel.position.copy(position);
     return wheel;
 }
 
@@ -160,7 +159,7 @@ function createCar() {
     );
 
     // create the car body
-    var geom = new THREE.CubeGeometry(15, 4, 4);
+    var geom = new THREE.BoxGeometry(15, 4, 4);
     var body = new Physijs.BoxMesh(geom, car_material, 500);
     body.position.set(5, 5, 5);
     body.castShadow = true;
@@ -255,7 +254,7 @@ function createGround() {
 
     // Ground
     ground = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(length, 1, width),
+            new THREE.BoxGeometry(length, 1, width),
             ground_material,
             0 // mass
     );
@@ -264,7 +263,7 @@ function createGround() {
 
 
     var borderLeft = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(2, 6, width),
+            new THREE.BoxGeometry(2, 6, width),
             ground_material,
             0 // mass
     );
@@ -276,7 +275,7 @@ function createGround() {
 
     ground.add(borderLeft);
 
-    var borderRight = new Physijs.BoxMesh(new THREE.CubeGeometry(2, 6, width),
+    var borderRight = new Physijs.BoxMesh(new THREE.BoxGeometry(2, 6, width),
             ground_material,
             0 // mass
     );
@@ -288,7 +287,7 @@ function createGround() {
 
 
     var borderBottom = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(width - 1, 6, 2),
+            new THREE.BoxGeometry(width - 1, 6, 2),
             ground_material,
             0 // mass
     );
@@ -299,7 +298,7 @@ function createGround() {
     ground.add(borderBottom);
 
     var borderTop = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(width, 6, 2),
+            new THREE.BoxGeometry(width, 6, 2),
             ground_material,
             0 // mass
     );

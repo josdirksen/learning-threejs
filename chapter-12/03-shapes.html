@@ -35,7 +35,6 @@ var initScene, render, applyForce, setMousePosition, mouse_position,
         projector, renderer, render_stats, physics_stats, scene, ground, light, camera, box, boxes = [];
 
 initScene = function () {
-    projector = new THREE.Projector;
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -99,7 +98,7 @@ initScene = function () {
         };
         this.addBoxMesh = function () {
             var cube = new Physijs.BoxMesh(
-                    new THREE.CubeGeometry(4, 2, 6),
+                    new THREE.BoxGeometry(4, 2, 6),
                     getMaterial()
             );
             setPosAndShade(cube);
@@ -139,22 +138,27 @@ initScene = function () {
             scene.add(plane);
         };
         this.addCapsuleMesh = function () {
+            var merged = new THREE.Geometry();
             var cyl = new THREE.CylinderGeometry(2, 2, 6);
             var top = new THREE.SphereGeometry(2);
             var bot = new THREE.SphereGeometry(2);
 
-            // create normal meshes
-            var topMesh = new THREE.Mesh(top);
-            var botMesh = new THREE.Mesh(bot);
-            topMesh.position.y = 3;
-            botMesh.position.y = -3;
+            var matrix = new THREE.Matrix4();
+            matrix.makeTranslation(0,3,0);
+            top.applyMatrix(matrix);
+
+            var matrix = new THREE.Matrix4();
+            matrix.makeTranslation(0,-3,0);
+            bot.applyMatrix(matrix);
+
             // merge to create a capsule
-            THREE.GeometryUtils.merge(cyl, topMesh);
-            THREE.GeometryUtils.merge(cyl, botMesh);
+            merged.merge(top);
+            merged.merge(bot);
+            merged.merge(cyl);
 
             // create a physijs capsule mesh
             var capsule = new Physijs.CapsuleMesh(
-                    cyl,
+                    merged,
                     getMaterial()
             );
             setPosAndShade(capsule);

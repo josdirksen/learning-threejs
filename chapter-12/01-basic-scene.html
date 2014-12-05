@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 
 <html>
+<style>
+    body {
+        /* set margin to 0 and overflow to hidden, to go fullscreen */
+        margin: 0;
+        overflow: hidden;
+    }
+</style>
 
 <head>
     <title>Rigid body - Physijs</title>
@@ -24,10 +31,9 @@
 
         var initScene, render, applyForce, setMousePosition, mouse_position,
                 ground_material, box_material,
-                projector, renderer, render_stats, physics_stats, scene, ground, light, camera, box, boxes = [];
+                renderer, render_stats, scene, ground, light, camera, box, boxes = [];
 
         initScene = function () {
-            projector = new THREE.Projector;
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -40,12 +46,6 @@
             render_stats.domElement.style.top = '1px';
             render_stats.domElement.style.zIndex = 100;
             document.getElementById('viewport').appendChild(render_stats.domElement);
-
-            physics_stats = new Stats();
-            physics_stats.domElement.style.position = 'absolute';
-            physics_stats.domElement.style.top = '50px';
-            physics_stats.domElement.style.zIndex = 100;
-            document.getElementById('viewport').appendChild(physics_stats.domElement);
 
             scene = new Physijs.Scene;
             scene.setGravity(new THREE.Vector3(0, -50, 0));
@@ -91,7 +91,7 @@
 
 
                     points.forEach(function (point) {
-                        var stoneGeom = new THREE.CubeGeometry(0.6, 6, 2);
+                        var stoneGeom = new THREE.BoxGeometry(0.6, 6, 2);
 
                         var stone = new Physijs.BoxMesh(stoneGeom, Physijs.createMaterial(new THREE.MeshPhongMaterial(
                                 {
@@ -99,7 +99,8 @@
                                     transparent: true, opacity: 0.8,
 //                            map: THREE.ImageUtils.loadTexture( '../assets/textures/general/darker_wood.jpg' )
                                 })));
-                        stone.position = point.clone();
+                        console.log(stone.position);
+                        stone.position.copy(point);
                         stone.lookAt(scene.position);
                         stone.__dirtyRotation = true;
                         stone.position.y = 3.5;
@@ -164,24 +165,24 @@
                     new THREE.MeshPhongMaterial({ map: THREE.ImageUtils.loadTexture('../assets/textures/general/wood-2.jpg') }),
                     .9, .3);
 
-            var ground = new Physijs.BoxMesh(new THREE.CubeGeometry(60, 1, 60), ground_material, 0);
+            var ground = new Physijs.BoxMesh(new THREE.BoxGeometry(60, 1, 60), ground_material, 0);
 
-            var borderLeft = new Physijs.BoxMesh(new THREE.CubeGeometry(2, 3, 60), ground_material, 0);
+            var borderLeft = new Physijs.BoxMesh(new THREE.BoxGeometry(2, 3, 60), ground_material, 0);
             borderLeft.position.x = -31;
             borderLeft.position.y = 2;
             ground.add(borderLeft);
 
-            var borderRight = new Physijs.BoxMesh(new THREE.CubeGeometry(2, 3, 60), ground_material, 0);
+            var borderRight = new Physijs.BoxMesh(new THREE.BoxGeometry(2, 3, 60), ground_material, 0);
             borderRight.position.x = 31;
             borderRight.position.y = 2;
             ground.add(borderRight);
 
-            var borderBottom = new Physijs.BoxMesh(new THREE.CubeGeometry(64, 3, 2), ground_material, 0);
+            var borderBottom = new Physijs.BoxMesh(new THREE.BoxGeometry(64, 3, 2), ground_material, 0);
             borderBottom.position.z = 30;
             borderBottom.position.y = 2;
             ground.add(borderBottom);
 
-            var borderTop = new Physijs.BoxMesh(new THREE.CubeGeometry(64, 3, 2), ground_material, 0);
+            var borderTop = new Physijs.BoxMesh(new THREE.BoxGeometry(64, 3, 2), ground_material, 0);
             borderTop.position.z = -30;
             borderTop.position.y = 2;
             ground.add(borderTop);

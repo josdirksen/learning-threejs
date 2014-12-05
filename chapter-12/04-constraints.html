@@ -225,7 +225,7 @@ function createGround() {
 
     // Ground
     ground = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(60, 1, 65),
+            new THREE.BoxGeometry(60, 1, 65),
             ground_material,
             0 // mass
     );
@@ -234,7 +234,7 @@ function createGround() {
 
 
     var borderLeft = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(2, 6, 65),
+            new THREE.BoxGeometry(2, 6, 65),
             ground_material,
             0 // mass
     );
@@ -246,7 +246,7 @@ function createGround() {
 
     ground.add(borderLeft);
 
-    var borderRight = new Physijs.BoxMesh(new THREE.CubeGeometry(2, 6, 65),
+    var borderRight = new Physijs.BoxMesh(new THREE.BoxGeometry(2, 6, 65),
             ground_material,
             0 // mass
     );
@@ -258,7 +258,7 @@ function createGround() {
 
 
     var borderBottom = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(64, 6, 2),
+            new THREE.BoxGeometry(64, 6, 2),
             ground_material,
             0 // mass
     );
@@ -269,7 +269,7 @@ function createGround() {
     ground.add(borderBottom);
 
     var borderTop = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(64, 6, 2),
+            new THREE.BoxGeometry(64, 6, 2),
             ground_material,
             0 // mass
     );
@@ -287,7 +287,7 @@ function createGround() {
 
 function createConeTwist() {
     var baseMesh = new THREE.SphereGeometry(1);
-    var armMesh = new THREE.CubeGeometry(2, 12, 3);
+    var armMesh = new THREE.BoxGeometry(2, 12, 3);
 
     var objectOne = new Physijs.BoxMesh(baseMesh, Physijs.createMaterial(
             new THREE.MeshPhongMaterial({color: 0x4444ff, transparent: true, opacity: 0.7}), 0, 0), 0);
@@ -345,7 +345,7 @@ function createPointToPoint() {
 }
 
 function createSliderBottom() {
-    var sliderCube = new THREE.CubeGeometry(12, 2, 2);
+    var sliderCube = new THREE.BoxGeometry(12, 2, 2);
 
 
     var sliderMesh = new Physijs.BoxMesh(sliderCube, Physijs.createMaterial(
@@ -367,7 +367,7 @@ function createSliderBottom() {
 }
 
 function createSliderTop() {
-    var sliderSphere = new THREE.CubeGeometry(7, 2, 7);
+    var sliderSphere = new THREE.BoxGeometry(7, 2, 7);
 
 
     var sliderMesh = new Physijs.BoxMesh(sliderSphere, Physijs.createMaterial(
@@ -390,7 +390,7 @@ function createSliderTop() {
 
 function createLeftFlipper() {
     var flipperLeft = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(12, 2, 2), Physijs.createMaterial(new THREE.MeshPhongMaterial(
+            new THREE.BoxGeometry(12, 2, 2), Physijs.createMaterial(new THREE.MeshPhongMaterial(
                     {opacity: 0.6, transparent: true}
             )), 0.3
     );
@@ -400,7 +400,7 @@ function createLeftFlipper() {
     flipperLeft.castShadow = true;
     scene.add(flipperLeft);
     var flipperLeftPivot = new Physijs.SphereMesh(
-            new THREE.CubeGeometry(1, 1, 1), ground_material, 0);
+            new THREE.BoxGeometry(1, 1, 1), ground_material, 0);
 
     flipperLeftPivot.position.y = 1;
     flipperLeftPivot.position.x = -15;
@@ -414,7 +414,6 @@ function createLeftFlipper() {
     // so as long as that one is the same as the scene, no problems
     // rotation and axis are relative to object2. If position == cube2.position it works as expected
     var constraint = new Physijs.HingeConstraint(flipperLeft, flipperLeftPivot, flipperLeftPivot.position, new THREE.Vector3(0, 1, 0));
-//            var constraint = new Physijs.HingeConstraint(cube1, new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0));
     scene.addConstraint(constraint);
 
     constraint.setLimits(
@@ -429,7 +428,7 @@ function createLeftFlipper() {
 
 function createRightFlipper() {
     var flipperright = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(12, 2, 2), Physijs.createMaterial(new THREE.MeshPhongMaterial(
+            new THREE.BoxGeometry(12, 2, 2), Physijs.createMaterial(new THREE.MeshPhongMaterial(
                     {opacity: 0.6, transparent: true}
             )), 0.3
     );
@@ -439,7 +438,7 @@ function createRightFlipper() {
     flipperright.castShadow = true;
     scene.add(flipperright);
     var flipperLeftPivot = new Physijs.SphereMesh(
-            new THREE.CubeGeometry(1, 1, 1), ground_material, 0);
+            new THREE.BoxGeometry(1, 1, 1), ground_material, 0);
 
     flipperLeftPivot.position.y = 2;
     flipperLeftPivot.position.x = 15;
