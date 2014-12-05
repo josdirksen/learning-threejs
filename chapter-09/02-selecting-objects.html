@@ -8,6 +8,7 @@
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
+    <script type="text/javascript" src="../libs/Projector.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -63,7 +64,7 @@
         scene.add(plane);
 
         // create a cube
-        var cubeGeometry = new THREE.CubeGeometry(4, 4, 4);
+        var cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
@@ -170,22 +171,22 @@
             event.preventDefault();
 
             var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
-            projector.unprojectVector(vector, camera);
+            vector = vector.unproject(camera);
 
             var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
 
             var intersects = raycaster.intersectObjects([sphere, cylinder, cube]);
 
             if (intersects.length > 0) {
+
+                console.log(intersects[0]);
+
                 intersects[ 0 ].object.material.transparent = true;
                 intersects[ 0 ].object.material.opacity = 0.1;
 
                 var points = [];
-                var origin = raycaster.ray.origin.clone();
-                console.log(origin);
                 points.push(new THREE.Vector3(-30, 39.8, 30));
                 points.push(intersects[0].point);
-
 
                 var mat = new THREE.MeshBasicMaterial({color: 0xff0000, transparent: true, opacity: 0.6});
                 var tubeGeometry = new THREE.TubeGeometry(new THREE.SplineCurve3(points), 60, 0.001);

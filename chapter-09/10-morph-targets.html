@@ -83,8 +83,7 @@
         loader.load('../assets/models/horse.js', function (geometry, mat) {
 
             var mat = new THREE.MeshLambertMaterial(
-                    {color: 0xffffff, morphNormals: false,
-                        morphTargets: true,
+                    {   morphTargets: true,
                         vertexColors: THREE.FaceColors});
 
 
@@ -112,8 +111,6 @@
             geometry.computeVertexNormals();
             geometry.computeFaceNormals();
             geometry.computeMorphNormals();
-
-            console.log(geometry);
 
             meshAnim = new THREE.MorphAnimMesh(geometry, mat);
             meshAnim.duration = 1000;

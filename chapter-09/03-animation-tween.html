@@ -71,7 +71,7 @@
 
         }
 
-        var particleSystem = new THREE.Object3D();
+        var pointCloud = new THREE.Object3D();
         var loadedGeometry;
 
 
@@ -94,10 +94,10 @@
 
             loadedGeometry.vertices.forEach(function (e) {
                 var newY = ((e.y + 3.22544) * pos) - 3.22544;
-                particleSystem.geometry.vertices[count++].set(e.x, newY, e.z);
+                pointCloud.geometry.vertices[count++].set(e.x, newY, e.z);
             });
 
-            particleSystem.sortParticles = true;
+            pointCloud.sortParticles = true;
         };
 
         tween.onUpdate(onUpdate);
@@ -112,7 +112,7 @@
         loader.load("../assets/models/test.ply", function (geometry) {
             loadedGeometry = geometry.clone();
 
-            var material = new THREE.ParticleBasicMaterial({
+            var material = new THREE.PointCloudMaterial({
                 color: 0xffffff,
                 size: 0.4,
                 opacity: 0.6,
@@ -121,11 +121,11 @@
                 map: generateSprite()
             });
 
-            particleSystem = new THREE.ParticleSystem(geometry, material);
-            particleSystem.sortParticles = true;
+            pointCloud = new THREE.PointCloud(geometry, material);
+            pointCloud.sortParticles = true;
 
             tween.start();
-            scene.add(particleSystem);
+            scene.add(pointCloud);
         });
 
 
