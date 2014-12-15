@@ -46,10 +46,10 @@
         // renderer.shadowMapEnabled = true;
 
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
-        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var planeGeometry = new THREE.PlaneGeometry(60, 20, 20, 20);
+        var planeMaterial = new THREE.MeshPhongMaterial({color: 0xffffff});
         var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-        //plane.receiveShadow  = true;
+        plane.receiveShadow  = true;
 
         // rotate and position the plane
         plane.rotation.x = -0.5 * Math.PI;
@@ -61,7 +61,7 @@
         scene.add(plane);
 
         // create a cube
-        var cubeGeometry = new THREE.CubeGeometry(4, 4, 4);
+        var cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff7777});
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
         cube.castShadow = true;
@@ -187,7 +187,7 @@
                 sphereLightMesh.position.x = (invert * (sphereLightMesh.position.x - pivot)) + pivot;
             }
 
-            pointLight.position = sphereLightMesh.position;
+            pointLight.position.copy(sphereLightMesh.position);
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);

@@ -118,25 +118,25 @@
         areaLight3.height = 9.9;
         scene.add(areaLight3);
 
-        var planeGeometry1 = new THREE.CubeGeometry(4, 10, 0);
+        var planeGeometry1 = new THREE.BoxGeometry(4, 10, 0);
         var planeGeometry1Mat = new THREE.MeshBasicMaterial({color: 0xff0000})
         var plane1 = new THREE.Mesh(planeGeometry1, planeGeometry1Mat);
-        plane1.position = areaLight1.position;
+        plane1.position.copy(areaLight1.position);
         scene.add(plane1);
 
 
-        var planeGeometry2 = new THREE.CubeGeometry(4, 10, 0);
+        var planeGeometry2 = new THREE.BoxGeometry(4, 10, 0);
         var planeGeometry2Mat = new THREE.MeshBasicMaterial({color: 0x00ff00})
         var plane2 = new THREE.Mesh(planeGeometry2, planeGeometry2Mat);
 
-        plane2.position = areaLight2.position;
+        plane2.position.copy(areaLight2.position);
         scene.add(plane2);
 
-        var planeGeometry3 = new THREE.CubeGeometry(4, 10, 0);
+        var planeGeometry3 = new THREE.BoxGeometry(4, 10, 0);
         var planeGeometry3Mat = new THREE.MeshBasicMaterial({color: 0x0000ff})
         var plane3 = new THREE.Mesh(planeGeometry3, planeGeometry3Mat);
 
-        plane3.position = areaLight3.position;
+        plane3.position.copy(areaLight3.position);
         scene.add(plane3);
 
 

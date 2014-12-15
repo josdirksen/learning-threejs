@@ -70,7 +70,7 @@ $(function () {
     scene.add(plane);
 
     // create a cube
-    var cubeGeometry = new THREE.CubeGeometry(4, 4, 4);
+    var cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
     var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff3333});
     var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
     cube.castShadow = true;
@@ -192,7 +192,7 @@ $(function () {
     lensFlare.add(textureFlare3, 120, 0.9, THREE.AdditiveBlending);
     lensFlare.add(textureFlare3, 70, 1.0, THREE.AdditiveBlending);
 
-    lensFlare.position = spotLight.position;
+    lensFlare.position.copy(spotLight.position);
     scene.add(lensFlare);
 
     render();
