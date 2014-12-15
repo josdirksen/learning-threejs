@@ -78,7 +78,7 @@ $(function () {
     lines.colors = colors;
 
     lines.computeLineDistances();
-    var material = new THREE.LineDashedMaterial({ vertexColors: true, color: 0xffffff, dashSize: 3, gapSize: 1, scale: 0.1 });
+    var material = new THREE.LineDashedMaterial({ vertexColors: true, color: 0xffffff, dashSize: 2, gapSize: 2, scale: 0.1 });
 
     var line = new THREE.Line(lines, material);
     line.position.set(25, -30, -60);
