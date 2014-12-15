@@ -114,7 +114,7 @@
         }
 
         var material = new THREE.MeshLambertMaterial( {color: 0x44ff44 } );
-        var geom = new THREE.CubeGeometry(5,8,3);
+        var geom = new THREE.BoxGeometry(5,8,3);
         var cube = new THREE.Mesh(geom,material);
         cube.position.y=4;
         cube.castShadow=true;
