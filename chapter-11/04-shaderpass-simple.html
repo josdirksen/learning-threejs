@@ -25,6 +25,11 @@
     <script type="text/javascript" src="../libs/shaders/MirrorShader.js"></script>
     <script type="text/javascript" src="../libs/shaders/VignetteShader.js"></script>
     <script type="text/javascript" src="../libs/shaders/HueSaturationShader.js"></script>
+    <script type="text/javascript" src="../libs/shaders/BlendShader.js"></script>
+    <script type="text/javascript" src="../libs/shaders/KaleidoShader.js"></script>
+    <script type="text/javascript" src="../libs/shaders/LuminosityShader.js"></script>
+    <script type="text/javascript" src="../libs/shaders/TechnicolorShader.js"></script>
+    <script type="text/javascript" src="../libs/shaders/UnpackDepthRGBAShader.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -84,7 +89,7 @@ $(function () {
 
 
     scene.add(spotLight);
-    var plane = new THREE.CubeGeometry(1600, 1600, 0.1, 40, 40);
+    var plane = new THREE.BoxGeometry(1600, 1600, 0.1, 40, 40);
 
 
     var cube = new THREE.Mesh(plane, new THREE.MeshPhongMaterial(
@@ -107,7 +112,7 @@ $(function () {
     scene.add(cube);
 
 
-    var cube1 = new THREE.Mesh(new THREE.CubeGeometry(30, 10, 2), new THREE.MeshPhongMaterial({color: 0xff0000}));
+    var cube1 = new THREE.Mesh(new THREE.BoxGeometry(30, 10, 2), new THREE.MeshPhongMaterial({color: 0xff0000}));
     cube1.position.x = -15;
     cube1.position.y = 5;
     cube1.position.z = 15;
@@ -136,11 +141,13 @@ $(function () {
 
 
     var loader = new THREE.OBJMTLLoader();
-    loader.addEventListener('load', function (event) {
+    loader.load('../assets/models/sol/libertStatue.obj', '../assets/models/sol/libertStatue.mtl',
+     function (event) {
 
-        var object = event.content;
+        var object = event;
 
         // fix for incorrect uvs.
+        console.log(event);
         var geom = object.children[0].geometry;
         var uv3 = geom.faceVertexUvs[0][0];
         var uv4 = geom.faceVertexUvs[0][10];
@@ -154,21 +161,6 @@ $(function () {
             }
         }
 
-        // correct the ones where 3 vertices are listed but four are needed
-        // and vice versa
-//        for (var j = 0; j < geom.faces.length; j++) {
-//            if (geom.faces[j] instanceof THREE.Face4) {
-//                if (geom.faceVertexUvs[0][j].length == 3) {
-//                    geom.faceVertexUvs[0][j] = uv4;
-//                }
-//
-//            } else {
-//                if (geom.faceVertexUvs[0][j].length == 4) {
-//                    geom.faceVertexUvs[0][j] = uv3;
-//                }
-//            }
-//        }
-
         object.children.forEach(function (e) {
             e.castShadow = true
         });
@@ -181,7 +173,7 @@ $(function () {
     });
 
 
-    loader.load('../assets/models/sol/libertStatue.obj', '../assets/models/sol/libertStatue.mtl');
+
 
     var mirror = new THREE.ShaderPass(THREE.MirrorShader);
     mirror.enabled = false;
@@ -213,6 +205,18 @@ $(function () {
     sepia.uniforms.amount.value = 1;
     sepia.enabled = false;
 
+    var kal = new THREE.ShaderPass(THREE.KaleidoShader);
+    kal.enabled = false;
+
+    var lum = new THREE.ShaderPass(THREE.LuminosityShader);
+    lum.enabled = false;
+
+    var techni = new THREE.ShaderPass(THREE.TechnicolorShader);
+    techni.enabled = false;
+
+    var unpack = new THREE.ShaderPass(THREE.UnpackDepthRGBAShader);
+    unpack.enabled = false;
+
     var renderPass = new THREE.RenderPass(scene, camera);
     var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
     effectCopy.renderToScreen = true;
@@ -227,6 +231,10 @@ $(function () {
     composer.addPass(rgbShift);
     composer.addPass(vignette);
     composer.addPass(hue);
+    composer.addPass(kal);
+    composer.addPass(lum);
+    composer.addPass(techni);
+    composer.addPass(unpack);
     composer.addPass(effectCopy);
 
     var controls = new function () {
@@ -248,6 +256,8 @@ $(function () {
         this.darkness = 1;
         this.hue = 0.01;
         this.saturation = 0.01;
+        this.kalAngle = 0;
+        this.kalSides = 6;
 
         this.rotate = false;
 
@@ -307,6 +317,27 @@ $(function () {
                     enableShader(hue);
                     break;
                 }
+
+                case 'kaleidoscope' :
+                {
+                    enableShader(kal);
+                    break;
+                }
+                case 'luminosity' :
+                {
+                    enableShader(lum);
+                    break;
+                }
+                case 'technicolor' :
+                {
+                    enableShader(techni);
+                    break;
+                }
+                case 'unpackDepth' :
+                {
+                    enableShader(unpack);
+                    break;
+                }
             }
         }
 
@@ -347,6 +378,11 @@ $(function () {
             hue.uniforms.saturation.value = controls.saturation;
         }
 
+        this.changeKal = function () {
+            kal.uniforms.sides.value = controls.kalSides;
+            kal.uniforms.angle.value = controls.kalAngle;
+        }
+
         function enableShader(shader) {
             // we're not interested in the first or the last one
             for (var i = 1; i < composer.passes.length - 1; i++) {
@@ -361,7 +397,7 @@ $(function () {
 
     var gui = new dat.GUI();
 
-    gui.add(controls, "select", ['none', "colorify", 'brightness', 'sepia', 'colorCorrection', 'rgbShift', 'mirror', 'vignette', 'hueAndSaturation']).onChange(controls.switchShader);
+    gui.add(controls, "select", ['none', "colorify", 'brightness', 'sepia', 'colorCorrection', 'rgbShift', 'mirror', 'vignette', 'hueAndSaturation', 'kaleidoscope', 'luminosity', 'technicolor']).onChange(controls.switchShader);
     gui.add(controls, "rotate");
 
     var bnFolder = gui.addFolder("Brightness");
@@ -396,6 +432,11 @@ $(function () {
     var hueAndSat = gui.addFolder("hue and saturation");
     hueAndSat.add(controls, "hue", -1, 1).step(0.01).onChange(controls.changeHue);
     hueAndSat.add(controls, "saturation", -1, 1).step(0.01).onChange(controls.changeHue);
+
+
+    var kalMenu = gui.addFolder("Kaleidoscope");
+    kalMenu.add(controls, "kalAngle", -2*Math.PI, 2*Math.PI ).onChange(controls.changeKal);
+    kalMenu.add(controls, "kalSides", 2, 20).onChange(controls.changeKal);
 
     render();
 

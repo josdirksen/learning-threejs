@@ -86,7 +86,7 @@
         spotLight.shadowCameraFar = 200;
 
         scene.add(spotLight);
-        var plane = new THREE.CubeGeometry(1600, 1600, 0.1, 40, 40);
+        var plane = new THREE.BoxGeometry(1600, 1600, 0.1, 40, 40);
 
 
         var cube = new THREE.Mesh(plane, new THREE.MeshPhongMaterial(
@@ -111,7 +111,7 @@
         var stepZ = 8;
         for (var i = -25; i < 5; i++) {
             for (var j = -15; j < 15; j++) {
-                var cube = new THREE.Mesh(new THREE.CubeGeometry(3, 4, 3),
+                var cube = new THREE.Mesh(new THREE.BoxGeometry(3, 4, 3),
                         new THREE.MeshPhongMaterial(
                                 {color: scale(Math.random()).hex(),
                                     opacity: 0.8,
