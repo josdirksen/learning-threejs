@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var cube = createMesh(new THREE.CubeGeometry(10, 10, 10));
+        var cube = createMesh(new THREE.BoxGeometry(10, 10, 10));
         // add the sphere to the scene
         scene.add(cube);
 
@@ -86,7 +86,7 @@
                 // remove the old plane
                 scene.remove(cube);
                 // create a new one
-                cube = createMesh(new THREE.CubeGeometry(controls.width, controls.height, controls.depth, Math.round(controls.widthSegments), Math.round(controls.heightSegments), Math.round(controls.depthSegments)));
+                cube = createMesh(new THREE.BoxGeometry(controls.width, controls.height, controls.depth, Math.round(controls.widthSegments), Math.round(controls.heightSegments), Math.round(controls.depthSegments)));
                 // add it to the scene.
                 scene.add(cube);
             };

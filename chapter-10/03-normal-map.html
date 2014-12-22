@@ -44,19 +44,19 @@ $(function () {
     webGLRenderer.setSize(window.innerWidth, window.innerHeight);
     webGLRenderer.shadowMapEnabled = true;
 
-    var sphere1 = createMesh(new THREE.CubeGeometry(15, 15, 15), "plaster.jpg");
+    var sphere1 = createMesh(new THREE.BoxGeometry(15, 15, 15), "plaster.jpg");
     sphere1.rotation.y = -0.5;
     sphere1.position.x = 12;
     scene.add(sphere1);
 
-    var sphere2 = createMesh(new THREE.CubeGeometry(15, 15, 15), "plaster.jpg", "plaster-normal.jpg");
+    var sphere2 = createMesh(new THREE.BoxGeometry(15, 15, 15), "plaster.jpg", "plaster-normal.jpg");
     sphere2.rotation.y = 0.5;
     sphere2.position.x = -12;
     scene.add(sphere2);
     console.log(sphere2.geometry.faceVertexUvs);
 
     var floorTex = THREE.ImageUtils.loadTexture("../assets/textures/general/floor-wood.jpg")
-    var plane = new THREE.Mesh(new THREE.CubeGeometry(200, 100, 0.1, 30), new THREE.MeshPhongMaterial({color: 0x3c3c3c, map: floorTex}));
+    var plane = new THREE.Mesh(new THREE.BoxGeometry(200, 100, 0.1, 30), new THREE.MeshPhongMaterial({color: 0x3c3c3c, map: floorTex}));
     plane.position.y = -7.5;
     plane.rotation.x = -0.5 * Math.PI;
     scene.add(plane);

@@ -61,12 +61,12 @@
         scene.add(plane);
 
         // create a cube
-        var cubeGeometry = new THREE.CubeGeometry(4, 4, 4);
+        var cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
         var cubeMaterial = new THREE.MeshLambertMaterial({morphTargets: true, color: 0xff0000});
 
         // define morphtargets, we'll use the vertices from these geometries
-        var cubeTarget1 = new THREE.CubeGeometry(2, 10, 2);
-        var cubeTarget2 = new THREE.CubeGeometry(8, 2, 8);
+        var cubeTarget1 = new THREE.BoxGeometry(2, 10, 2);
+        var cubeTarget2 = new THREE.BoxGeometry(8, 2, 8);
 
         // define morphtargets and compute the morphnormal
         cubeGeometry.morphTargets[0] = {name: 't1', vertices: cubeTarget2.vertices};

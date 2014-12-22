@@ -297,7 +297,7 @@ function createGround() {
 
     // Ground
     ground = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(length, 1, width),
+            new THREE.BoxGeometry(length, 1, width),
             ground_material,
             0 // mass
     );
@@ -306,7 +306,7 @@ function createGround() {
 
 
     var borderLeft = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(2, 6, width),
+            new THREE.BoxGeometry(2, 6, width),
             ground_material,
             0 // mass
     );
@@ -318,7 +318,7 @@ function createGround() {
 
     ground.add(borderLeft);
 
-    var borderRight = new Physijs.BoxMesh(new THREE.CubeGeometry(2, 6, width),
+    var borderRight = new Physijs.BoxMesh(new THREE.BoxGeometry(2, 6, width),
             ground_material,
             0 // mass
     );
@@ -330,7 +330,7 @@ function createGround() {
 
 
     var borderBottom = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(width - 1, 6, 2),
+            new THREE.BoxGeometry(width - 1, 6, 2),
             ground_material,
             0 // mass
     );
@@ -341,7 +341,7 @@ function createGround() {
     ground.add(borderBottom);
 
     var borderTop = new Physijs.BoxMesh(
-            new THREE.CubeGeometry(width, 6, 2),
+            new THREE.BoxGeometry(width, 6, 2),
             ground_material,
             0 // mass
     );

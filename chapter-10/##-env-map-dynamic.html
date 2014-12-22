@@ -59,7 +59,7 @@ $(function () {
                 depthWrite: false,
                 side: THREE.BackSide
             }),
-            cubeMesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), material);
+            cubeMesh = new THREE.Mesh(new THREE.BoxGeometry(100, 100, 100), material);
     // cubeMesh.scale.x=-1;
     scene.add(cubeMesh);
 
@@ -71,7 +71,7 @@ $(function () {
     sphere1.position.y = 5;
     scene.add(sphere1);
 
-    var sphere2 = createMesh(new THREE.CubeGeometry(4, 4, 4), "plaster.jpg", "plaster-normal.jpg");
+    var sphere2 = createMesh(new THREE.BoxGeometry(4, 4, 4), "plaster.jpg", "plaster-normal.jpg");
     sphere2.material.envMap = createCubeMap();
     sphere2.rotation.y = 0.5;
     sphere2.position.x = -12;

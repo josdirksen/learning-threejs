@@ -3,11 +3,12 @@
 <html>
 
 <head>
-    <title>Example 10.02 - Bump maps</title>
+    <title>Example 10.11 - Video texture - non canvas</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
+    <script type="text/javascript" src="../libs/sketch.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -20,12 +21,18 @@
 
 <div id="Stats-output">
 </div>
+
+<video id="video" style="display: none; position: absolute; left: 15px; top: 75px;"
+       src="../assets/movies/Big_Buck_Bunny_small.ogv" controls="true" autoplay="true"></video>
+
 <!-- Div which will hold the Output -->
 <div id="WebGL-output">
 </div>
 
 <!-- Javascript code that runs our Three.js examples -->
 <script type="text/javascript">
+
+    var texture;
 
     // once everything is loaded, we run our Three.js stuff.
     $(function () {
@@ -44,35 +51,27 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var sphere1 = createMesh(new THREE.BoxGeometry(15, 15, 2), "stone.jpg");
-        sphere1.rotation.y = -0.5;
-        sphere1.position.x = 12;
-        scene.add(sphere1);
+        var video = document.getElementById('video');
+        texture = new THREE.VideoTexture(video);
+        var cube;
 
-        var sphere2 = createMesh(new THREE.BoxGeometry(15, 15, 2), "stone.jpg", "stone-bump.jpg");
-        sphere2.rotation.y = 0.5;
-        sphere2.position.x = -12;
-        scene.add(sphere2);
-        console.log(sphere2.geometry.faceVertexUvs);
 
-        var floorTex = THREE.ImageUtils.loadTexture("../assets/textures/general/floor-wood.jpg")
-        var plane = new THREE.Mesh(new THREE.BoxGeometry(200, 100, 0.1, 30), new THREE.MeshPhongMaterial({color: 0x3c3c3c, map: floorTex}));
-        plane.position.y = -7.5;
-        plane.rotation.x = -0.5 * Math.PI;
-        scene.add(plane);
+        cube = createMesh(new THREE.BoxGeometry(22, 16, 0.2), "floor-wood.jpg");
+        cube.position.y = 2;
+        scene.add(cube);
+
 
         // position and point the camera to the center of the scene
         camera.position.x = 00;
-        camera.position.y = 12;
+        camera.position.y = 1;
         camera.position.z = 28;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-        var ambiLight = new THREE.AmbientLight(0x242424)
+        var ambiLight = new THREE.AmbientLight(0x141414)
         scene.add(ambiLight);
 
-        var light = new THREE.SpotLight();
-        light.position.set(0, 30, 30);
-        light.intensity = 1.2;
+        var light = new THREE.DirectionalLight();
+        light.position.set(0, 30, 20);
         scene.add(light);
 
         // add the output of the renderer to the html element
@@ -85,50 +84,42 @@
 
         // setup the control gui
         var controls = new function () {
-            this.bumpScale = 0.2;
-            this.changeTexture = "weave";
+
+            this.showVideo = false;
             this.rotate = false;
 
-            this.changeTexture = function (e) {
-                var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + e + ".jpg");
-                sphere2.material.map = texture;
-                sphere1.material.map = texture;
-
-                var bump = THREE.ImageUtils.loadTexture("../assets/textures/general/" + e + "-bump.jpg");
-                sphere2.material.bumpMap = bump;
+            this.showCanvas = function () {
+                if (controls.showVideo) {
+                    $('#video').show();
+                } else {
+                    $('#video').hide();
+                }
             }
 
-            this.updateBump = function (e) {
-                console.log(sphere2.material.bumpScale);
-                sphere2.material.bumpScale = e;
-            }
         };
 
 
         var gui = new dat.GUI();
-        gui.add(controls, "bumpScale", -2, 2).onChange(controls.updateBump);
-        gui.add(controls, "changeTexture", ['stone', 'weave']).onChange(controls.changeTexture);
         gui.add(controls, "rotate");
+        gui.add(controls, "showVideo").onChange(controls.showCanvas);
 
 
         render();
 
-        function createMesh(geom, imageFile, bump) {
-            var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + imageFile)
-            geom.computeVertexNormals();
-            var mat = new THREE.MeshPhongMaterial();
-            mat.map = texture;
+        function createMesh(geom) {
 
-            if (bump) {
-                var bump = THREE.ImageUtils.loadTexture("../assets/textures/general/" + bump)
-                mat.bumpMap = bump;
-                mat.bumpScale = 0.2;
-                console.log('d');
-            }
+            var materialArray = [];
+            materialArray.push(new THREE.MeshBasicMaterial({ color: 0x0051ba  }));
+            materialArray.push(new THREE.MeshBasicMaterial({ color: 0x0051ba  }));
+            materialArray.push(new THREE.MeshBasicMaterial({ color: 0x0051ba  }));
+            materialArray.push(new THREE.MeshBasicMaterial({ color: 0x0051ba   }));
+            materialArray.push(new THREE.MeshBasicMaterial({ map: texture }));
+            materialArray.push(new THREE.MeshBasicMaterial({ color: 0xff51ba  }));
+            var faceMaterial = new THREE.MeshFaceMaterial(materialArray);
 
 
             // create a multimaterial
-            var mesh = new THREE.Mesh(geom, mat);
+            var mesh = new THREE.Mesh(geom, faceMaterial);
 
             return mesh;
         }
@@ -137,14 +128,11 @@
             stats.update();
 
             if (controls.rotate) {
-                sphere1.rotation.y -= 0.01;
-                sphere2.rotation.y += 0.01;
+                cube.rotation.x += -0.01;
+                cube.rotation.y += -0.01;
+                cube.rotation.z += -0.01;
             }
 
-//            sphere1.rotation.y=step+=0.01;
-//            sphere1.rotation.x=step;
-//            sphere2.rotation.y=step;
-//            sphere2.rotation.x=step;
 
             // render using requestAnimationFrame
             requestAnimationFrame(render);
@@ -169,5 +157,9 @@
 
 
 </script>
+
 </body>
 </html>
+
+
+

@@ -51,7 +51,7 @@
         var sphere = createMesh(new THREE.SphereGeometry(5, 20, 20), "floor-wood.jpg");
         scene.add(sphere);
 
-        var cube = createMesh(new THREE.CubeGeometry(5, 5, 5), "brick-wall.jpg");
+        var cube = createMesh(new THREE.BoxGeometry(5, 5, 5), "brick-wall.jpg");
         cube.position.x = -12;
         scene.add(cube);
         console.log(cube.geometry.faceVertexUvs);

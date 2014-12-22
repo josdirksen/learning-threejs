@@ -91,7 +91,7 @@
 
             // Ground
             var ground = new Physijs.BoxMesh(
-                    new THREE.CubeGeometry(50, 1, 50),
+                    new THREE.BoxGeometry(50, 1, 50),
                     //new THREE.PlaneGeometry(50, 50),
                     ground_material,
                     0 // mass
@@ -104,7 +104,7 @@
             var size = 3;
             var mass = 1;
             var NUM = 6;
-            var geometry = new THREE.CubeGeometry(size, size, size);
+            var geometry = new THREE.BoxGeometry(size, size, size);
             for (var i = 0; i < NUM; i++) {
                 var material1 = Physijs.createMaterial(new THREE.MeshLambertMaterial({color: 0x992222 + i*0x3333}), 0.1, 0.1);
                 var material2 = Physijs.createMaterial(new THREE.MeshLambertMaterial({color: 0x992222 + i*0x3333, transparent: true, opacity: 0.7}), 0.1, 0.1);
