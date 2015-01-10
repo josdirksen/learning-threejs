@@ -156,14 +156,14 @@
         gui.add(new function() {
             this.clone = function() {
 
-                var cloned = mesh.children[0].geometry.clone();
+                var clonedGeometry = mesh.children[0].geometry.clone();
                 var materials = [
                     new THREE.MeshLambertMaterial( { opacity:0.6, color: 0xff44ff, transparent:true } ),
                     new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } )
 
                 ];
 
-                var mesh2 = THREE.SceneUtils.createMultiMaterialObject(cloned,materials);
+                var mesh2 = THREE.SceneUtils.createMultiMaterialObject(clonedGeometry,materials);
                 mesh2.children.forEach(function(e) {e.castShadow=true});
 
                 mesh2.translateX(5);

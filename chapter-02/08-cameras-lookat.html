@@ -64,12 +64,12 @@
 
         var cubeGeometry = new THREE.BoxGeometry(4,4,4);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: 0x00ee22});
-        for (var j = 0 ; j < (planeGeometry.height/5) ; j++) {
-            for (var i = 0 ; i < planeGeometry.width/5 ; i++) {
+        for (var j = 0 ; j < (planeGeometry.parameters.height/5) ; j++) {
+            for (var i = 0 ; i < planeGeometry.parameters.width/5 ; i++) {
                 var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
-                cube.position.z=-((planeGeometry.height)/2)+2+(j*5);
-                cube.position.x=-((planeGeometry.width)/2)+2+(i*5);
+                cube.position.z=-((planeGeometry.parameters.height)/2)+2+(j*5);
+                cube.position.x=-((planeGeometry.parameters.width)/2)+2+(i*5);
                 cube.position.y=2;
 
                 scene.add(cube);
@@ -102,9 +102,10 @@
             this.switchCamera = function() {
                 if (camera instanceof THREE.PerspectiveCamera) {
                     camera = new THREE.OrthographicCamera( window.innerWidth / - 16, window.innerWidth / 16, window.innerHeight / 16, window.innerHeight / - 16, -200, 500 );
-                    camera.position.x = 2;
-                    camera.position.y = 1;
-                    camera.position.z = 3;
+                    camera.position.x = 120;
+                    camera.position.y = 60;
+                    camera.position.z = 180;
+
                     camera.lookAt(scene.position);
                     this.perspective = "Orthographic";
                 } else {
@@ -136,14 +137,10 @@
             stats.update();
             // render using requestAnimationFrame
             step+=0.02;
-            if (camera instanceof THREE.PerspectiveCamera) {
+            if (camera instanceof THREE.Camera) {
                 var x = 10+( 100*(Math.sin(step)));
                 camera.lookAt(new THREE.Vector3(x,10,0));
-                lookAtMesh.position=new THREE.Vector3(x,10,0);
-            } else {
-                var x = ((Math.cos(step)));
-                camera.lookAt(new THREE.Vector3(x,0,0));
-                lookAtMesh.position=new THREE.Vector3(x,10,0);
+                lookAtMesh.position.copy(new THREE.Vector3(x,10,0));
             }
 
 //        .position.x = 20+( 10*(Math.cos(step)));

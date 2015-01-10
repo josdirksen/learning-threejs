@@ -102,9 +102,9 @@
             this.switchCamera = function() {
                 if (camera instanceof THREE.PerspectiveCamera) {
                     camera = new THREE.OrthographicCamera( window.innerWidth / - 16, window.innerWidth / 16, window.innerHeight / 16, window.innerHeight / - 16, -200, 500 );
-                    camera.position.x = 3;
-                    camera.position.y = 1;
-                    camera.position.z = 3;
+                    camera.position.x = 120;
+                    camera.position.y = 60;
+                    camera.position.z = 180;
                     camera.lookAt(scene.position);
                     this.perspective = "Orthographic";
                 } else {
@@ -112,10 +112,6 @@
                     camera.position.x = 120;
                     camera.position.y = 60;
                     camera.position.z = 180;
-
-                    camera.zoom = 0.5;
-                    camera.updateProjectionMatrix();
-
 
                     camera.lookAt(scene.position);
                     this.perspective = "Perspective";

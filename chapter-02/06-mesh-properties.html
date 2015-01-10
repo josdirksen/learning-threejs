@@ -103,13 +103,14 @@
             this.visible = true;
 
             this.translate = function() {
-                cube.translateX(this.translateX);
-                cube.translateY(this.translateX);
-                cube.translateZ(this.translateX);
 
-                this.positionX = cube.position.x;
-                this.positionY = cube.position.y;
-                this.positionZ = cube.position.z;
+                cube.translateX(controls.translateX);
+                cube.translateY(controls.translateY);
+                cube.translateZ(controls.translateZ);
+
+                controls.positionX = cube.position.x;
+                controls.positionY = cube.position.y;
+                controls.positionZ = cube.position.z;
             }
         }
 
