@@ -117,7 +117,7 @@
         var sphereLightMesh = new THREE.Mesh(sphereLight, sphereLightMaterial);
         sphereLightMesh.castShadow = true;
 
-        sphereLightMesh.position = new THREE.Vector3(3, 5, 3);
+        sphereLightMesh.position = new THREE.Vector3(3, 0, 3);
         scene.add(sphereLightMesh);
 
 
@@ -181,6 +181,7 @@
             }
             sphereLightMesh.position.z = +(7 * (Math.sin(phase)));
             sphereLightMesh.position.x = +(14 * (Math.cos(phase)));
+            sphereLightMesh.position.y = 5;
 
             if (invert < 0) {
                 var pivot = 14;

@@ -114,11 +114,15 @@
             this.rotationSpeed = 0.02;
             this.bouncingSpeed = 0.03;
             this.ambientColor = ambiColor;
+            this.disableSpotlight = false;
         }
 
         var gui = new dat.GUI();
         gui.addColor(controls, 'ambientColor').onChange(function (e) {
             ambientLight.color = new THREE.Color(e);
+        });
+        gui.add(controls, 'disableSpotlight').onChange(function(e) {
+            spotLight.visible = !e;
         });
 
 
