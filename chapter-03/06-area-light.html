@@ -156,7 +156,7 @@
             planeGeometry1Mat.color = new THREE.Color(e);
             scene.remove(plane1);
             plane1 = new THREE.Mesh(planeGeometry1, planeGeometry1Mat);
-            plane1.position = areaLight1.position;
+            plane1.position.copy(areaLight1.position);
             scene.add(plane1);
 
         });
@@ -168,7 +168,7 @@
             planeGeometry2Mat.color = new THREE.Color(e);
             scene.remove(plane2);
             plane2 = new THREE.Mesh(planeGeometry2, planeGeometry2Mat);
-            plane2.position = areaLight2.position;
+            plane2.position.copy(areaLight2.position);
             scene.add(plane2);
         });
         gui.add(controls, 'intensity2', 0, 5).onChange(function (e) {
@@ -179,7 +179,7 @@
             planeGeometry3Mat.color = new THREE.Color(e);
             scene.remove(plane3);
             plane3 = new THREE.Mesh(planeGeometry1, planeGeometry3Mat);
-            plane3.position = areaLight3.position;
+            plane3.position.copy(areaLight3.position);
             scene.add(plane3);
         });
         gui.add(controls, 'intensity3', 0, 5).onChange(function (e) {

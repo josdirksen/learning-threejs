@@ -57,6 +57,7 @@
 
         var planeGeometry = new THREE.PlaneGeometry(1000, 200, 20, 20);
         var planeMaterial = new THREE.MeshLambertMaterial({map: textureGrass});
+//        var planeMaterial = new THREE.MeshLambertMaterial();
         var plane = new THREE.Mesh(planeGeometry, planeMaterial);
         plane.receiveShadow = true;
 
@@ -100,6 +101,9 @@
         camera.position.x = -20;
         camera.position.y = 15;
         camera.position.z = 45;
+//        camera.position.x = -120;
+//        camera.position.y = 165;
+//        camera.position.z = 145;
         camera.lookAt(new THREE.Vector3(10, 0, 0));
 
 
@@ -115,31 +119,29 @@
 
         var hemiLight = new THREE.HemisphereLight(0x0000ff, 0x00ff00, 0.6);
         hemiLight.position.set(0, 500, 0);
-        hemiLight.visible = false;
         scene.add(hemiLight);
 
 
         var pointColor = "#ffffff";
-//    var spotLight = new THREE.SpotLight( pointColor);
-        var spotLight = new THREE.DirectionalLight(pointColor);
-        spotLight.position.set(30, 10, -50);
-        spotLight.castShadow = true;
-        spotLight.shadowCameraNear = 0.1;
-        spotLight.shadowCameraFar = 100;
-        spotLight.shadowCameraFov = 50;
-        spotLight.target = plane;
-        spotLight.distance = 0;
-        spotLight.shadowCameraNear = 2;
-        spotLight.shadowCameraFar = 200;
-        spotLight.shadowCameraLeft = -100;
-        spotLight.shadowCameraRight = 100;
-        spotLight.shadowCameraTop = 100;
-        spotLight.shadowCameraBottom = -100;
-        spotLight.shadowMapWidth = 2048;
-        spotLight.shadowMapHeight = 2048;
+//    var dirLight = new THREE.SpotLight( pointColor);
+        var dirLight = new THREE.DirectionalLight(pointColor);
+        dirLight.position.set(30, 10, -50);
+        dirLight.castShadow = true;
+//        dirLight.shadowCameraNear = 0.1;
+//        dirLight.shadowCameraFar = 100;
+//        dirLight.shadowCameraFov = 50;
+        dirLight.target = plane;
+        dirLight.shadowCameraNear = 0.1;
+        dirLight.shadowCameraFar = 200;
+        dirLight.shadowCameraLeft = -50;
+        dirLight.shadowCameraRight = 50;
+        dirLight.shadowCameraTop = 50;
+        dirLight.shadowCameraBottom = -50;
+        dirLight.shadowMapWidth = 2048;
+        dirLight.shadowMapHeight = 2048;
 
 
-        scene.add(spotLight);
+        scene.add(dirLight);
 
 
         // add the output of the renderer to the html element
@@ -156,8 +158,8 @@
             this.rotationSpeed = 0.03;
             this.bouncingSpeed = 0.03;
 
-            this.hemisphere = false;
-            this.groundColor = 0x00ff00;
+            this.hemisphere = true;
+            this.color = 0x00ff00;
             this.skyColor = 0x0000ff;
             this.intensity = 0.6;
 
@@ -166,9 +168,14 @@
         var gui = new dat.GUI();
 
         gui.add(controls, 'hemisphere').onChange(function (e) {
-            hemiLight.visible = e;
+
+            if (!e) {
+                hemiLight.intensity = 0;
+            } else {
+                hemiLight.intensity = controls.intensity;
+            }
         });
-        gui.addColor(controls, 'groundColor').onChange(function (e) {
+        gui.addColor(controls, 'color').onChange(function (e) {
             hemiLight.groundColor = new THREE.Color(e);
         });
         gui.addColor(controls, 'skyColor').onChange(function (e) {

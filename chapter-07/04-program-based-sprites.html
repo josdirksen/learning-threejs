@@ -8,6 +8,8 @@
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
+    <script type="text/javascript" src="../libs/CanvasRenderer.js"></script>
+    <script type="text/javascript" src="../libs/Projector.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -108,7 +110,7 @@
 
         function createSprites() {
             var material = new THREE.SpriteCanvasMaterial({
-                program: draw,
+                program: getTexture,
                 color: 0xffffff}
                 );
 

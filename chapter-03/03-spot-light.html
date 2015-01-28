@@ -46,6 +46,7 @@ $(function () {
     renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMapEnabled = true;
+    renderer.shadowMapType=THREE.PCFShadowMap;
 
     // create the ground plane
     var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
@@ -102,7 +103,7 @@ $(function () {
 
     // add spotlight for a bit of light
     var spotLight0 = new THREE.SpotLight(0xcccccc);
-    spotLight0.position.set(-40, 60, -10);
+    spotLight0.position.set(-40, 30, -10);
     spotLight0.lookAt(plane);
     scene.add(spotLight0);
 
@@ -117,9 +118,11 @@ $(function () {
     spotLight.castShadow = true;
     spotLight.shadowCameraNear = 2;
     spotLight.shadowCameraFar = 200;
-    spotLight.shadowCameraFov = 130;
+    spotLight.shadowCameraFov = 30;
     spotLight.target = plane;
     spotLight.distance = 0;
+    spotLight.angle = 0.4;
+
 
 
     scene.add(spotLight);
@@ -244,13 +247,14 @@ $(function () {
             }
             sphereLightMesh.position.z = +(7 * (Math.sin(phase)));
             sphereLightMesh.position.x = +(14 * (Math.cos(phase)));
+            sphereLightMesh.position.y = 10;
 
             if (invert < 0) {
                 var pivot = 14;
                 sphereLightMesh.position.x = (invert * (sphereLightMesh.position.x - pivot)) + pivot;
             }
 
-            spotLight.position = sphereLightMesh.position;
+            spotLight.position.copy(sphereLightMesh.position);
         }
 
         // render using requestAnimationFrame
