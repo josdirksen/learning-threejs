@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var cube = createMesh(new THREE.BoxGeometry(10, 10, 10));
+        var cube = createMesh(new THREE.BoxGeometry(10, 10, 10, 1, 1, 1));
         // add the sphere to the scene
         scene.add(cube);
 
@@ -70,16 +70,13 @@
         // setup the control gui
         var controls = new function () {
 
-            console.log(cube.children[0].geometry);
+            this.width = cube.children[0].geometry.parameters.width;
+            this.height = cube.children[0].geometry.parameters.height;
+            this.depth = cube.children[0].geometry.parameters.depth;
 
-            // we need the first child, since it's a multimaterial
-            this.width = cube.children[0].geometry.width;
-            this.height = cube.children[0].geometry.height;
-            this.depth = cube.children[0].geometry.depth;
-
-            this.widthSegments = cube.children[0].geometry.widthSegments;
-            this.heightSegments = cube.children[0].geometry.heightSegments;
-            this.depthSegments = cube.children[0].geometry.depthSegments;
+            this.widthSegments = cube.children[0].geometry.parameters.widthSegments;
+            this.heightSegments = cube.children[0].geometry.parameters.heightSegments;
+            this.depthSegments = cube.children[0].geometry.parameters.depthSegments;
 
 
             this.redraw = function () {

@@ -139,10 +139,10 @@ $(function () {
         if (normal) {
             var t = THREE.ImageUtils.loadTexture("../assets/textures/general/" + imageFile);
             var m = THREE.ImageUtils.loadTexture("../assets/textures/general/" + normal);
-            var mat2 = new THREE.MeshPhongMaterial({
-                map: t,
-                normalMap: m
-            });
+            var mat2 = new THREE.MeshPhongMaterial();
+            mat2.map = t;
+            mat2.normalMap = m;
+
             var mesh = new THREE.Mesh(geom, mat2);
             return mesh;
         } else {
@@ -211,13 +211,7 @@ $(function () {
             sphereLightMesh.position.x = (invert * (sphereLightMesh.position.x - pivot)) + pivot;
         }
 
-        directionalLight.position = sphereLightMesh.position;
-
-
-//            sphere1.rotation.y=step+=0.01;
-//            sphere1.rotation.x=step;
-//            sphere2.rotation.y=step;
-//            sphere2.rotation.x=step;
+        directionalLight.position.copy(sphereLightMesh.position);
 
         // render using requestAnimationFrame
         requestAnimationFrame(render);

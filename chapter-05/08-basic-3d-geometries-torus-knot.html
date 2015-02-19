@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var knot = createMesh(new THREE.TorusKnotGeometry(10, 1));
+        var knot = createMesh(new THREE.TorusKnotGeometry(10, 1, 64, 8, 2, 3, 1));
         // add the sphere to the scene
         scene.add(knot);
 
@@ -64,13 +64,13 @@
         // setup the control gui
         var controls = new function () {
             // we need the first child, since it's a multimaterial
-            this.radius = knot.children[0].geometry.radius;
+            this.radius = knot.children[0].geometry.parameters.radius;
             this.tube = 0.3;
-            this.radialSegments = knot.children[0].geometry.radialSegments;
-            this.tubularSegments = knot.children[0].geometry.tubularSegments;
-            this.p = knot.children[0].geometry.p;
-            this.q = knot.children[0].geometry.q;
-            this.heightScale = knot.children[0].geometry.heightScale;
+            this.radialSegments = knot.children[0].geometry.parameters.radialSegments;
+            this.tubularSegments = knot.children[0].geometry.parameters.tubularSegments;
+            this.p = knot.children[0].geometry.parameters.p;
+            this.q = knot.children[0].geometry.parameters.q;
+            this.heightScale = knot.children[0].geometry.parameters.heightScale;
 
             this.redraw = function () {
                 // remove the old plane

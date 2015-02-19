@@ -65,9 +65,9 @@
         // setup the control gui
         var controls = new function () {
             // we need the first child, since it's a multimaterial
-            this.radius = sphere.children[0].geometry.radius;
-            this.widthSegments = sphere.children[0].geometry.widthSegments;
-            this.heightSegments = sphere.children[0].geometry.heightSegments;
+            this.radius = sphere.children[0].geometry.parameters.radius;
+            this.widthSegments = sphere.children[0].geometry.parameters.widthSegments;
+            this.heightSegments = sphere.children[0].geometry.parameters.heightSegments;
             this.phiStart = 0;
             this.phiLength = Math.PI * 2;
             this.thetaStart = 0;

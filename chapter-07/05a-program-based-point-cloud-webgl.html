@@ -118,8 +118,8 @@
             this.sizeAttenuation = true;
 
             this.redraw = function () {
-                if (scene.getObjectByName("particles")) {
-                    scene.remove(scene.getObjectByName("particles"));
+                if (scene.getObjectByName("pointcloud")) {
+                    scene.remove(scene.getObjectByName("pointcloud"));
                 }
                 createPointCloud(controls.size, controls.transparent, controls.opacity, controls.sizeAttenuation, controls.color);
             };
@@ -160,6 +160,7 @@
             }
 
             cloud = new THREE.PointCloud(geom, material);
+            cloud.name = 'pointcloud';
             cloud.sortParticles = true;
             scene.add(cloud);
         }

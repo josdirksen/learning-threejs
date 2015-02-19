@@ -3,8 +3,10 @@
 <html>
 
 <head>
-    <title>Example 09.13 - Animation from blender</title>
+    <title>Example 10.07 - UV mapping </title>
     <script type="text/javascript" src="../libs/three.js"></script>
+    <script type="text/javascript" src="../libs/OBJLoader.js"></script>
+
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
@@ -40,22 +42,16 @@
 
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
-        webGLRenderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
+        webGLRenderer.setClearColor(new THREE.Color(0xffffff, 1.0));
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
         // position and point the camera to the center of the scene
-        camera.position.x = 0;
-        camera.position.y = 0;
-        camera.position.z = 4;
+        camera.position.x = -30;
+        camera.position.y = 40;
+        camera.position.z = 50;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-
-        // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(0, 50, 30);
-        spotLight.intensity = 2;
-        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         $("#WebGL-output").append(webGLRenderer.domElement);
@@ -63,39 +59,41 @@
         // call the render function
         var step = 0;
 
-        var mesh;
-        var helper;
-        var clock = new THREE.Clock();
 
+        var texture = THREE.ImageUtils.loadTexture("../assets/textures/ash_uvgrid01.jpg");
+//        var mat = new THREE.MeshBasicMaterial();
+        var mat = new THREE.MeshBasicMaterial({map: texture});
+        var geom = new THREE.BoxGeometry(24,24,24);
+        var mesh = new THREE.Mesh(geom, mat);
+
+        mesh.rotation.z = 0.5*Math.PI;
+        mesh.rotation.y = 0.2*Math.PI;
+        mesh.rotation.x = 0.2*Math.PI;
+        scene.add(mesh);
+
+        console.log(geom.faceVertexUvs[0][0]);
+
+        // setup the control gui
         var controls = new function () {
-            this.showHelper = false;
+            // we need the first child, since it's a multimaterial
+            this.uv1 = geom.faceVertexUvs[0][0][0].x;
+            this.uv2 = geom.faceVertexUvs[0][0][0].y;
+            this.uv3 = geom.faceVertexUvs[0][0][1].x;
+            this.uv4 = geom.faceVertexUvs[0][0][1].y;
+            this.uv5 = geom.faceVertexUvs[0][0][2].x;
+            this.uv6 = geom.faceVertexUvs[0][0][2].y;
         }
+
         var gui = new dat.GUI();
-        gui.add(controls, 'showHelper', 0, 0.5).onChange(function(state) {
-            helper.visible = state;
-        });
+        gui.add(controls, 'uv1', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][0].x = e; geom.uvsNeedUpdate = true});
+        gui.add(controls, 'uv2', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][0].y = e; geom.uvsNeedUpdate = true});
+        gui.add(controls, 'uv3', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][1].x = e; geom.uvsNeedUpdate = true});
+        gui.add(controls, 'uv4', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][1].y = e; geom.uvsNeedUpdate = true});
+        gui.add(controls, 'uv5', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][2].x = e; geom.uvsNeedUpdate = true});
+        gui.add(controls, 'uv6', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][2].y = e; geom.uvsNeedUpdate = true});
 
-        var loader = new THREE.JSONLoader();
-        loader.load('../assets/models/hand-2.js', function (model, mat) {
 
-            var mat = new THREE.MeshLambertMaterial({color: 0xF0C8C9, skinning: true});
-            mesh = new THREE.SkinnedMesh(model, mat);
-
-            var animation = new THREE.Animation(mesh, model.animation);
-
-            mesh.rotation.x = 0.5 * Math.PI;
-            mesh.rotation.z = 0.7 * Math.PI;
-            scene.add(mesh);
-
-            helper = new THREE.SkeletonHelper( mesh );
-            helper.material.linewidth = 2;
-            helper.visible = false;
-            scene.add( helper );
-
-            // start the animation
-            animation.play();
-
-        }, '../assets/models');
+//        controls.loadCube1();
 
 
         render();
@@ -104,13 +102,10 @@
         function render() {
             stats.update();
 
-
-            var delta = clock.getDelta();
             if (mesh) {
-
-                helper.update();
-                THREE.AnimationHandler.update(delta);
-
+//                mesh.rotation.y += 0.006;
+//                mesh.rotation.x += 0.006;
+//                mesh.rotation.y+=0.006;
             }
 
 

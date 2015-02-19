@@ -44,7 +44,7 @@
         webGLRenderer.setSize(window.innerWidth, window.innerHeight);
         webGLRenderer.shadowMapEnabled = true;
 
-        var torus = createMesh(new THREE.TorusGeometry(10, 10));
+        var torus = createMesh(new THREE.TorusGeometry(10, 10, 8, 6, Math.PI * 2));
         // add the sphere to the scene
         scene.add(torus);
 
@@ -65,11 +65,11 @@
         var controls = new function () {
             // we need the first child, since it's a multimaterial
 
-            this.radius = torus.children[0].geometry.radius;
-            this.tube = torus.children[0].geometry.tube;
-            this.radialSegments = torus.children[0].geometry.radialSegments;
-            this.tubularSegments = torus.children[0].geometry.tubularSegments;
-            this.arc = torus.children[0].geometry.arc;
+            this.radius = torus.children[0].geometry.parameters.radius;
+            this.tube = torus.children[0].geometry.parameters.tube;
+            this.radialSegments = torus.children[0].geometry.parameters.radialSegments;
+            this.tubularSegments = torus.children[0].geometry.parameters.tubularSegments;
+            this.arc = torus.children[0].geometry.parameters.arc;
 
             this.redraw = function () {
                 // remove the old plane

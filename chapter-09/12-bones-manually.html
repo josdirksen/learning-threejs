@@ -87,6 +87,8 @@
         var onUpdate = function () {
             var pos = this.pos;
 
+            console.log(mesh.skeleton);
+
             // rotate the fingers
             mesh.skeleton.bones[5].rotation.set(0, 0, pos);
             mesh.skeleton.bones[6].rotation.set(0, 0, pos);

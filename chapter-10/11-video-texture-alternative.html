@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 10.11 - Video texture - non canvas</title>
+    <title>Example 10.11 - Video texture</title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
@@ -52,7 +52,13 @@
         webGLRenderer.shadowMapEnabled = true;
 
         var video = document.getElementById('video');
-        texture = new THREE.VideoTexture(video);
+        texture = new THREE.Texture(video);
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.format = THREE.RGBFormat;
+        texture.generateMipmaps = false;
+
+
         var cube;
 
 
@@ -126,6 +132,11 @@
 
         function render() {
             stats.update();
+
+
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                if (texture) texture.needsUpdate = true;
+            }
 
             if (controls.rotate) {
                 cube.rotation.x += -0.01;

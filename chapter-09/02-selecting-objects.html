@@ -48,6 +48,8 @@
 
         var projector = new THREE.Projector();
         document.addEventListener('mousedown', onDocumentMouseDown, false);
+        document.addEventListener('mousemove', onDocumentMouseMove, false);
+
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
         var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
@@ -168,8 +170,6 @@
 
         function onDocumentMouseDown(event) {
 
-            event.preventDefault();
-
             var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
             vector = vector.unproject(camera);
 
@@ -183,22 +183,33 @@
 
                 intersects[ 0 ].object.material.transparent = true;
                 intersects[ 0 ].object.material.opacity = 0.1;
+            }
+        }
 
-                var points = [];
-                points.push(new THREE.Vector3(-30, 39.8, 30));
-                points.push(intersects[0].point);
+        function onDocumentMouseMove(event) {
+            if (controls.showRay) {
+                var vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1, -( event.clientY / window.innerHeight ) * 2 + 1, 0.5);
+                vector = vector.unproject(camera);
 
-                var mat = new THREE.MeshBasicMaterial({color: 0xff0000, transparent: true, opacity: 0.6});
-                var tubeGeometry = new THREE.TubeGeometry(new THREE.SplineCurve3(points), 60, 0.001);
+                var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+                var intersects = raycaster.intersectObjects([sphere, cylinder, cube]);
 
-                if (tube) scene.remove(tube);
+                if (intersects.length > 0) {
 
-                if (controls.showRay) {
-                    tube = new THREE.Mesh(tubeGeometry, mat);
-                    scene.add(tube);
+                    var points = [];
+                    points.push(new THREE.Vector3(-30, 39.8, 30));
+                    points.push(intersects[0].point);
+
+                    var mat = new THREE.MeshBasicMaterial({color: 0xff0000, transparent: true, opacity: 0.6});
+                    var tubeGeometry = new THREE.TubeGeometry(new THREE.SplineCurve3(points), 60, 0.001);
+
+                    if (tube) scene.remove(tube);
+
+                    if (controls.showRay) {
+                        tube = new THREE.Mesh(tubeGeometry, mat);
+                        scene.add(tube);
+                    }
                 }
-
-
             }
         }
 

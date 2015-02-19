@@ -69,8 +69,8 @@
             this.radiusBottom = 20;
             this.height = 20;
 
-            this.segmentsX = 8;
-            this.segmentsY = 1;
+            this.radialSegments = 8;
+            this.heightSegments = 8;
 
             this.openEnded = false;
 
@@ -79,7 +79,7 @@
                 scene.remove(cylinder);
                 // create a new one
 
-                cylinder = createMesh(new THREE.CylinderGeometry(controls.radiusTop, controls.radiusBottom, controls.height, controls.segmentsX, controls.segmentsY, controls.openEnded));
+                cylinder = createMesh(new THREE.CylinderGeometry(controls.radiusTop, controls.radiusBottom, controls.height, controls.radialSegments, controls.heightSegments, controls.openEnded));
                 // add it to the scene.
                 scene.add(cylinder);
             };
@@ -89,8 +89,8 @@
         gui.add(controls, 'radiusTop', -40, 40).onChange(controls.redraw);
         gui.add(controls, 'radiusBottom', -40, 40).onChange(controls.redraw);
         gui.add(controls, 'height', 0, 40).onChange(controls.redraw);
-        gui.add(controls, 'segmentsX', 1, 20).step(1).onChange(controls.redraw);
-        gui.add(controls, 'segmentsY', 1, 20).step(1).onChange(controls.redraw);
+        gui.add(controls, 'radialSegments', 1, 20).step(1).onChange(controls.redraw);
+        gui.add(controls, 'heightSegments', 1, 20).step(1).onChange(controls.redraw);
         gui.add(controls, 'openEnded').onChange(controls.redraw);
 
 

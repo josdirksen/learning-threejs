@@ -84,6 +84,9 @@
                     case 'Octahedron':
                         polyhedron = createMesh(new THREE.OctahedronGeometry(controls.radius, controls.detail));
                         break;
+                    case 'Dodecahedron':
+                        polyhedron = createMesh(new THREE.DodecahedronGeometry(controls.radius, controls.detail));
+                        break;
                     case 'Custom':
                         var vertices = [
                             1,  1,  1,   - 1, - 1,  1,   - 1,  1, - 1,    1, - 1, - 1
@@ -105,7 +108,7 @@
         var gui = new dat.GUI();
         gui.add(controls, 'radius', 0, 40).step(1).onChange(controls.redraw);
         gui.add(controls, 'detail', 0, 3).step(1).onChange(controls.redraw);
-        gui.add(controls, 'type', ['Icosahedron', 'Tetrahedron', 'Octahedron', 'Custom']).onChange(controls.redraw);
+        gui.add(controls, 'type', ['Icosahedron', 'Tetrahedron', 'Octahedron', 'Dodecahedron', 'Custom']).onChange(controls.redraw);
 
 
         render();

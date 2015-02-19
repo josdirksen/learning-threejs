@@ -72,11 +72,11 @@
             // we need the first child, since it's a multimaterial
 
 
-            this.width = plane.children[0].geometry.width;
-            this.height = plane.children[0].geometry.height;
+            this.width = plane.children[0].geometry.parameters.width;
+            this.height = plane.children[0].geometry.parameters.height;
 
-            this.widthSegments = plane.children[0].geometry.widthSegments;
-            this.heightSegments = plane.children[0].geometry.heightSegments;
+            this.widthSegments = plane.children[0].geometry.parameters.widthSegments;
+            this.heightSegments = plane.children[0].geometry.parameters.heightSegments;
 
             this.redraw = function () {
                 // remove the old plane
