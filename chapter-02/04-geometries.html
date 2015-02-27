@@ -144,13 +144,9 @@
 
             var j=0;
             for (var i = 0 ; i < geoms.length ; i++) {
-                var cubeMaterial = new THREE.MeshLambertMaterial({wireframe: true, color:  Math.random() * 0xffffff });
-
                 var materials = [
-
                     new THREE.MeshLambertMaterial( { color:  Math.random() * 0xffffff, shading: THREE.FlatShading } ),
                     new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } )
-
                 ];
 
                 var mesh = THREE.SceneUtils.createMultiMaterialObject(geoms[i],materials);
