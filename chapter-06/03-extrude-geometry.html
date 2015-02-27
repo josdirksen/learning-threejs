@@ -5,7 +5,7 @@
 <head>
     <title>Example 06.03 - Extrude Geometry</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -28,7 +28,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -55,7 +55,7 @@
         camera.lookAt(new THREE.Vector3(20, 20, 0));
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         // call the render function
         var step = 0;
@@ -93,7 +93,7 @@
                 scene.add(shape);
             };
 
-        }
+        };
 
         var gui = new dat.GUI();
         gui.add(controls, 'amount', 0, 20).onChange(controls.asGeom);
@@ -126,7 +126,7 @@
                     [new THREE.Vector2(32, 30),
                         new THREE.Vector2(28, 20),
                         new THREE.Vector2(30, 10),
-                    ])
+                    ]);
 
             // curve at the bottom
             shape.quadraticCurveTo(20, 15, 10, 10);
@@ -155,7 +155,11 @@
             geom.applyMatrix(new THREE.Matrix4().makeTranslation(-20, 0, 0));
 
             // assign two materials
-            var meshMaterial = new THREE.MeshNormalMaterial({shading: THREE.FlatShading, transparent: true, opacity: 0.7});
+            var meshMaterial = new THREE.MeshNormalMaterial({
+                shading: THREE.FlatShading,
+                transparent: true,
+                opacity: 0.7
+            });
 
             //  meshMaterial.side = THREE.DoubleSide;
             var wireFrameMat = new THREE.MeshBasicMaterial();
@@ -169,10 +173,16 @@
 
         function createLine(shape, spaced) {
             if (!spaced) {
-                var mesh = new THREE.Line(shape.createPointsGeometry(), new THREE.LineBasicMaterial({ color: 0xff3333, linewidth: 2 }));
+                var mesh = new THREE.Line(shape.createPointsGeometry(), new THREE.LineBasicMaterial({
+                    color: 0xff3333,
+                    linewidth: 2
+                }));
                 return mesh;
             } else {
-                var mesh = new THREE.Line(shape.createSpacedPointsGeometry(20), new THREE.LineBasicMaterial({ color: 0xff3333, linewidth: 2 }));
+                var mesh = new THREE.Line(shape.createSpacedPointsGeometry(20), new THREE.LineBasicMaterial({
+                    color: 0xff3333,
+                    linewidth: 2
+                }));
                 return mesh;
             }
 
@@ -198,13 +208,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

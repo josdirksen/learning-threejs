@@ -7,7 +7,7 @@
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/OBJLoader.js"></script>
 
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -30,7 +30,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -54,7 +54,7 @@
 
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         // call the render function
         var step = 0;
@@ -63,12 +63,12 @@
         var texture = THREE.ImageUtils.loadTexture("../assets/textures/ash_uvgrid01.jpg");
 //        var mat = new THREE.MeshBasicMaterial();
         var mat = new THREE.MeshBasicMaterial({map: texture});
-        var geom = new THREE.BoxGeometry(24,24,24);
+        var geom = new THREE.BoxGeometry(24, 24, 24);
         var mesh = new THREE.Mesh(geom, mat);
 
-        mesh.rotation.z = 0.5*Math.PI;
-        mesh.rotation.y = 0.2*Math.PI;
-        mesh.rotation.x = 0.2*Math.PI;
+        mesh.rotation.z = 0.5 * Math.PI;
+        mesh.rotation.y = 0.2 * Math.PI;
+        mesh.rotation.x = 0.2 * Math.PI;
         scene.add(mesh);
 
         console.log(geom.faceVertexUvs[0][0]);
@@ -82,15 +82,33 @@
             this.uv4 = geom.faceVertexUvs[0][0][1].y;
             this.uv5 = geom.faceVertexUvs[0][0][2].x;
             this.uv6 = geom.faceVertexUvs[0][0][2].y;
-        }
+        };
 
         var gui = new dat.GUI();
-        gui.add(controls, 'uv1', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][0].x = e; geom.uvsNeedUpdate = true});
-        gui.add(controls, 'uv2', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][0].y = e; geom.uvsNeedUpdate = true});
-        gui.add(controls, 'uv3', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][1].x = e; geom.uvsNeedUpdate = true});
-        gui.add(controls, 'uv4', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][1].y = e; geom.uvsNeedUpdate = true});
-        gui.add(controls, 'uv5', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][2].x = e; geom.uvsNeedUpdate = true});
-        gui.add(controls, 'uv6', 0, 1).onChange(function(e) {geom.faceVertexUvs[0][0][2].y = e; geom.uvsNeedUpdate = true});
+        gui.add(controls, 'uv1', 0, 1).onChange(function (e) {
+            geom.faceVertexUvs[0][0][0].x = e;
+            geom.uvsNeedUpdate = true
+        });
+        gui.add(controls, 'uv2', 0, 1).onChange(function (e) {
+            geom.faceVertexUvs[0][0][0].y = e;
+            geom.uvsNeedUpdate = true
+        });
+        gui.add(controls, 'uv3', 0, 1).onChange(function (e) {
+            geom.faceVertexUvs[0][0][1].x = e;
+            geom.uvsNeedUpdate = true
+        });
+        gui.add(controls, 'uv4', 0, 1).onChange(function (e) {
+            geom.faceVertexUvs[0][0][1].y = e;
+            geom.uvsNeedUpdate = true
+        });
+        gui.add(controls, 'uv5', 0, 1).onChange(function (e) {
+            geom.faceVertexUvs[0][0][2].x = e;
+            geom.uvsNeedUpdate = true
+        });
+        gui.add(controls, 'uv6', 0, 1).onChange(function (e) {
+            geom.faceVertexUvs[0][0][2].y = e;
+            geom.uvsNeedUpdate = true
+        });
 
 
 //        controls.loadCube1();
@@ -124,13 +142,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

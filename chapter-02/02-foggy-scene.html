@@ -5,11 +5,11 @@
 <head>
     <title>Example 02.02 - Foggy Scene</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -28,14 +28,14 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
         // create a scene, that will hold all our elements such as objects, cameras and lights.
         var scene = new THREE.Scene();
         //scene.fog=new THREE.FogExp2( 0xffffff, 0.015 );
-        scene.fog=new THREE.Fog( 0xffffff, 0.015, 100 );
+        scene.fog = new THREE.Fog(0xffffff, 0.015, 100);
 
         // create a camera, which defines where we're looking at.
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -48,16 +48,16 @@
         renderer.shadowMapEnabled = true;
 
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(60,40,1,1);
-        var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});
-        var plane = new THREE.Mesh(planeGeometry,planeMaterial);
-        plane.receiveShadow  = true;
+        var planeGeometry = new THREE.PlaneGeometry(60, 40, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.receiveShadow = true;
 
         // rotate and position the plane
-        plane.rotation.x=-0.5*Math.PI;
-        plane.position.x=0
-        plane.position.y=0
-        plane.position.z=0
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 0;
+        plane.position.y = 0;
+        plane.position.z = 0;
 
         // add the plane to the scene
         scene.add(plane);
@@ -73,55 +73,55 @@
         scene.add(ambientLight);
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( -40, 60, -10 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 60, -10);
         spotLight.castShadow = true;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(renderer.domElement);
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
-        var controls = new function() {
+        var controls = new function () {
             this.rotationSpeed = 0.02;
             this.numberOfObjects = scene.children.length;
 
-            this.removeCube = function() {
+            this.removeCube = function () {
                 var allChildren = scene.children;
-                var lastObject = allChildren[allChildren.length-1];
+                var lastObject = allChildren[allChildren.length - 1];
                 if (lastObject instanceof THREE.Mesh) {
                     scene.remove(lastObject);
                     this.numberOfObjects = scene.children.length;
                 }
-            }
+            };
 
-            this.addCube = function() {
+            this.addCube = function () {
 
                 var cubeSize = Math.ceil((Math.random() * 3));
-                var cubeGeometry = new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize);
-                var cubeMaterial = new THREE.MeshLambertMaterial({color:  Math.random() * 0xffffff });
+                var cubeGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+                var cubeMaterial = new THREE.MeshLambertMaterial({color: Math.random() * 0xffffff});
                 var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
                 cube.castShadow = true;
 
                 // position the cube randomly in the scene
-                cube.position.x=-30 + Math.round((Math.random() * planeGeometry.parameters.width));
-                cube.position.y= Math.round((Math.random() * 5));
-                cube.position.z=-20 + Math.round((Math.random() * planeGeometry.parameters.height));
+                cube.position.x = -30 + Math.round((Math.random() * planeGeometry.parameters.width));
+                cube.position.y = Math.round((Math.random() * 5));
+                cube.position.z = -20 + Math.round((Math.random() * planeGeometry.parameters.height));
 
                 // add the cube to the scene
                 scene.add(cube);
                 this.numberOfObjects = scene.children.length;
             };
 
-            this.outputObjects = function() {
+            this.outputObjects = function () {
                 console.log(scene.children);
             }
-        }
+        };
 
         var gui = new dat.GUI();
-        gui.add(controls, 'rotationSpeed',0,0.5);
+        gui.add(controls, 'rotationSpeed', 0, 0.5);
         gui.add(controls, 'addCube');
         gui.add(controls, 'removeCube');
         gui.add(controls, 'outputObjects');
@@ -133,12 +133,12 @@
             stats.update();
 
             // rotate the cubes around its axes
-            scene.traverse(function(e) {
-                if (e instanceof THREE.Mesh && e != plane ) {
+            scene.traverse(function (e) {
+                if (e instanceof THREE.Mesh && e != plane) {
 
-                    e.rotation.x+=controls.rotationSpeed;
-                    e.rotation.y+=controls.rotationSpeed;
-                    e.rotation.z+=controls.rotationSpeed;
+                    e.rotation.x += controls.rotationSpeed;
+                    e.rotation.y += controls.rotationSpeed;
+                    e.rotation.z += controls.rotationSpeed;
                 }
             });
 
@@ -158,12 +158,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
+    }
+    window.onload = init
 
 
 </script>

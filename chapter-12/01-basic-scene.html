@@ -35,7 +35,7 @@
 
         initScene = function () {
 
-            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setSize(window.innerWidth, window.innerHeight);
 
             renderer.setClearColor(new THREE.Color(0x000000));
@@ -115,7 +115,7 @@
                     stones[0].__dirtyRotation = true;
 
                 };
-            }
+            };
 
             var gui = new dat.GUI();
             gui.add(controls, 'gravityX', -100, 100);
@@ -162,7 +162,7 @@
 
         function createGround() {
             var ground_material = Physijs.createMaterial(
-                    new THREE.MeshPhongMaterial({ map: THREE.ImageUtils.loadTexture('../assets/textures/general/wood-2.jpg') }),
+                    new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture('../assets/textures/general/wood-2.jpg')}),
                     .9, .3);
 
             var ground = new Physijs.BoxMesh(new THREE.BoxGeometry(60, 1, 60), ground_material, 0);

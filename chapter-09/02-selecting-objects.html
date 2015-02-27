@@ -5,7 +5,7 @@
 <head>
     <title>Example 09.02 - Selecting objects</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/Projector.js"></script>
@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -58,9 +58,9 @@
 
         // rotate and position the plane
         plane.rotation.x = -0.5 * Math.PI;
-        plane.position.x = 15
-        plane.position.y = 0
-        plane.position.z = 0
+        plane.position.x = 15;
+        plane.position.y = 0;
+        plane.position.z = 0;
 
         // add the plane to the scene
         scene.add(plane);
@@ -116,7 +116,7 @@
         scene.add(spotLight);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(renderer.domElement);
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
         // call the render function
         var step = 0;
@@ -127,7 +127,7 @@
             this.bouncingSpeed = 0.03;
             this.scalingSpeed = 0.03;
             this.showRay = false;
-        }
+        };
 
         var gui = new dat.GUI();
         gui.add(controls, 'rotationSpeed', 0, 0.5);
@@ -181,8 +181,8 @@
 
                 console.log(intersects[0]);
 
-                intersects[ 0 ].object.material.transparent = true;
-                intersects[ 0 ].object.material.opacity = 0.1;
+                intersects[0].object.material.transparent = true;
+                intersects[0].object.material.opacity = 0.1;
             }
         }
 
@@ -224,13 +224,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

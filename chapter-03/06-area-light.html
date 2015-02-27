@@ -5,7 +5,7 @@
 <head>
     <title>Example 03.06 - Area Light</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/WebGLDeferredRenderer.js"></script>
@@ -39,7 +39,7 @@
     var camera;
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -57,22 +57,23 @@
             width: window.innerWidth,
             height: window.innerHeight,
             scale: 1, antialias: true,
-            tonemapping: THREE.FilmicOperator, brightness: 2.5 });
+            tonemapping: THREE.FilmicOperator, brightness: 2.5
+        });
 
 //        renderer.setSize(window.innerWidth, window.innerHeight);
 //        renderer.shadowMapEnabled = true;
 
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(70, 70, 1, 1);
-        var planeMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, specular: 0xffffff, shininess: 200 });
+        var planeMaterial = new THREE.MeshPhongMaterial({color: 0xffffff, specular: 0xffffff, shininess: 200});
         var plane = new THREE.Mesh(planeGeometry, planeMaterial);
         // plane.receiveShadow  = true;
 
         // rotate and position the plane
         plane.rotation.x = -0.5 * Math.PI;
-        plane.position.x = 0
-        plane.position.y = 0
-        plane.position.z = 0
+        plane.position.x = 0;
+        plane.position.y = 0;
+        plane.position.z = 0;
 
         // add the plane to the scene
         scene.add(plane);
@@ -84,7 +85,7 @@
         camera.lookAt(new THREE.Vector3(0, 0, -30));
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(renderer.domElement);
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
         // call the render function
         var step = 0;
@@ -119,21 +120,21 @@
         scene.add(areaLight3);
 
         var planeGeometry1 = new THREE.BoxGeometry(4, 10, 0);
-        var planeGeometry1Mat = new THREE.MeshBasicMaterial({color: 0xff0000})
+        var planeGeometry1Mat = new THREE.MeshBasicMaterial({color: 0xff0000});
         var plane1 = new THREE.Mesh(planeGeometry1, planeGeometry1Mat);
         plane1.position.copy(areaLight1.position);
         scene.add(plane1);
 
 
         var planeGeometry2 = new THREE.BoxGeometry(4, 10, 0);
-        var planeGeometry2Mat = new THREE.MeshBasicMaterial({color: 0x00ff00})
+        var planeGeometry2Mat = new THREE.MeshBasicMaterial({color: 0x00ff00});
         var plane2 = new THREE.Mesh(planeGeometry2, planeGeometry2Mat);
 
         plane2.position.copy(areaLight2.position);
         scene.add(plane2);
 
         var planeGeometry3 = new THREE.BoxGeometry(4, 10, 0);
-        var planeGeometry3Mat = new THREE.MeshBasicMaterial({color: 0x0000ff})
+        var planeGeometry3Mat = new THREE.MeshBasicMaterial({color: 0x0000ff});
         var plane3 = new THREE.Mesh(planeGeometry3, planeGeometry3Mat);
 
         plane3.position.copy(areaLight3.position);
@@ -148,7 +149,7 @@
             this.intensity2 = 2;
             this.color3 = 0x0000ff;
             this.intensity3 = 2;
-        }
+        };
 
         var gui = new dat.GUI();
         gui.addColor(controls, 'color1').onChange(function (e) {
@@ -208,13 +209,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <head>
     <title>Example 10.01 - Basic textures</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/TGALoader.js"></script>
@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -62,7 +62,7 @@
         camera.position.z = 28;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-        var ambiLight = new THREE.AmbientLight(0x141414)
+        var ambiLight = new THREE.AmbientLight(0x141414);
         scene.add(ambiLight);
 
         var light = new THREE.DirectionalLight();
@@ -70,7 +70,7 @@
         scene.add(light);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         // call the render function
         var step = 0;
@@ -88,7 +88,7 @@
 
         function createMesh(geom, imageFile) {
             var loader = new THREE.TGALoader();
-            var texture = loader.load( '../assets/textures/crate_color8.tga' );
+            var texture = loader.load('../assets/textures/crate_color8.tga');
             var mat = new THREE.MeshPhongMaterial();
             mat.map = texture;
 
@@ -121,13 +121,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

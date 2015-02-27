@@ -5,7 +5,7 @@
 <head>
     <title>Example 07.09 - Sprites in 3D</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -30,7 +30,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -51,7 +51,7 @@
         camera.position.z = 150;
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
 
         createSprites();
@@ -83,12 +83,13 @@
                         opacity: opacity,
                         color: color,
                         transparent: transparent,
-                        map: getTexture()}
+                        map: getTexture()
+                    }
             );
 
             // we have 1 row, with five sprites
-            spriteMaterial.map.offset = new THREE.Vector2(0.2*spriteNumber, 0);
-            spriteMaterial.map.repeat = new THREE.Vector2(1/5, 1);
+            spriteMaterial.map.offset = new THREE.Vector2(0.2 * spriteNumber, 0);
+            spriteMaterial.map.repeat = new THREE.Vector2(1 / 5, 1);
             spriteMaterial.depthTest = false;
 
             spriteMaterial.blending = THREE.AdditiveBlending;
@@ -125,15 +126,14 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
 
 
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

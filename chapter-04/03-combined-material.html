@@ -5,7 +5,7 @@
 <head>
     <title>Example 04.03 - Combined Material</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -28,7 +28,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -56,7 +56,7 @@
         camera.lookAt(scene.position);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(renderer.domElement);
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
         // call the render function
         var step = 0;
@@ -66,6 +66,8 @@
             this.cameraFar = camera.far;
             this.rotationSpeed = 0.02;
             this.numberOfObjects = scene.children.length;
+            this.color = 0x00ff00;
+
 
             this.removeCube = function () {
                 var allChildren = scene.children;
@@ -74,7 +76,7 @@
                     scene.remove(lastObject);
                     this.numberOfObjects = scene.children.length;
                 }
-            }
+            };
 
             this.addCube = function () {
 
@@ -83,7 +85,11 @@
 
                 //var cubeMaterial = new THREE.MeshLambertMaterial({color:  Math.random() * 0xffffff });
                 var cubeMaterial = new THREE.MeshDepthMaterial();
-                var colorMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00, transparent: true, blending: THREE.MultiplyBlending})
+                var colorMaterial = new THREE.MeshBasicMaterial({
+                    color: controls.color,
+                    transparent: true,
+                    blending: THREE.MultiplyBlending
+                });
                 var cube = new THREE.SceneUtils.createMultiMaterialObject(cubeGeometry, [colorMaterial, cubeMaterial]);
                 cube.children[1].scale.set(0.99, 0.99, 0.99);
                 cube.castShadow = true;
@@ -101,9 +107,10 @@
             this.outputObjects = function () {
                 console.log(scene.children);
             }
-        }
+        };
 
         var gui = new dat.GUI();
+        gui.addColor(controls, 'color');
         gui.add(controls, 'rotationSpeed', 0, 0.5);
         gui.add(controls, 'addCube');
         gui.add(controls, 'removeCube');
@@ -114,6 +121,11 @@
             camera.far = e;
         });
 
+        var i = 0;
+        while (i < 10) {
+            controls.addCube();
+            i++;
+        }
 
         render();
 
@@ -146,13 +158,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

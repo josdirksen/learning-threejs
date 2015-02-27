@@ -5,7 +5,7 @@
 <head>
     <title>Example 04.08 - Shader material - http://glsl.heroku.com/</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -32,6 +32,7 @@
     //gl_Position = projectionMatrix * modelViewMatrix * vec4(position*(abs(sin(time)/2.0)+0.5),1.0);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(posChanged,1.0);
     }
+
 </script>
 
 <script id="fragment-shader-1" type="x-shader/x-fragment">
@@ -77,6 +78,7 @@
 
     gl_FragColor = vec4(col*1.0, -col*1.0,-col*4.0, 1.0);
     }
+
 
 </script>
 
@@ -160,6 +162,7 @@
 
     gl_FragColor = vec4( hsvtorgb(dd+time*0.5/d1, sin(dd*time), d2), 1.0 );
     }
+
 </script>
 
 <script id="fragment-shader-3" type="x-shader/x-fragment">
@@ -203,6 +206,7 @@
     }
     gl_FragColor = vec4(color);
     }
+
 </script>
 
 <script id="fragment-shader-4" type="x-shader/x-fragment">
@@ -253,6 +257,7 @@
     }
     gl_FragColor = vec4(color,mix(color,cos(color),sin(color)),color,1);
     }
+
 </script>
 
 <script id="fragment-shader-5" type="x-shader/x-fragment">
@@ -281,6 +286,7 @@
     if(a<0.5) a=a*22.5;
     gl_FragColor = vec4( cos(a/20.0),a*cos(a/200.0),sin(a/8.0), 1.0 );
     }
+
 
 </script>
 
@@ -315,6 +321,7 @@
     vec4 color_final = vec4(color, 1.0);
     gl_FragColor = color_final;
     }
+
 </script>
 
 <div id="Stats-output">
@@ -327,7 +334,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -357,11 +364,11 @@
 
         var material = new THREE.MeshFaceMaterial(
                 [meshMaterial1,
-                 meshMaterial2,
-                 meshMaterial3,
-                 meshMaterial4,
-                 meshMaterial5,
-                 meshMaterial6]);
+                    meshMaterial2,
+                    meshMaterial3,
+                    meshMaterial4,
+                    meshMaterial5,
+                    meshMaterial6]);
 //        var material = new THREE.MeshFaceMaterial([meshMaterial2, meshMaterial2, meshMaterial1, meshMaterial1, meshMaterial1, meshMaterial1]);
 
         var cube = new THREE.Mesh(cubeGeometry, material);
@@ -387,7 +394,7 @@
         scene.add(spotLight);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(renderer.domElement);
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
         // call the render function
         var step = 0;
@@ -410,7 +417,7 @@
 
             this.shadow = "flat";
 
-        }
+        };
 
 
         render();
@@ -445,7 +452,7 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
@@ -459,7 +466,7 @@
                 time: {type: 'f', value: 0.2},
                 scale: {type: 'f', value: 0.2},
                 alpha: {type: 'f', value: 0.6},
-                resolution: { type: "v2", value: new THREE.Vector2() }
+                resolution: {type: "v2", value: new THREE.Vector2()}
             };
 
             uniforms.resolution.value.x = window.innerWidth;
@@ -479,9 +486,8 @@
         }
 
 
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

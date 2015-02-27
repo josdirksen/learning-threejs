@@ -5,7 +5,7 @@
 <head>
     <title>Example 06.04 - Extrude TubeGeometry</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -28,7 +28,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -51,7 +51,7 @@
         camera.lookAt(new THREE.Vector3(10, 0, 0));
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         // call the render function
         var step = 0;
@@ -84,7 +84,7 @@
                 }
                 controls.points = points;
                 controls.redraw();
-            }
+            };
 
             this.redraw = function () {
                 scene.remove(spGroup);
@@ -92,7 +92,7 @@
                 generatePoints(controls.points, controls.segments, controls.radius, controls.radiusSegments, controls.closed);
             };
 
-        }
+        };
 
         var gui = new dat.GUI();
         gui.add(controls, 'newPoints');
@@ -166,13 +166,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

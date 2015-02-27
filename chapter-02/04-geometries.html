@@ -7,11 +7,11 @@
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/ParametricGeometries.js"></script>
     <script type="text/javascript" src="../libs/ConvexGeometry.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -30,7 +30,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -48,16 +48,16 @@
         renderer.shadowMapEnabled = true;
 
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(60,40,1,1);
-        var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});
-        var plane = new THREE.Mesh(planeGeometry,planeMaterial);
-        plane.receiveShadow  = true;
+        var planeGeometry = new THREE.PlaneGeometry(60, 40, 1, 1);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.receiveShadow = true;
 
         // rotate and position the plane
-        plane.rotation.x=-0.5*Math.PI;
-        plane.position.x=0
-        plane.position.y=0
-        plane.position.z=0
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 0;
+        plane.position.y = 0;
+        plane.position.z = 0;
 
         // add the plane to the scene
         scene.add(plane);
@@ -66,27 +66,26 @@
         camera.position.x = -50;
         camera.position.y = 30;
         camera.position.z = 20;
-        camera.lookAt(new THREE.Vector3(-10,0,0));
+        camera.lookAt(new THREE.Vector3(-10, 0, 0));
 
         // add subtle ambient lighting
         var ambientLight = new THREE.AmbientLight(0x090909);
         scene.add(ambientLight);
 
         // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set( -40, 40, 50 );
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 40, 50);
         spotLight.castShadow = true;
-        scene.add( spotLight );
+        scene.add(spotLight);
 
         // add geometries
         addGeometries(scene);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(renderer.domElement);
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
         // call the render function
-        var step=0;
-
+        var step = 0;
 
 
         render();
@@ -95,10 +94,10 @@
         function addGeometries(scene) {
             var geoms = [];
 
-            geoms.push(new THREE.CylinderGeometry(1,4,4));
+            geoms.push(new THREE.CylinderGeometry(1, 4, 4));
 
             // basic cube
-            geoms.push(new THREE.BoxGeometry(2,2,2));
+            geoms.push(new THREE.BoxGeometry(2, 2, 2));
 
             // basic spherer
             geoms.push(new THREE.SphereGeometry(2));
@@ -109,14 +108,14 @@
             // using a couple of points
             // for instance a cube
             var points = [
-                new THREE.Vector3( 2, 2, 2 ),
-                new THREE.Vector3( 2, 2, -2 ),
-                new THREE.Vector3( -2, 2, -2 ),
-                new THREE.Vector3( -2, 2, 2 ),
-                new THREE.Vector3( 2, -2, 2 ),
-                new THREE.Vector3( 2, -2, -2 ),
-                new THREE.Vector3( -2, -2, -2 ),
-                new THREE.Vector3( -2, -2, 2 )
+                new THREE.Vector3(2, 2, 2),
+                new THREE.Vector3(2, 2, -2),
+                new THREE.Vector3(-2, 2, -2),
+                new THREE.Vector3(-2, 2, 2),
+                new THREE.Vector3(2, -2, 2),
+                new THREE.Vector3(2, -2, -2),
+                new THREE.Vector3(-2, -2, -2),
+                new THREE.Vector3(-2, -2, 2)
             ];
             geoms.push(new THREE.ConvexGeometry(points));
 
@@ -125,44 +124,46 @@
             var pts = [];//points array - the path profile points will be stored here
             var detail = .1;//half-circle detail - how many angle increments will be used to generate points
             var radius = 3;//radius for half_sphere
-            for(var angle = 0.0; angle < Math.PI ; angle+= detail)//loop from 0.0 radians to PI (0 - 180 degrees)
-                pts.push(new THREE.Vector3(Math.cos(angle) * radius,0,Math.sin(angle) * radius));//angle/radius to x,z
-            geoms.push(new THREE.LatheGeometry( pts, 12 ));
+            for (var angle = 0.0; angle < Math.PI; angle += detail)//loop from 0.0 radians to PI (0 - 180 degrees)
+                pts.push(new THREE.Vector3(Math.cos(angle) * radius, 0, Math.sin(angle) * radius));//angle/radius to x,z
+            geoms.push(new THREE.LatheGeometry(pts, 12));
 
             // create a OctahedronGeometry
             geoms.push(new THREE.OctahedronGeometry(3));
 
             // create a geometry based on a function
-            geoms.push(new THREE.ParametricGeometry( THREE.ParametricGeometries.mobius3d, 20, 10 ));
+            geoms.push(new THREE.ParametricGeometry(THREE.ParametricGeometries.mobius3d, 20, 10));
 
             //
             geoms.push(new THREE.TetrahedronGeometry(3));
 
-            geoms.push(new THREE.TorusGeometry(3,1,10,10));
+            geoms.push(new THREE.TorusGeometry(3, 1, 10, 10));
 
-            geoms.push(new THREE.TorusKnotGeometry(3,0.5,50,20));
+            geoms.push(new THREE.TorusKnotGeometry(3, 0.5, 50, 20));
 
-            var j=0;
-            for (var i = 0 ; i < geoms.length ; i++) {
-                var cubeMaterial = new THREE.MeshLambertMaterial({wireframe: true, color:  Math.random() * 0xffffff });
+            var j = 0;
+            for (var i = 0; i < geoms.length; i++) {
+                var cubeMaterial = new THREE.MeshLambertMaterial({wireframe: true, color: Math.random() * 0xffffff});
 
                 var materials = [
 
-                    new THREE.MeshLambertMaterial( { color:  Math.random() * 0xffffff, shading: THREE.FlatShading } ),
-                    new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } )
+                    new THREE.MeshLambertMaterial({color: Math.random() * 0xffffff, shading: THREE.FlatShading}),
+                    new THREE.MeshBasicMaterial({color: 0x000000, wireframe: true})
 
                 ];
 
-                var mesh = THREE.SceneUtils.createMultiMaterialObject(geoms[i],materials);
-                mesh.traverse(function(e) {e.castShadow=true});
+                var mesh = THREE.SceneUtils.createMultiMaterialObject(geoms[i], materials);
+                mesh.traverse(function (e) {
+                    e.castShadow = true
+                });
 
                 //var mesh = new THREE.Mesh(geoms[i],materials[i]);
                 //mesh.castShadow=true;
-                mesh.position.x=-24+((i%4)*12);
-                mesh.position.y=4;
-                mesh.position.z=-8+(j*12);
+                mesh.position.x = -24 + ((i % 4) * 12);
+                mesh.position.y = 4;
+                mesh.position.z = -8 + (j * 12);
 
-                if ((i+1)%4==0) j++;
+                if ((i + 1) % 4 == 0) j++;
                 scene.add(mesh);
             }
 
@@ -187,12 +188,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
+    }
+    window.onload = init
 
 
 </script>

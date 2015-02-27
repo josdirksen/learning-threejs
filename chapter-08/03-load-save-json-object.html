@@ -5,7 +5,7 @@
 <head>
     <title>Example 08.03 - Save & Load</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -28,7 +28,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -55,7 +55,7 @@
         camera.lookAt(new THREE.Vector3(-20, 0, 0));
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         // call the render function
         var step = 0;
@@ -88,7 +88,7 @@
             this.save = function () {
                 var result = knot.toJSON();
                 localStorage.setItem("json", JSON.stringify(result));
-            }
+            };
 
             this.load = function () {
 
@@ -101,18 +101,16 @@
                     var loader = new THREE.ObjectLoader();
 
                     loadedMesh = loader.parse(loadedGeometry);
-                    loadedMesh.position.x-=50;
+                    loadedMesh.position.x -= 50;
                     scene.add(loadedMesh);
                 }
             }
-        }
+        };
 
         var gui = new dat.GUI();
         var ioGui = gui.addFolder('Save & Load');
         ioGui.add(controls, 'save').onChange(controls.save);
         ioGui.add(controls, 'load').onChange(controls.load);
-        ;
-
         var meshGui = gui.addFolder('mesh');
         meshGui.add(controls, 'radius', 0, 40).onChange(controls.redraw);
         meshGui.add(controls, 'tube', 0, 40).onChange(controls.redraw);
@@ -128,7 +126,12 @@
         function createMesh(geom) {
 
             // assign two materials
-            var meshMaterial = new THREE.MeshBasicMaterial({vertexColors: THREE.VertexColors, wireframe: true, wireframeLinewidth: 2, color: 0xaaaaaa});
+            var meshMaterial = new THREE.MeshBasicMaterial({
+                vertexColors: THREE.VertexColors,
+                wireframe: true,
+                wireframeLinewidth: 2,
+                color: 0xaaaaaa
+            });
             meshMaterial.side = THREE.DoubleSide;
 
             // create a multimaterial
@@ -157,13 +160,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 
 </body>

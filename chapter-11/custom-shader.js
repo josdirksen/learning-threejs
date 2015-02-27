@@ -2,10 +2,10 @@ THREE.CustomGrayScaleShader = {
 
     uniforms: {
 
-        "tDiffuse": { type: "t", value: null },
-        "rPower":  { type: "f", value: 0.2126 },
-        "gPower":  { type: "f", value: 0.7152 },
-        "bPower":  { type: "f", value: 0.0722 }
+        "tDiffuse": {type: "t", value: null},
+        "rPower": {type: "f", value: 0.2126},
+        "gPower": {type: "f", value: 0.7152},
+        "bPower": {type: "f", value: 0.0722}
 
     },
 
@@ -59,8 +59,8 @@ THREE.CustomBitShader = {
 
     uniforms: {
 
-        "tDiffuse": { type: "t", value: null },
-        "bitSize":  { type: "i", value: 4 }
+        "tDiffuse": {type: "t", value: null},
+        "bitSize": {type: "i", value: 4}
 
     },
 

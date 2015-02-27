@@ -5,7 +5,7 @@
 <head>
     <title>Example 07.04 - Particles - Canvas based texture</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -30,7 +30,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -52,7 +52,7 @@
         camera.position.z = 150;
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(canvasRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(canvasRenderer.domElement);
 
         var getTexture = function () {
 
@@ -108,7 +108,7 @@
             texture.needsUpdate = true;
             return texture;
 
-        }
+        };
 
         createSprites();
         render();
@@ -118,13 +118,13 @@
             var material = new THREE.SpriteMaterial({
                 map: getTexture(),
                 color: 0xffffff
-                });
+            });
 
             var range = 500;
             for (var i = 0; i < 1500; i++) {
                 var sprite = new THREE.Sprite(material);
                 sprite.position.set(Math.random() * range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2);
-                sprite.scale.set(4,4,4);
+                sprite.scale.set(4, 4, 4);
                 scene.add(sprite);
             }
         }
@@ -150,15 +150,14 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
 
 
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

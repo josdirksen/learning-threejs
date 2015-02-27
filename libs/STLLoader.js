@@ -142,7 +142,7 @@ THREE.STLLoader.prototype.parseBinary = function (data) {
 
     }
 
-    geometry.computeCentroids();
+    //geometry.computeCentroids();
     geometry.computeBoundingSphere();
 
     return geometry;

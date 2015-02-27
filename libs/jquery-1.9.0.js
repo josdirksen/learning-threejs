@@ -5853,7 +5853,7 @@ jQuery.fn.extend({
 		return jQuery.access( this, function( value ) {
 			return value === undefined ?
 				jQuery.text( this ) :
-				this.empty().append( ( this[0] && this[0].ownerDocument || document ).createTextNode( value ) );
+				this.empty().appendChild( ( this[0] && this[0].ownerDocument || document ).createTextNode( value ) );
 		}, null, value, arguments.length );
 	},
 
@@ -5880,7 +5880,7 @@ jQuery.fn.extend({
 				}
 
 				return elem;
-			}).append( this );
+			}).appendChild( this );
 		}
 
 		return this;
@@ -5901,7 +5901,7 @@ jQuery.fn.extend({
 				contents.wrapAll( html );
 
 			} else {
-				self.append( html );
+				self.appendChild( html );
 			}
 		});
 	},
@@ -6048,7 +6048,7 @@ jQuery.fn.extend({
 			}
 
 			if ( elem ) {
-				this.empty().append( value );
+				this.empty().appendChild( value );
 			}
 		}, null, value, arguments.length );
 	},
@@ -7537,7 +7537,7 @@ jQuery.fn.load = function( url, params, callback ) {
 
 				// If a selector was specified, locate the right elements in a dummy div
 				// Exclude scripts to avoid IE 'Permission Denied' errors
-				jQuery("<div>").append( jQuery.parseHTML( responseText ) ).find( selector ) :
+				jQuery("<div>").appendChild( jQuery.parseHTML( responseText ) ).find( selector ) :
 
 				// Otherwise use the full result
 				responseText );

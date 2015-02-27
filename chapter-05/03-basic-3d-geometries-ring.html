@@ -5,7 +5,7 @@
 <head>
     <title>Example 05.03 - Basic 2D geometries - Ring</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -28,7 +28,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -55,7 +55,7 @@
         camera.lookAt(new THREE.Vector3(10, 0, 0));
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         // call the render function
         var step = 0;
@@ -70,7 +70,7 @@
             this.thetaSegments = 8;
             this.phiSegments = 8;
             this.thetaStart = 0;
-            this.thetaLength = Math.PI*2;
+            this.thetaLength = Math.PI * 2;
 
             this.redraw = function () {
                 // remove the old plane
@@ -81,7 +81,7 @@
                 // add it to the scene.
                 scene.add(torus);
             };
-        }
+        };
 
         var gui = new dat.GUI();
         gui.add(controls, 'innerRadius', 0, 40).onChange(controls.redraw);
@@ -128,13 +128,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

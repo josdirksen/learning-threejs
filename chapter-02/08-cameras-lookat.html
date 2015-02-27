@@ -5,11 +5,11 @@
 <head>
     <title>Example 02.08 - Cameras</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
-        body{
+        body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
             margin: 0;
             overflow: hidden;
@@ -28,7 +28,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -48,43 +48,42 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
 
         // create the ground plane
-        var planeGeometry = new THREE.PlaneGeometry(180,180);
-        var planeMaterial =    new THREE.MeshLambertMaterial({color: 0xffffff});
-        var plane = new THREE.Mesh(planeGeometry,planeMaterial);
+        var planeGeometry = new THREE.PlaneGeometry(180, 180);
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
 
         // rotate and position the plane
-        plane.rotation.x=-0.5*Math.PI;
-        plane.position.x=0
-        plane.position.y=0
-        plane.position.z=0
+        plane.rotation.x = -0.5 * Math.PI;
+        plane.position.x = 0;
+        plane.position.y = 0;
+        plane.position.z = 0;
 
         // add the plane to the scene
         scene.add(plane);
 
-        var cubeGeometry = new THREE.BoxGeometry(4,4,4);
+        var cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
         var cubeMaterial = new THREE.MeshLambertMaterial({color: 0x00ee22});
-        for (var j = 0 ; j < (planeGeometry.parameters.height/5) ; j++) {
-            for (var i = 0 ; i < planeGeometry.parameters.width/5 ; i++) {
+        for (var j = 0; j < (planeGeometry.parameters.height / 5); j++) {
+            for (var i = 0; i < planeGeometry.parameters.width / 5; i++) {
                 var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
-                cube.position.z=-((planeGeometry.parameters.height)/2)+2+(j*5);
-                cube.position.x=-((planeGeometry.parameters.width)/2)+2+(i*5);
-                cube.position.y=2;
+                cube.position.z = -((planeGeometry.parameters.height) / 2) + 2 + (j * 5);
+                cube.position.x = -((planeGeometry.parameters.width) / 2) + 2 + (i * 5);
+                cube.position.y = 2;
 
                 scene.add(cube);
             }
         }
 
         var lookAtGeom = new THREE.SphereGeometry(2);
-        var lookAtMesh = new THREE.Mesh(lookAtGeom,new THREE.MeshLambertMaterial({color: 0xff0000}));
+        var lookAtMesh = new THREE.Mesh(lookAtGeom, new THREE.MeshLambertMaterial({color: 0xff0000}));
         scene.add(lookAtMesh);
 
 
-        var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.7 );
-        directionalLight.position.set( -20, 40, 60 );
+        var directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+        directionalLight.position.set(-20, 40, 60);
         scene.add(directionalLight);
-
 
 
         // add subtle ambient lighting
@@ -92,16 +91,16 @@
         scene.add(ambientLight);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(renderer.domElement);
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
         // call the render function
-        var step=0;
+        var step = 0;
 
-        var controls = new function() {
+        var controls = new function () {
             this.perspective = "Perspective";
-            this.switchCamera = function() {
+            this.switchCamera = function () {
                 if (camera instanceof THREE.PerspectiveCamera) {
-                    camera = new THREE.OrthographicCamera( window.innerWidth / - 16, window.innerWidth / 16, window.innerHeight / 16, window.innerHeight / - 16, -200, 500 );
+                    camera = new THREE.OrthographicCamera(window.innerWidth / -16, window.innerWidth / 16, window.innerHeight / 16, window.innerHeight / -16, -200, 500);
                     camera.position.x = 120;
                     camera.position.y = 60;
                     camera.position.z = 180;
@@ -118,7 +117,7 @@
                     this.perspective = "Perspective";
                 }
             };
-        }
+        };
 
         var gui = new dat.GUI();
         gui.add(controls, 'switchCamera');
@@ -126,21 +125,21 @@
 
         // make sure that for the first time, the
         // camera is looking at the scene
-     //   camera.lookAt(scene.position);
+        //   camera.lookAt(scene.position);
         render();
 
 
-        var step=0;
+        var step = 0;
 
         function render() {
 
             stats.update();
             // render using requestAnimationFrame
-            step+=0.02;
+            step += 0.02;
             if (camera instanceof THREE.Camera) {
-                var x = 10+( 100*(Math.sin(step)));
-                camera.lookAt(new THREE.Vector3(x,10,0));
-                lookAtMesh.position.copy(new THREE.Vector3(x,10,0));
+                var x = 10 + ( 100 * (Math.sin(step)));
+                camera.lookAt(new THREE.Vector3(x, 10, 0));
+                lookAtMesh.position.copy(new THREE.Vector3(x, 10, 0));
             }
 
 //        .position.x = 20+( 10*(Math.cos(step)));
@@ -159,12 +158,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append( stats.domElement );
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
+    }
+    window.onload = init
 
 
 </script>

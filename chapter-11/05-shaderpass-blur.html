@@ -5,7 +5,7 @@
 <head>
     <title>Example 11.04 - Shader Pass simple</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/chroma.js"></script>
@@ -44,7 +44,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var scale = chroma.scale(['white', 'blue']);
 
@@ -115,7 +115,8 @@
             for (var j = -15; j < 15; j++) {
                 var cube = new THREE.Mesh(new THREE.BoxGeometry(3, 4, 3),
                         new THREE.MeshPhongMaterial(
-                                {color: scale(Math.random()).hex(),
+                                {
+                                    color: scale(Math.random()).hex(),
                                     opacity: 0.8,
                                     transparent: true
                                 }));
@@ -129,7 +130,7 @@
 
         // add the output of the renderer to the html element
 
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         var hBlur = new THREE.ShaderPass(THREE.HorizontalBlurShader);
         hBlur.enabled = false;
@@ -228,13 +229,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

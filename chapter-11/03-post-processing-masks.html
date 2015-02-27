@@ -4,7 +4,7 @@
 <head>
     <title>Example 11.03 - Post processing masks</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/OrbitControls.js"></script>
@@ -46,7 +46,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -100,14 +100,17 @@
         sceneEarth.add(spotLight);
         sceneMars.add(spotLight2);
 
-        var materialColor = new THREE.MeshBasicMaterial({ map: THREE.ImageUtils.loadTexture("../assets/textures/starry-deep-outer-space-galaxy.jpg"), depthTest: false });
+        var materialColor = new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture("../assets/textures/starry-deep-outer-space-galaxy.jpg"),
+            depthTest: false
+        });
         var bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), materialColor);
         bgPlane.position.z = -100;
         bgPlane.scale.set(window.innerWidth * 2, window.innerHeight * 2, 1);
         sceneBG.add(bgPlane);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         var bgPass = new THREE.RenderPass(sceneBG, cameraBG);
         var renderPass = new THREE.RenderPass(sceneEarth, camera);
@@ -133,7 +136,7 @@
         effectSepia.uniforms['amount'].value = 0.8;
 
         var effectColorify = new THREE.ShaderPass(THREE.ColorifyShader);
-        effectColorify.uniforms[ 'color' ].value.setRGB(0.5, 0.5, 1);
+        effectColorify.uniforms['color'].value.setRGB(0.5, 0.5, 1);
 
 
         var composer = new THREE.EffectComposer(webGLRenderer);
@@ -221,13 +224,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

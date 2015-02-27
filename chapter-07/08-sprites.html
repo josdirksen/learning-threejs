@@ -5,7 +5,7 @@
 <head>
     <title>Example 07.08 - Particles - Sprites</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -29,7 +29,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -39,7 +39,7 @@
 
         // create a camera, which defines where we're looking at.
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 250);
-        var cameraOrtho = new THREE.OrthographicCamera( 0, window.innerWidth, window.innerHeight, 0, - 10, 10 );
+        var cameraOrtho = new THREE.OrthographicCamera(0, window.innerWidth, window.innerHeight, 0, -10, 10);
 
         // create a render and set the size
         var webGLRenderer = new THREE.WebGLRenderer();
@@ -52,7 +52,7 @@
         camera.position.z = 50;
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         var material = new THREE.MeshNormalMaterial();
         var geom = new THREE.SphereGeometry(15, 20, 20);
@@ -63,7 +63,7 @@
         var getTexture = function () {
             var texture = new THREE.ImageUtils.loadTexture("../assets/textures/particles/sprite-sheet.png");
             return texture;
-        }
+        };
 
 
         var controls = new function () {
@@ -77,10 +77,10 @@
             this.redraw = function () {
                 sceneOrtho.children.forEach(function (child) {
                     if (child instanceof THREE.Sprite) sceneOrtho.remove(child);
-                })
+                });
                 createSprite(controls.size, controls.transparent, controls.opacity, controls.color, controls.sprite);
             };
-        }
+        };
 
         var gui = new dat.GUI();
         gui.add(controls, 'sprite', 0, 4).step(1).onChange(controls.redraw);
@@ -99,12 +99,13 @@
                         opacity: opacity,
                         color: color,
                         transparent: transparent,
-                        map: getTexture()}
+                        map: getTexture()
+                    }
             );
 
             // we have 1 row, with five sprites
-            spriteMaterial.map.offset = new THREE.Vector2(0.2*spriteNumber, 0);
-            spriteMaterial.map.repeat = new THREE.Vector2(1/5, 1);
+            spriteMaterial.map.offset = new THREE.Vector2(0.2 * spriteNumber, 0);
+            spriteMaterial.map.repeat = new THREE.Vector2(1 / 5, 1);
             spriteMaterial.depthTest = false;
 
             spriteMaterial.blending = THREE.AdditiveBlending;
@@ -159,15 +160,14 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
 
 
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

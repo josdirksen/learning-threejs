@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <html>
@@ -24,7 +23,7 @@
         initScene = function () {
             projector = new THREE.Projector;
 
-            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMapEnabled = true;
             renderer.shadowMapSoft = true;
@@ -75,19 +74,19 @@
             light.shadowCameraBottom = 60;
             light.shadowCameraNear = 20;
             light.shadowCameraFar = 200;
-            light.shadowBias = -.0001
+            light.shadowBias = -.0001;
             light.shadowMapWidth = light.shadowMapHeight = 2048;
             light.shadowDarkness = .7;
             scene.add(light);
 
             // Materials
             var ground_material = Physijs.createMaterial(
-                    new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/rocks.jpg' ) }),
+                    new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture('images/rocks.jpg')}),
                     .8, // high friction
                     .4 // low restitution
             );
             ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-            ground_material.map.repeat.set( 2.5, 2.5 );
+            ground_material.map.repeat.set(2.5, 2.5);
 
             // Ground
             var ground = new Physijs.BoxMesh(
@@ -97,8 +96,7 @@
                     0 // mass
             );
             ground.receiveShadow = true;
-            scene.add( ground );
-
+            scene.add(ground);
 
 
             var size = 3;
@@ -106,16 +104,24 @@
             var NUM = 6;
             var geometry = new THREE.BoxGeometry(size, size, size);
             for (var i = 0; i < NUM; i++) {
-                var material1 = Physijs.createMaterial(new THREE.MeshLambertMaterial({color: 0x992222 + i*0x3333}), 0.1, 0.1);
-                var material2 = Physijs.createMaterial(new THREE.MeshLambertMaterial({color: 0x992222 + i*0x3333, transparent: true, opacity: 0.7}), 0.1, 0.1);
-                var material3 = new THREE.MeshLambertMaterial({color: 0x992222 + i*0x3333, transparent: true, opacity: 0.3});
+                var material1 = Physijs.createMaterial(new THREE.MeshLambertMaterial({color: 0x992222 + i * 0x3333}), 0.1, 0.1);
+                var material2 = Physijs.createMaterial(new THREE.MeshLambertMaterial({
+                    color: 0x992222 + i * 0x3333,
+                    transparent: true,
+                    opacity: 0.7
+                }), 0.1, 0.1);
+                var material3 = new THREE.MeshLambertMaterial({
+                    color: 0x992222 + i * 0x3333,
+                    transparent: true,
+                    opacity: 0.3
+                });
 
                 var base = new Physijs.BoxMesh(geometry, material1, 0);
                 base.add(new THREE.AxisHelper(size));
 
                 var satellite = new Physijs.BoxMesh(geometry, material2, mass);
                 base.position.set(
-                        size * 6 * (i-NUM/2),
+                        size * 6 * (i - NUM / 2),
                         size * i + size * 2,
                         0
                 );
@@ -139,7 +145,7 @@
                 ghost.rotation.copy(satellite.rotation);
 
                 var position = base.position.clone();
-                var axis = new THREE.Vector3(0,1,0);
+                var axis = new THREE.Vector3(0, 1, 0);
 
 
                 scene.add(base);
@@ -173,7 +179,9 @@
 <body>
 <div id="heading">
     <h1>Physi.js 2013-04-17: Hinge Constraint Axis Errors</h1>
-    <p>The axis is defined always as (0,1,0) and the position as the static box position, but the rotating boxes do not match periodically with their initial position and rotation.</p>
+
+    <p>The axis is defined always as (0,1,0) and the position as the static box position, but the rotating boxes do not
+        match periodically with their initial position and rotation.</p>
 </div>
 <div id="viewport"></div>
 </body>

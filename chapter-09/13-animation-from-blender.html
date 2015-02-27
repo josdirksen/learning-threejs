@@ -5,7 +5,7 @@
 <head>
     <title>Example 09.13 - Animation from blender</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -28,7 +28,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -58,7 +58,7 @@
         scene.add(spotLight);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         // call the render function
         var step = 0;
@@ -69,9 +69,9 @@
 
         var controls = new function () {
             this.showHelper = false;
-        }
+        };
         var gui = new dat.GUI();
-        gui.add(controls, 'showHelper', 0, 0.5).onChange(function(state) {
+        gui.add(controls, 'showHelper', 0, 0.5).onChange(function (state) {
             helper.visible = state;
         });
 
@@ -87,10 +87,10 @@
             mesh.rotation.z = 0.7 * Math.PI;
             scene.add(mesh);
 
-            helper = new THREE.SkeletonHelper( mesh );
+            helper = new THREE.SkeletonHelper(mesh);
             helper.material.linewidth = 2;
             helper.visible = false;
-            scene.add( helper );
+            scene.add(helper);
 
             // start the animation
             animation.play();
@@ -129,13 +129,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

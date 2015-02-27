@@ -5,7 +5,7 @@
 <head>
     <title>Example 09.10 - Working with morph targets</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -28,7 +28,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -58,7 +58,7 @@
         scene.add(spotLight);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         // call the render function
         var step = 0;
@@ -67,7 +67,7 @@
         // setup the control gui
         var controls = new function () {
             this.keyframe = 0;
-        }
+        };
 
         var gui = new dat.GUI();
         gui.add(controls, "keyframe", 0, 15).step(1).onChange(function (e) {
@@ -83,8 +83,10 @@
         loader.load('../assets/models/horse.js', function (geometry, mat) {
 
             var mat = new THREE.MeshLambertMaterial(
-                    {   morphTargets: true,
-                        vertexColors: THREE.FaceColors});
+                    {
+                        morphTargets: true,
+                        vertexColors: THREE.FaceColors
+                    });
 
 
             var mat2 = new THREE.MeshLambertMaterial(
@@ -134,10 +136,10 @@
 
             if (geometry.morphColors && geometry.morphColors.length) {
 
-                var colorMap = geometry.morphColors[ 0 ];
+                var colorMap = geometry.morphColors[0];
                 for (var i = 0; i < colorMap.colors.length; i++) {
-                    geometry.faces[ i ].color = colorMap.colors[ i ];
-                    geometry.faces[ i ].color.offsetHSL(0, 0.3, 0);
+                    geometry.faces[i].color = colorMap.colors[i];
+                    geometry.faces[i].color.offsetHSL(0, 0.3, 0);
                 }
             }
         }
@@ -173,13 +175,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

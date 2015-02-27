@@ -6,7 +6,7 @@
     <title>Example 08.16 - Load vrml model </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/VRMLLoader.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/OrbitControls.js"></script>
@@ -30,7 +30,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -56,15 +56,15 @@
         var orbit = new THREE.OrbitControls(camera);
 
         var dir1 = new THREE.DirectionalLight(0.4);
-        dir1.position.set(-30,30,-30);
+        dir1.position.set(-30, 30, -30);
         scene.add(dir1);
 
         var dir2 = new THREE.DirectionalLight(0.4);
-        dir2.position.set(-30,30,30);
+        dir2.position.set(-30, 30, 30);
         scene.add(dir2);
 
         var dir3 = new THREE.DirectionalLight(0.4);
-        dir3.position.set(30,30,-30);
+        dir3.position.set(30, 30, -30);
         scene.add(dir3);
 
         // add spotlight for the shadows
@@ -73,7 +73,7 @@
         scene.add(spotLight);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(webGLRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(webGLRenderer.domElement);
 
         // call the render function
         var step = 0;
@@ -84,7 +84,7 @@
             // we need the first child, since it's a multimaterial
 
 
-        }
+        };
 
         var group;
         var gui = new dat.GUI();
@@ -96,14 +96,14 @@
 
             console.log(model);
 
-            model.traverse(function(child) {
+            model.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
 //                    child.material = new THREE.MeshLambertMaterial({color:0xaaaaaa});
                     console.log(child.geometry);
                 }
             });
 
-            model.scale.set(10,10,10);
+            model.scale.set(10, 10, 10);
 
             scene.add(model);
 
@@ -138,13 +138,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

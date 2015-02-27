@@ -5,7 +5,7 @@
 <head>
     <title>Example 07.04 - Particles - Canvas based texture</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/CanvasRenderer.js"></script>
@@ -32,7 +32,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -55,7 +55,7 @@
         camera.position.z = 150;
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(canvasRenderer.domElement);
+        document.getElementById("WebGL-output").appendChild(canvasRenderer.domElement);
 
         var getTexture = function (ctx) {
 
@@ -101,7 +101,7 @@
             ctx.arc(89, 102, 2, 0, Math.PI * 2, true);
             ctx.fill();
 
-        }
+        };
 
 
         createSprites();
@@ -110,9 +110,10 @@
 
         function createSprites() {
             var material = new THREE.SpriteCanvasMaterial({
-                program: getTexture,
-                color: 0xffffff}
-                );
+                        program: getTexture,
+                        color: 0xffffff
+                    }
+            );
 
             material.rotation = Math.PI;
 
@@ -120,7 +121,7 @@
             for (var i = 0; i < 1500; i++) {
                 var sprite = new THREE.Sprite(material);
                 sprite.position.set(Math.random() * range - range / 2, Math.random() * range - range / 2, Math.random() * range - range / 2);
-                sprite.scale.set(0.1,0.1,0.1);
+                sprite.scale.set(0.1, 0.1, 0.1);
                 scene.add(sprite);
             }
         }
@@ -146,15 +147,14 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
 
 
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>

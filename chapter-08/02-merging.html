@@ -5,7 +5,7 @@
 <head>
     <title>Example 08.02 - Merge objects</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
@@ -28,7 +28,7 @@
 <script type="text/javascript">
 
     // once everything is loaded, we run our Three.js stuff.
-    $(function () {
+    function init() {
 
         var stats = initStats();
 
@@ -52,7 +52,7 @@
         camera.lookAt(scene.position);
 
         // add the output of the renderer to the html element
-        $("#WebGL-output").append(renderer.domElement);
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
         // call the render function
         var step = 0;
@@ -82,7 +82,7 @@
                     for (var i = 0; i < controls.numberOfObjects; i++) {
                         var cubeMesh = addcube();
                         cubeMesh.updateMatrix();
-                        geometry.merge(cubeMesh.geometry,cubeMesh.matrix);
+                        geometry.merge(cubeMesh.geometry, cubeMesh.matrix);
                     }
                     scene.add(new THREE.Mesh(geometry, cubeMaterial));
 
@@ -91,7 +91,7 @@
                         scene.add(controls.addCube());
                     }
                 }
-            }
+            };
 
 
             this.addCube = addcube;
@@ -99,7 +99,7 @@
             this.outputObjects = function () {
                 console.log(scene.children);
             }
-        }
+        };
 
         var gui = new dat.GUI();
 
@@ -129,8 +129,7 @@
 
             // add the cube to the scene
             return cube;
-        };
-
+        }
         function render() {
 
             rotation += 0.005;
@@ -170,13 +169,12 @@
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
 
-            $("#Stats-output").append(stats.domElement);
+            document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
         }
-    });
-
-
+    }
+    window.onload = init;
 </script>
 </body>
 </html>
