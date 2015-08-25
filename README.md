@@ -3,11 +3,11 @@ learning-threejs
 
 Code repository for the examples from the Packt book "Learning Threejs"
 
-Chapter 1
+**Chapter 1**
 
-[01-basic-skeleton.html] (http://murat-aka.github.io/learning-threejs/chapter-01/01-basic-skeleton.html)
+[01-basic-skeleton.html](http://murat-aka.github.io/learning-threejs/chapter-01/01-basic-skeleton.html)
 
-[02-first-scene.html] (http://murat-aka.github.io/learning-threejs/chapter-01/02-first-scene.html)
+[02-first-scene.html](http://murat-aka.github.io/learning-threejs/chapter-01/02-first-scene.html)
 
 [02 - Elements](http://murat-aka.github.io/babylonJS/tutorials/02%20-Basic%20objects/02%20-%20Elements)
 
