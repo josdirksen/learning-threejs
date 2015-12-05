@@ -31,7 +31,13 @@
         var scene = new THREE.Scene();
 
         // create a camera, which defines where we're looking at.
-        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+        
+         // position and point the camera to the center of the scene
+        camera.position.x = -30;
+        camera.position.y = 80;
+        camera.position.z = 30;
+        camera.lookAt(scene.position);
 
         // create a render and set the size
         var renderer = new THREE.WebGLRenderer();
@@ -82,11 +88,7 @@
         // add the sphere to the scene
         scene.add(sphere);
 
-        // position and point the camera to the center of the scene
-        camera.position.x = -30;
-        camera.position.y = 40;
-        camera.position.z = 30;
-        camera.lookAt(scene.position);
+       
 
         // add spotlight for the shadows
         var spotLight = new THREE.SpotLight(0xffffff);
