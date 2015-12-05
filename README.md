@@ -17,3 +17,8 @@ Code repository for the examples from the Packt book "Learning Threejs"
 
 [06-ascii-renderer.html](http://murat-aka.github.io/learning-threejs/chapter-01/06-ascii-renderer.html)
 
+
+**Chapter 2**
+
+
+[01-basic-scene.html](http://murat-aka.github.io/learning-threejs/chapter-02/01-basic-scene.html)
