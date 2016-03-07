@@ -124,11 +124,13 @@
             this.switchRenderer = function () {
                 if (renderer instanceof THREE.WebGLRenderer) {
                     renderer = canvasRenderer;
-                    document.getElementById("WebGL-output").empty();
+                   // document.getElementById("WebGL-output").empty();
+                   $("#WebGL-output").empty();
                     document.getElementById("WebGL-output").appendChild(renderer.domElement);
                 } else {
                     renderer = webGLRenderer;
-                    document.getElementById("WebGL-output").empty();
+                   // document.getElementById("WebGL-output").empty();
+                   $("#WebGL-output").empty();
                     document.getElementById("WebGL-output").appendChild(renderer.domElement);
                 }
             }
