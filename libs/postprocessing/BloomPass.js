@@ -4,6 +4,8 @@
 
 THREE.BloomPass = function ( strength, kernelSize, sigma, resolution ) {
 
+	THREE.Pass.call( this );
+
 	strength = ( strength !== undefined ) ? strength : 1;
 	kernelSize = ( kernelSize !== undefined ) ? kernelSize : 25;
 	sigma = ( sigma !== undefined ) ? sigma : 4.0;
@@ -11,7 +13,7 @@ THREE.BloomPass = function ( strength, kernelSize, sigma, resolution ) {
 
 	// render targets
 
-	var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat };
+	var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat };
 
 	this.renderTargetX = new THREE.WebGLRenderTarget( resolution, resolution, pars );
 	this.renderTargetY = new THREE.WebGLRenderTarget( resolution, resolution, pars );
@@ -46,7 +48,7 @@ THREE.BloomPass = function ( strength, kernelSize, sigma, resolution ) {
 
 	this.convolutionUniforms = THREE.UniformsUtils.clone( convolutionShader.uniforms );
 
-	this.convolutionUniforms[ "uImageIncrement" ].value = THREE.BloomPass.blurx;
+	this.convolutionUniforms[ "uImageIncrement" ].value = THREE.BloomPass.blurX;
 	this.convolutionUniforms[ "cKernel" ].value = THREE.ConvolutionShader.buildKernel( sigma );
 
 	this.materialConvolution = new THREE.ShaderMaterial( {
@@ -61,13 +63,21 @@ THREE.BloomPass = function ( strength, kernelSize, sigma, resolution ) {
 
 	} );
 
-	this.enabled = true;
 	this.needsSwap = false;
-	this.clear = false;
+
+	this.camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
+	this.scene  = new THREE.Scene();
+
+	this.quad = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2, 2 ), null );
+	this.scene.add( this.quad );
 
 };
 
+THREE.BloomPass.prototype = Object.create( THREE.Pass.prototype );
+
 THREE.BloomPass.prototype = {
+
+	constructor: THREE.BloomPass,
 
 	render: function ( renderer, writeBuffer, readBuffer, delta, maskActive ) {
 
@@ -75,12 +85,12 @@ THREE.BloomPass.prototype = {
 
 		// Render quad with blured scene into texture (convolution pass 1)
 
-		THREE.EffectComposer.quad.material = this.materialConvolution;
+		this.quad.material = this.materialConvolution;
 
 		this.convolutionUniforms[ "tDiffuse" ].value = readBuffer;
 		this.convolutionUniforms[ "uImageIncrement" ].value = THREE.BloomPass.blurX;
 
-		renderer.render( THREE.EffectComposer.scene, THREE.EffectComposer.camera, this.renderTargetX, true );
+		renderer.render( this.scene, this.camera, this.renderTargetX, true );
 
 
 		// Render quad with blured scene into texture (convolution pass 2)
@@ -88,17 +98,17 @@ THREE.BloomPass.prototype = {
 		this.convolutionUniforms[ "tDiffuse" ].value = this.renderTargetX;
 		this.convolutionUniforms[ "uImageIncrement" ].value = THREE.BloomPass.blurY;
 
-		renderer.render( THREE.EffectComposer.scene, THREE.EffectComposer.camera, this.renderTargetY, true );
+		renderer.render( this.scene, this.camera, this.renderTargetY, true );
 
 		// Render original scene with superimposed blur to texture
 
-		THREE.EffectComposer.quad.material = this.materialCopy;
+		this.quad.material = this.materialCopy;
 
 		this.copyUniforms[ "tDiffuse" ].value = this.renderTargetY;
 
 		if ( maskActive ) renderer.context.enable( renderer.context.STENCIL_TEST );
 
-		renderer.render( THREE.EffectComposer.scene, THREE.EffectComposer.camera, readBuffer, this.clear );
+		renderer.render( this.scene, this.camera, readBuffer, this.clear );
 
 	}
 

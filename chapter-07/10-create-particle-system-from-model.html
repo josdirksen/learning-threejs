@@ -4,7 +4,9 @@
 
 <head>
     <title>Example 07.10 - 3D Torusknot</title>
-    <script type="text/javascript" src="../libs/three.js"></script>
+    <!-- <script type="text/javascript" src="../libs/three.js"></script> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r75/three.js"></script>
+
 
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
@@ -129,16 +131,16 @@
         }
 
         function createPointCloud(geom) {
-            var material = new THREE.PointCloudMaterial({
+            var material = new THREE.PointsMaterial({
                 color: 0xffffff,
                 size: 3,
                 transparent: true,
+                depthTest: false,
                 blending: THREE.AdditiveBlending,
                 map: generateSprite()
             });
 
-            var cloud = new THREE.PointCloud(geom, material);
-            cloud.sortParticles = true;
+            var cloud = new THREE.Points(geom, material);
             return cloud;
         }
 

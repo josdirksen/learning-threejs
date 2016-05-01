@@ -42,7 +42,7 @@
 
         renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMapEnabled = true;
+        renderer.shadowMap.enabled = true;
 
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
@@ -93,12 +93,12 @@
         camera.lookAt(scene.position);
 
         // add subtle ambient lighting
-        var ambientLight = new THREE.AmbientLight(0x0c0c0c);
-        scene.add(ambientLight);
+        var ambienLight = new THREE.AmbientLight(0x353535);
+        scene.add(ambienLight);
 
         // add spotlight for the shadows
         var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(-40, 60, -10);
+        spotLight.position.set(-10, 20, -5);
         spotLight.castShadow = true;
         scene.add(spotLight);
 

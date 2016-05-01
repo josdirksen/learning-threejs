@@ -38,7 +38,7 @@
 
         renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMapEnabled = true;
+        renderer.shadowMap.enabled = true;
 
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(60, 20);
@@ -90,9 +90,12 @@
 
         // add spotlight for the shadows
         var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(-40, 60, -10);
+        spotLight.position.set(-10, 20, -5);
         spotLight.castShadow = true;
         scene.add(spotLight);
+
+        var ambienLight = new THREE.AmbientLight(0x353535);
+        scene.add(ambienLight);
 
         // add the output of the renderer to the html element
         document.getElementById("WebGL-output").appendChild(renderer.domElement);
