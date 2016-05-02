@@ -43,7 +43,7 @@
 
         renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMapEnabled = true;
+        renderer.shadowMap.enabled = true;
 
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(60, 40, 1, 1);
@@ -67,14 +67,10 @@
         camera.lookAt(new THREE.Vector3(5, 0, 0));
 
         // add subtle ambient lighting
-//        var ambientLight = new THREE.AmbientLight(0x494949);
-//        scene.add(ambientLight);
+        var ambientLight = new THREE.AmbientLight(0x494949);
+        scene.add(ambientLight);
 
-        // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(-40, 60, 10);
-        spotLight.castShadow = true;
-        scene.add(spotLight);
+
 
         // add the output of the renderer to the html element
         document.getElementById("WebGL-output").appendChild(renderer.domElement);
@@ -131,6 +127,15 @@
 
         scene.add(mesh);
 
+        // add spotlight for the shadows
+        var spotLight = new THREE.SpotLight(0xffffff, 1, 180, Math.PI/4);
+        spotLight.shadow.mapSize.height = 2048;
+        spotLight.shadow.mapSize.width = 2048;
+        spotLight.position.set(-40, 30, 30);
+        spotLight.castShadow = true;
+        spotLight.lookAt(mesh);
+        scene.add(spotLight);
+
         function addControl(x, y, z) {
             var controls = new function () {
                 this.x = x;
@@ -157,7 +162,7 @@
 
                 var clonedGeometry = mesh.children[0].geometry.clone();
                 var materials = [
-                    new THREE.MeshLambertMaterial({opacity: 0.6, color: 0xff44ff, transparent: true}),
+                    new THREE.MeshLambertMaterial({opacity: 0.8, color: 0xff44ff, transparent: true}),
                     new THREE.MeshBasicMaterial({color: 0x000000, wireframe: true})
 
                 ];
@@ -188,10 +193,6 @@
 
         render();
 
-        function addCube() {
-
-        }
-
         function render() {
             stats.update();
 
@@ -204,6 +205,7 @@
                 e.geometry.vertices = vertices;
                 e.geometry.verticesNeedUpdate = true;
                 e.geometry.computeFaceNormals();
+                delete e.geometry.__directGeometry
             });
 
             // render using requestAnimationFrame
