@@ -45,8 +45,8 @@
 
         renderer.setClearColor(new THREE.Color(0xEEEEEE, 1.0));
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMapEnabled = true;
-        renderer.shadowMapType = THREE.PCFShadowMap;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFShadowMap;
 
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(60, 20, 1, 1);
@@ -116,16 +116,16 @@
         var spotLight = new THREE.SpotLight(pointColor);
         spotLight.position.set(-40, 60, -10);
         spotLight.castShadow = true;
-        spotLight.shadowCameraNear = 2;
-        spotLight.shadowCameraFar = 200;
-        spotLight.shadowCameraFov = 30;
+        spotLight.shadow.camera.near = 1;
+        spotLight.shadow.camera.far = 100;
         spotLight.target = plane;
         spotLight.distance = 0;
         spotLight.angle = 0.4;
+        spotLight.shadow.camera.fov = 120;
 
 
         scene.add(spotLight);
-
+        var debugCamera = new THREE.CameraHelper(spotLight.shadow.camera);
 
         // add a small sphere simulating the pointlight
         var sphereLight = new THREE.SphereGeometry(0.2);
@@ -156,9 +156,8 @@
             this.distance = 0;
             this.exponent = 30;
             this.angle = 0.1;
-            this.debug = false;
+            this.shadowDebug = false;
             this.castShadow = true;
-            this.onlyShadow = false;
             this.target = "Plane";
             this.stopMovingLight = false;
 
@@ -189,16 +188,16 @@
             spotLight.exponent = e;
         });
 
-        gui.add(controls, 'debug').onChange(function (e) {
-            spotLight.shadowCameraVisible = e;
+        gui.add(controls, 'shadowDebug').onChange(function (e) {
+            if (e) {
+                scene.add(debugCamera);
+            } else {
+                scene.remove(debugCamera);
+            }
         });
 
         gui.add(controls, 'castShadow').onChange(function (e) {
             spotLight.castShadow = e;
-        });
-
-        gui.add(controls, 'onlyShadow').onChange(function (e) {
-            spotLight.onlyShadow = e;
         });
 
         gui.add(controls, 'target', ['Plane', 'Sphere', 'Cube']).onChange(function (e) {
@@ -246,7 +245,7 @@
                 }
                 sphereLightMesh.position.z = +(7 * (Math.sin(phase)));
                 sphereLightMesh.position.x = +(14 * (Math.cos(phase)));
-                sphereLightMesh.position.y = 10;
+                sphereLightMesh.position.y = 15;
 
                 if (invert < 0) {
                     var pivot = 14;

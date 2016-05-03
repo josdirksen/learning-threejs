@@ -98,18 +98,10 @@
         var ambientLight = new THREE.AmbientLight(ambiColor);
         scene.add(ambientLight);
 
-        // add spotlight for the shadows
-        // add spotlight for the shadows
-        var spotLight = new THREE.SpotLight(0xffffff);
-        spotLight.position.set(-40, 60, -10);
-        spotLight.castShadow = true;
-        // scene.add( spotLight );
-
         var pointColor = "#ccffcc";
         var pointLight = new THREE.PointLight(pointColor);
         pointLight.distance = 100;
         scene.add(pointLight);
-
 
         // add a small sphere simulating the pointlight
         var sphereLight = new THREE.SphereGeometry(0.2);
@@ -117,7 +109,7 @@
         var sphereLightMesh = new THREE.Mesh(sphereLight, sphereLightMaterial);
         sphereLightMesh.castShadow = true;
 
-        sphereLightMesh.position = new THREE.Vector3(3, 0, 3);
+        sphereLightMesh.position = new THREE.Vector3(3, 0, 5);
         scene.add(sphereLightMesh);
 
 
@@ -181,7 +173,7 @@
             }
             sphereLightMesh.position.z = +(7 * (Math.sin(phase)));
             sphereLightMesh.position.x = +(14 * (Math.cos(phase)));
-            sphereLightMesh.position.y = 5;
+            sphereLightMesh.position.y = 10;
 
             if (invert < 0) {
                 var pivot = 14;
