@@ -101,7 +101,7 @@
         sceneMars.add(spotLight2);
 
         var materialColor = new THREE.MeshBasicMaterial({
-            map: THREE.ImageUtils.loadTexture("../assets/textures/starry-deep-outer-space-galaxy.jpg"),
+            map: THREE.ImageUtils.loadTexture("assets/textures/starry-deep-outer-space-galaxy.jpg"),
             depthTest: false
         });
         var bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), materialColor);
@@ -157,8 +157,8 @@
         render();
 
         function createMarshMesh(geom) {
-            var planetTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/Mars_2k-050104.png");
-            var normalTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/Mars-normalmap_2k.png");
+            var planetTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/Mars_2k-050104.png");
+            var normalTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/Mars-normalmap_2k.png");
 
             var planetMaterial = new THREE.MeshPhongMaterial();
             planetMaterial.normalMap = normalTexture;
@@ -173,9 +173,9 @@
         }
 
         function createEarthMesh(geom) {
-            var planetTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/Earth.png");
-            var specularTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/EarthSpec.png");
-            var normalTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/EarthNormal.png");
+            var planetTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/Earth.png");
+            var specularTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/EarthSpec.png");
+            var normalTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/EarthNormal.png");
 
 
             var planetMaterial = new THREE.MeshPhongMaterial();

@@ -1,0 +1,46 @@
+# Blender MTL File: 'butterfly.blend'
+# Material Count: 4
+newmtl butterfly_body
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.564706 0.329412 0.599216
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+
+
+newmtl butterfly_eyes
+Ns 65.007344
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 2.000000 2.000000 2.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+
+newmtl butterfly_legs
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.375324 0.157953 0.402333
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+
+
+newmtl butterfly_wings_butterflywings.png
+Ns 21.568627
+Ka 0.000000 0.000000 0.000000
+Kd 0.664280 0.453170 0.744248
+Ks 0.124165 0.124165 0.124165
+Ni 1.000000
+d 0.000000
+illum 2
+
+#change these
+map_Kd butterflywings.png
+map_d butterflywings.png
+
+

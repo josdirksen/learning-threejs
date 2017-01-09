@@ -24,8 +24,8 @@
 
         'use strict';
 
-        Physijs.scripts.worker = '../libs/physijs_worker.js';
-        Physijs.scripts.ammo = '../libs/ammo.js';
+        Physijs.scripts.worker = 'libs/physijs_worker.js';
+        Physijs.scripts.ammo = 'libs/ammo.js';
 
         var scale = chroma.scale(['white', 'blue', 'red', 'yellow']);
 
@@ -70,7 +70,7 @@
 
             // Materials
             ground_material = Physijs.createMaterial(
-                    new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture('../assets/textures/general/floor-wood.jpg')}),
+                    new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture('assets/textures/general/floor-wood.jpg')}),
                     .9, // high friction
                     .6 // low restitution
             );
@@ -179,7 +179,7 @@
                                                     color: colorSphere,
                                                     opacity: 0.8,
                                                     transparent: true
-//                                                        map: THREE.ImageUtils.loadTexture( '../assets/textures/general/floor-wood.jpg' )
+//                                                        map: THREE.ImageUtils.loadTexture( 'assets/textures/general/floor-wood.jpg' )
                                                 }),
                                         controls.sphereFriction,
                                         controls.sphereRestitution
@@ -209,7 +209,7 @@
                                             color: colorBox,
                                             opacity: 0.8,
                                             transparent: true
-//                                                map: THREE.ImageUtils.loadTexture( '../assets/textures/general/stone.jpg' )
+//                                                map: THREE.ImageUtils.loadTexture( 'assets/textures/general/stone.jpg' )
                                         }),
                                         controls.cubeFriction,
                                         controls.cubeRestitution

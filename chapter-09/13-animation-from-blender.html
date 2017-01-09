@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<!--
+BUGFIX
+
+loader.load('../assets/models/hand-2.js', function (model, mat) {
+}, '../assets/models');
+
+=>
+
+loader.load('assets/models/hand-2.js', function (model, mat) {
+}, 'assets/models');
+
+-->
 
 <html>
 
@@ -76,7 +88,7 @@
         });
 
         var loader = new THREE.JSONLoader();
-        loader.load('../assets/models/hand-2.js', function (model, mat) {
+        loader.load('assets/models/hand-2.js', function (model, mat) {
 
             var mat = new THREE.MeshLambertMaterial({color: 0xF0C8C9, skinning: true});
             mesh = new THREE.SkinnedMesh(model, mat);
@@ -95,7 +107,7 @@
             // start the animation
             animation.play();
 
-        }, '../assets/models');
+        }, 'assets/models');
 
 
         render();

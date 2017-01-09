@@ -38,6 +38,8 @@
 <!-- Javascript code that runs our Three.js examples -->
 <script type="text/javascript">
 
+    var svgString = document.querySelector("#batman-path").getAttribute("d");
+
     var orbit;
 
     // once everything is loaded, we run our Three.js stuff.
@@ -127,14 +129,13 @@
         gui.add(controls, 'bevelEnabled').onChange(controls.asGeom);
         gui.add(controls, 'curveSegments', 1, 30).step(1).onChange(controls.asGeom);
         gui.add(controls, 'steps', 1, 5).step(1).onChange(controls.asGeom);
-
+        
         controls.asGeom();
         render();
-
         function drawShape() {
 
 
-            var svgString = document.querySelector("#batman-path").getAttribute("d");
+            //var svgString = attribute_d;//document.querySelector("#batman-path").getAttribute("d");
 
             var shape = transformSVGPathExposed(svgString);
 

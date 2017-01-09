@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-
+<!--
+BUGFIX
+1. THREE.ParticleSystem(geom, material) => THREE.PointCloud(geom, material)
+2. THREE.ParticleBasicMaterial(geom, material) => THREE.PointCloudMaterial(geom, material)
+3. THREE.ImageUtils.loadTexture("../assets/textures/particles/raindrop-3.png") => THREE.ImageUtils.loadTexture("assets/textures/particles/raindrop-3.png"); // browser blocks non PWD XSS; firefox FIX only
+-->
 <html>
 
 <head>
@@ -18,7 +23,6 @@
     </style>
 </head>
 <body>
-
 <div id="Stats-output">
 </div>
 <!-- Div which will hold the Output -->
@@ -86,10 +90,10 @@
 
         function createPointCloud(size, transparent, opacity, sizeAttenuation, color) {
 
-            var texture = THREE.ImageUtils.loadTexture("../assets/textures/particles/raindrop-3.png");
+            var texture = THREE.ImageUtils.loadTexture("assets/textures/particles/raindrop-3.png");
             var geom = new THREE.Geometry();
 
-            var material = new THREE.ParticleBasicMaterial({
+            var material = new THREE.PointCloudMaterial({//THREE.ParticleBasicMaterial({
                 size: size,
                 transparent: transparent,
                 opacity: opacity,
@@ -111,7 +115,7 @@
                 geom.vertices.push(particle);
             }
 
-            cloud = new THREE.ParticleSystem(geom, material);
+            cloud = new THREE.PointCloud(geom, material);//THREE.ParticleSystem(geom, material);
             cloud.sortParticles = true;
 
             scene.add(cloud);

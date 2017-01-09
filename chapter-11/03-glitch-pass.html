@@ -4,15 +4,14 @@
 <head>
     <title>Example 11.01 - Effect composings</title>
     <script type="text/javascript" src="../libs/three.js"></script>
-
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <script type="text/javascript" src="../libs/OrbitControls.js"></script>
     <script type="text/javascript" src="../libs/postprocessing/ShaderPass.js"></script>
+    
     <script type="text/javascript" src="../libs/shaders/CopyShader.js"></script>
-
+    
     <script type="text/javascript" src="../libs/postprocessing/EffectComposer.js"></script>
-
     <script type="text/javascript" src="../libs/postprocessing/MaskPass.js"></script>
     <script type="text/javascript" src="../libs/postprocessing/RenderPass.js"></script>
     <script type="text/javascript" src="../libs/postprocessing/GlitchPass.js"></script>
@@ -110,9 +109,9 @@
         render();
 
         function createMesh(geom) {
-            var planetTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/Earth.png");
-            var specularTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/EarthSpec.png");
-            var normalTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/EarthNormal.png");
+            var planetTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/Earth.png");
+            var specularTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/EarthSpec.png");
+            var normalTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/EarthNormal.png");
 
 
             var planetMaterial = new THREE.MeshPhongMaterial();

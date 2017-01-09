@@ -89,7 +89,7 @@
 
         function createMesh(geom, imageFile) {
             var loader = new THREE.DDSLoader();
-            var texture = loader.load('../assets/textures/seafloor.dds');
+            var texture = loader.load('assets/textures/seafloor.dds');
             var mat = new THREE.MeshPhongMaterial();
             mat.map = texture;
 

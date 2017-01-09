@@ -62,7 +62,7 @@
 
     var canvas = document.createElement("canvas");
     document.getElementById('canvas-output').appendChild(canvas);
-    $('#canvas-output').literallycanvas({imageURLPrefix: '../libs/literally/img'});
+    $('#canvas-output').literallycanvas({imageURLPrefix: 'libs/literally/img'});
 
 
     // once everything is loaded, we run our Three.js stuff.
@@ -83,8 +83,8 @@
         webGLRenderer.shadowMapEnabled = true;
 
 
-        var cube = createMesh(new THREE.BoxGeometry(10, 10, 10), "floor-wood.jpg");
-        cube.position.x = 0;
+        var cube = createMesh(new THREE.BoxGeometry(12, 12, 12), "assets/textures/general/floor-wood.jpg");
+        cube.position.x = 3;
         scene.add(cube);
 
 

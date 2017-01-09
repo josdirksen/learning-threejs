@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-
+<!--
+BUGFIX
+1. loader.load("../assets/models/dae/Truck_dae.dae" => loader.load("assets/models/dae/Truck_dae.dae"
+-->
 <html>
 
 <head>
@@ -64,7 +67,7 @@
         var loader = new THREE.ColladaLoader();
 
         var mesh;
-        loader.load("../assets/models/dae/Truck_dae.dae", function (result) {
+        loader.load("assets/models/dae/Truck_dae.dae", function (result) {
             mesh = result.scene.children[0].children[0].clone();
             mesh.scale.set(4, 4, 4);
             scene.add(mesh);

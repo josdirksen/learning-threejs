@@ -1,0 +1,49 @@
+#VRML V2.0 utf8
+
+# a virtual Tree
+#from the lemay VRML book
+Shape {
+  appearance Appearance {
+    material Material {emissiveColor .41 .40 .1}
+    texture ImageTexture { url "oak.gif" }
+  }
+  geometry Cylinder{
+    radius .1
+    height 1
+  }
+}
+
+Transform {
+  translation 0 .9 0
+  children[
+    Shape {
+      appearance Appearance {
+        material Material {
+          emissiveColor 0 1 0
+          ambientIntensity 8
+          specularColor 0 1 0
+          transparency .1
+        }
+      }
+      geometry Sphere{
+        radius .5
+      }
+    }
+  ]
+}
+
+Transform {
+  translation 0 -.5 0
+  children [
+    Shape { 
+      appearance Appearance { 
+        material Material {emissiveColor 1 0 0}
+        texture ImageTexture { url "brick.gif" }
+      }
+      geometry Box { 
+        size 1 0.25 1 
+      } 
+    }
+  ]
+}
+      

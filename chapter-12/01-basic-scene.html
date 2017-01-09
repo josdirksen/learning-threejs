@@ -26,8 +26,8 @@
 
         var scale = chroma.scale(['green', 'white']);
 
-        Physijs.scripts.worker = '../libs/physijs_worker.js';
-        Physijs.scripts.ammo = '../libs/ammo.js';
+        Physijs.scripts.worker = 'libs/physijs_worker.js';
+        Physijs.scripts.ammo = 'libs/ammo.js';
 
         var initScene, render, applyForce, setMousePosition, mouse_position,
                 ground_material, box_material,
@@ -97,7 +97,7 @@
                                 {
                                     color: scale(Math.random()).hex(),
                                     transparent: true, opacity: 0.8,
-//                            map: THREE.ImageUtils.loadTexture( '../assets/textures/general/darker_wood.jpg' )
+//                            map: THREE.ImageUtils.loadTexture( 'assets/textures/general/darker_wood.jpg' )
                                 })));
                         console.log(stone.position);
                         stone.position.copy(point);
@@ -111,7 +111,7 @@
                     });
 
                     // let the first one fall down
-                    stones[0].rotation.x = 0.2;
+                    stones[0].rotation.x = 0.25*Math.PI;
                     stones[0].__dirtyRotation = true;
 
                 };
@@ -162,7 +162,7 @@
 
         function createGround() {
             var ground_material = Physijs.createMaterial(
-                    new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture('../assets/textures/general/wood-2.jpg')}),
+                    new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture('assets/textures/general/wood-2.jpg')}),
                     .9, .3);
 
             var ground = new Physijs.BoxMesh(new THREE.BoxGeometry(60, 1, 60), ground_material, 0);

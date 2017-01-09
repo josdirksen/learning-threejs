@@ -66,10 +66,10 @@
             this.loadCube1 = function () {
 
                 var loader = new THREE.OBJLoader();
-                loader.load('../assets/models/UVCube1.obj', function (geometry) {
+                loader.load('assets/models/UVCube1.obj', function (geometry) {
                     if (mesh) scene.remove(mesh);
                     var material = new THREE.MeshBasicMaterial({color: 0xffffff});
-                    var texture = THREE.ImageUtils.loadTexture("../assets/textures/ash_uvgrid01.jpg");
+                    var texture = THREE.ImageUtils.loadTexture("assets/textures/ash_uvgrid01.jpg");
                     material.map = texture;
 
                     geometry.children[0].material = material;
@@ -84,10 +84,10 @@
             this.loadCube2 = function () {
 
                 var loader = new THREE.OBJLoader();
-                loader.load('../assets/models/UVCube2.obj', function (geometry) {
+                loader.load('assets/models/UVCube2.obj', function (geometry) {
                     if (mesh) scene.remove(mesh);
                     var material = new THREE.MeshBasicMaterial({color: 0xffffff});
-                    var texture = THREE.ImageUtils.loadTexture("../assets/textures/ash_uvgrid01.jpg");
+                    var texture = THREE.ImageUtils.loadTexture("assets/textures/ash_uvgrid01.jpg");
                     material.map = texture;
 
                     geometry.children[0].material = material;

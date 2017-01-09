@@ -1,5 +1,19 @@
 <!DOCTYPE html>
+<!--
+BUGFIX
 
+        var texture = THREE.ImageUtils.loadTexture('../assets/textures/Metro01.JPG');
+        //texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        loader.load('../assets/models/city.obj', '../assets/models/city.mtl', load);
+        //texture.repeat.set( 1 , 1);
+        
+=>
+
+        var texture = THREE.ImageUtils.loadTexture('assets/textures/Metro01.JPG');
+        //texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        loader.load('assets/models/city.obj', 'assets/models/city.mtl', load);
+        //texture.repeat.set( 1 , 1);
+-->                
 <html>
 
 <head>
@@ -104,9 +118,9 @@
         };
 
 
-        var texture = THREE.ImageUtils.loadTexture('../assets/textures/Metro01.JPG');
+        var texture = THREE.ImageUtils.loadTexture('assets/textures/Metro01.JPG');
         //texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        loader.load('../assets/models/city.obj', '../assets/models/city.mtl', load);
+        loader.load('assets/models/city.obj', 'assets/models/city.mtl', load);
         //texture.repeat.set( 1 , 1);
 
 

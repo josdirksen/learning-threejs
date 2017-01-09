@@ -46,7 +46,7 @@
         // two ways, you can also use the THREE.UVMapping to load a single 360 degrees
 
         // create the cubemap
-//        var cubemap = THREE.ImageUtils.loadTexture('../assets/textures/cubemap/banquet.jpg',new THREE.UVMapping());
+//        var cubemap = THREE.ImageUtils.loadTexture('assets/textures/cubemap/banquet.jpg',new THREE.UVMapping());
         var textureCube = createCubeMap();
         textureCube.format = THREE.RGBFormat;
 
@@ -121,7 +121,7 @@
 
     function createCubeMap() {
 
-        var path = "../assets/textures/cubemap/parliament/";
+        var path = "assets/textures/cubemap/parliament/";
         var format = '.jpg';
         var urls = [
             path + 'posx' + format, path + 'negx' + format,

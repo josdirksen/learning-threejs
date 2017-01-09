@@ -125,11 +125,11 @@
             this.rotate = false;
 
             this.changeTexture = function (e) {
-                var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + e + ".jpg");
+                var texture = THREE.ImageUtils.loadTexture("assets/textures/general/" + e + ".jpg");
                 sphere2.material.map = texture;
                 sphere1.material.map = texture;
 
-                var bump = THREE.ImageUtils.loadTexture("../assets/textures/general/" + e + "-normal.jpg");
+                var bump = THREE.ImageUtils.loadTexture("assets/textures/general/" + e + "-normal.jpg");
                 sphere2.material.normalMap = bump;
             };
 
@@ -159,8 +159,8 @@
             geom.computeVertexNormals();
 
             if (normal) {
-                var t = THREE.ImageUtils.loadTexture("../assets/textures/general/" + texture);
-                var m = THREE.ImageUtils.loadTexture("../assets/textures/general/" + normal);
+                var t = THREE.ImageUtils.loadTexture("assets/textures/general/" + texture);
+                var m = THREE.ImageUtils.loadTexture("assets/textures/general/" + normal);
                 var mat2 = new THREE.MeshPhongMaterial({
                     map: t,
                     normalMap: m
@@ -168,7 +168,7 @@
                 var mesh = new THREE.Mesh(geom, mat2);
                 return mesh;
             } else {
-                var t = THREE.ImageUtils.loadTexture("../assets/textures/general/" + texture);
+                var t = THREE.ImageUtils.loadTexture("assets/textures/general/" + texture);
                 var mat1 = new THREE.MeshPhongMaterial({});
                 var mesh = new THREE.Mesh(geom, mat1);
                 return mesh;
@@ -184,7 +184,7 @@
 
         function createCubeMap() {
 
-            var path = "../assets/textures/cubemap/parliament/";
+            var path = "assets/textures/cubemap/parliament/";
             var format = '.jpg';
             var urls = [
                 path + 'posx' + format, path + 'negx' + format,

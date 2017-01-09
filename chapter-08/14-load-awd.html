@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-
+<!--
+BUGFIX
+1. loader.load("../assets/models/awd/PolarBear.awd" => loader.load("assets/models/awd/PolarBear.awd"
+-->
 <html>
 
 <head>
-    <title>Example 08.11 - Load pdb model </title>
+    <title>Example 08.14 - Load awd model </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/AWDLoader.js"></script>
 
@@ -92,7 +95,7 @@
 
         var loader = new THREE.AWDLoader();
         var group = new THREE.Object3D();
-        loader.load("../assets/models/awd/PolarBear.awd", function (model) {
+        loader.load("assets/models/awd/PolarBear.awd", function (model) {
 
             console.log(model);
 

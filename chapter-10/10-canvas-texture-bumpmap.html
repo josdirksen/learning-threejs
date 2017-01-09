@@ -79,7 +79,7 @@
         webGLRenderer.shadowMapEnabled = true;
 
 
-        var cube = createMesh(new THREE.BoxGeometry(12, 12, 12), "floor-wood.jpg");
+        var cube = createMesh(new THREE.BoxGeometry(12, 12, 12), "assets/textures/general/floor-wood.jpg");
         cube.position.x = 3;
         scene.add(cube);
 
@@ -129,7 +129,7 @@
         render();
 
         function createMesh(geom, texture) {
-            var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + texture);
+            var texture = THREE.ImageUtils.loadTexture(texture);
             var bumpMap = new THREE.Texture(canvas);
 
             geom.computeVertexNormals();

@@ -30,6 +30,7 @@
     // once everything is loaded, we run our Three.js stuff.
     function init() {
 
+        var working_dir = 'assets/textures/';
         var stats = initStats();
 
         // create a scene, that will hold all our elements such as objects, cameras and lights.
@@ -48,8 +49,8 @@
         renderer = webGLRenderer;
 
         var groundGeom = new THREE.PlaneGeometry(95, 95, 1, 1);
-        var lm = THREE.ImageUtils.loadTexture('../assets/textures/lightmap/lm-1.png');
-        var wood = THREE.ImageUtils.loadTexture('../assets/textures/general/floor-wood.jpg');
+        var lm = THREE.ImageUtils.loadTexture(working_dir + 'lightmap/lm-1.png');
+        var wood = THREE.ImageUtils.loadTexture(working_dir + 'general/floor-wood.jpg');
         var groundMaterial = new THREE.MeshBasicMaterial(
                 {
                     color: 0x777777,
@@ -81,7 +82,7 @@
 
 
         var meshMaterial = new THREE.MeshBasicMaterial();
-        meshMaterial.map = THREE.ImageUtils.loadTexture('../assets/textures/general/stone.jpg');
+        meshMaterial.map = THREE.ImageUtils.loadTexture(working_dir + 'general/stone.jpg');
 
 
         var cube = new THREE.Mesh(cubeGeometry, meshMaterial);

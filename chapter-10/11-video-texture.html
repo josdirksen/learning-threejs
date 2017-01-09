@@ -22,7 +22,7 @@
 </div>
 
 <video id="video" style="display: none; position: absolute; left: 15px; top: 75px;"
-       src="../assets/movies/Big_Buck_Bunny_small.ogv" controls="true" autoplay="true"></video>
+       src="assets/movies/Big_Buck_Bunny_small.ogv" controls="true" autoplay="true"></video>
 
 <!-- Div which will hold the Output -->
 <div id="WebGL-output">
@@ -54,8 +54,8 @@
         texture = new THREE.VideoTexture(video);
         var cube;
 
-
-        cube = createMesh(new THREE.BoxGeometry(22, 16, 0.2), "floor-wood.jpg");
+        //var dim = Math.max(texture.image.videoWidth,texture.image.videoHeight);
+        cube = createMesh(new THREE.BoxGeometry(16,9, 0.2), "assets/textures/general/floor-wood.jpg");
         cube.position.y = 2;
         scene.add(cube);
 
@@ -105,7 +105,7 @@
 
         render();
 
-        function createMesh(geom) {
+        function createMesh(geom,_) {
 
             var materialArray = [];
             materialArray.push(new THREE.MeshBasicMaterial({color: 0x0051ba}));

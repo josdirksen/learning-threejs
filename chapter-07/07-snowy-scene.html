@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-
+<!--
+BUGFIX
+1. THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake1.png") => THREE.ImageUtils.loadTexture("assets/textures/particles/snowflake1.png")
+2. THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake2.png") => THREE.ImageUtils.loadTexture("assets/textures/particles/snowflake2.png")
+3. THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake3.png") => THREE.ImageUtils.loadTexture("assets/textures/particles/snowflake3.png")
+4. THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake5.png") => THREE.ImageUtils.loadTexture("assets/textures/particles/snowflake5.png")
+-->
 <html>
 
 <head>
@@ -128,10 +134,10 @@
 
         function createPointClouds(size, transparent, opacity, sizeAttenuation, color) {
 
-            var texture1 = THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake1.png");
-            var texture2 = THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake2.png");
-            var texture3 = THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake3.png");
-            var texture4 = THREE.ImageUtils.loadTexture("../assets/textures/particles/snowflake5.png");
+            var texture1 = THREE.ImageUtils.loadTexture("assets/textures/particles/snowflake1.png");//loadTexture("../assets/textures/particles/snowflake1.png");
+            var texture2 = THREE.ImageUtils.loadTexture("assets/textures/particles/snowflake2.png");//loadTexture("../assets/textures/particles/snowflake2.png");
+            var texture3 = THREE.ImageUtils.loadTexture("assets/textures/particles/snowflake3.png");//loadTexture("../assets/textures/particles/snowflake3.png");
+            var texture4 = THREE.ImageUtils.loadTexture("assets/textures/particles/snowflake5.png");//loadTexture("../assets/textures/particles/snowflake5.png");
 
             scene.add(createPointCloud("system1", texture1, size, transparent, opacity, sizeAttenuation, color));
             scene.add(createPointCloud("system2", texture2, size, transparent, opacity, sizeAttenuation, color));

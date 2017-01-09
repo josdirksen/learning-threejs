@@ -1,0 +1,12 @@
+# Blender MTL File: 'pinecone.blend'
+# Material Count: 1
+newmtl Material
+Ns 56.862745
+Ka 0.000000 0.000000 0.000000
+Kd 0.360725 0.227524 0.127497
+Ks 0.010000 0.010000 0.010000
+Ni 1.000000
+d 1.000000
+illum 2
+
+

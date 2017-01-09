@@ -1,9 +1,24 @@
 <!DOCTYPE html>
+<!--
+BUGFIX
 
+        loader.load('../assets/models/hand-1.js', function (geometry, mat) {
+        .
+        .
+        }, '../assets/models');
+        
+=>
+
+        loader.load('assets/models/hand-1.js', function (geometry, mat) {
+        .
+        .
+        }, 'assets/models');
+        
+-->
 <html>
 
 <head>
-    <title>Example 09.12 - Load blender model </title>
+    <title>Example 09.12 - Bone Manually </title>
     <script type="text/javascript" src="../libs/three.js"></script>
 
     <script type="text/javascript" src="../libs/stats.js"></script>
@@ -68,7 +83,7 @@
         var clock = new THREE.Clock();
 
         var loader = new THREE.JSONLoader();
-        loader.load('../assets/models/hand-1.js', function (geometry, mat) {
+        loader.load('assets/models/hand-1.js', function (geometry, mat) {
             var mat = new THREE.MeshLambertMaterial({color: 0xF0C8C9, skinning: true});
             mesh = new THREE.SkinnedMesh(geometry, mat);
 
@@ -82,7 +97,7 @@
             // and start the animation
             tween.start();
 
-        }, '../assets/models');
+        }, 'assets/models');
 
         var onUpdate = function () {
             var pos = this.pos;

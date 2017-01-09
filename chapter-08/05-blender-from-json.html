@@ -1,5 +1,33 @@
 <!DOCTYPE html>
+<!--
+BUGFIX
+1. 
 
+        loader.load('assets/models/misc_chair01.js', function (geometry, mat) {
+            mesh = new THREE.Mesh(geometry, mat[0]);
+
+            mesh.scale.x = 15;
+            mesh.scale.y = 15;
+            mesh.scale.z = 15;
+
+            scene.add(mesh);
+
+        }, '../assets/models/');
+        
+=>
+
+
+        loader.load('assets/models/misc_chair01.js', function (geometry, mat) {
+            mesh = new THREE.Mesh(geometry, mat[0]);
+
+            mesh.scale.x = 15;
+            mesh.scale.y = 15;
+            mesh.scale.z = 15;
+
+            scene.add(mesh);
+
+        }, 'assets/models/');        
+-->
 <html>
 
 <head>
@@ -75,7 +103,7 @@
         var mesh;
 
         var loader = new THREE.JSONLoader();
-        loader.load('../assets/models/misc_chair01.js', function (geometry, mat) {
+        loader.load('assets/models/misc_chair01.js', function (geometry, mat) {
             mesh = new THREE.Mesh(geometry, mat[0]);
 
             mesh.scale.x = 15;
@@ -84,7 +112,7 @@
 
             scene.add(mesh);
 
-        }, '../assets/models/');
+        }, 'assets/models/');
 
 
         render();

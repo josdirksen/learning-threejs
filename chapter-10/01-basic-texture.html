@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-
+<!--
+BUGFIX
+"../assets/textures/general/" => "assets/textures/general/"
+-->
 <html>
 
 <head>
@@ -54,7 +57,7 @@
         var cube = createMesh(new THREE.BoxGeometry(5, 5, 5), "brick-wall.jpg");
         cube.position.x = -12;
         scene.add(cube);
-        console.log(cube.geometry.faceVertexUvs);
+        //console.log(cube.geometry.faceVertexUvs);
 
         // position and point the camera to the center of the scene
         camera.position.x = 00;
@@ -89,7 +92,7 @@
         render();
 
         function createMesh(geom, imageFile) {
-            var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + imageFile);
+            var texture = THREE.ImageUtils.loadTexture("assets/textures/general/" + imageFile);
             var mat = new THREE.MeshPhongMaterial();
             mat.map = texture;
 
