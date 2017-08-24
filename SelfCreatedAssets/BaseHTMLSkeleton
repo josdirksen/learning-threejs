@@ -13,4 +13,18 @@
       </style>
     </head>
   <body>
+    <!--Div which would hold Output -->
+    <div id="WebGL-output">
+    </div>
+    <!-- Javascript code that runs our Three.js examples -->
+    <script>
+
+      //once everything is loaded, we run our Three.js stuff.
+      function init() {
+        //here we'll put the Three.js stuff
+      };
+      window.onload = init;
+      </script>
+    </body>
+    <html>
     
