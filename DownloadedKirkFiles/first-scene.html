@@ -4,6 +4,7 @@
 		<title>First Scene</title>
 		<script type="text/javascript" src="../libs/three.js"></script>
 		<script type="text/javascript" src="../libs/stats.js"></script>
+		<script src="../libs/dat.gui.js"></script> //control import thing
 		<style>
 			body{
 				margin: 0;
@@ -15,10 +16,20 @@
 		<div id="stats-output"></div>
 		<div id="WebGL-output"></div>
 		<script type="text/javascript">
-            function init() {
+        function init() {
 
-                var rotationOfScene = 0.0;
-                rotationOfScene = prompt("Please enter number between -9 & 9 to rotate the scene.");
+				var controls = new function() {
+     			this.rotationSpeed = 0.02;
+     			this.bouncingSpeed = 0.03;
+					this.spinSpeed = 0.00;
+				}
+
+   			gui.add(controls, 'rotationSpeed', 0, 0.5);
+   			gui.add(controls, 'bouncingSpeed', 0, 0.5);
+				gui.add(controls, 'spinSpeed', -0.5,.5);
+
+        var rotationOfScene = 0.0;
+        rotationOfScene = prompt("Please enter number between -9 & 9 to rotate the scene.");
 
 				var stats = initStats();
 				var scene = new THREE.Scene() ;
@@ -85,18 +96,14 @@
 				cube.rotation.y += .02;
 				cube.rotation.z += .02;
 
-                
+
 				if (rotationOfScene > 9 || rotationOfScene < -9) {
 				    scene.rotation.y += (rotationOfScene / 1000);
 				} else {
 				    scene.rotation.y += (rotationOfScene / 100);
 				}
 
-               // ask Dr.Kirk 
 
-                
-
-				//scene.rotation.y += (rotationOfScene / 100);
 
 				step += 0.04;
 				sphere.position.x = 20 + 10 * Math.cos(step);
