@@ -15,7 +15,11 @@
 		<div id="stats-output"></div>
 		<div id="WebGL-output"></div>
 		<script type="text/javascript">
-			function init() {
+            function init() {
+
+                var rotationOfScene = 0.0;
+                rotationOfScene = prompt("Please enter number between -9 & 9 to rotate the scene.");
+
 				var stats = initStats();
 				var scene = new THREE.Scene() ;
 				var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -81,8 +85,18 @@
 				cube.rotation.y += .02;
 				cube.rotation.z += .02;
 
-				scene.rotation.y += .005;
+                
+				if (rotationOfScene > 9 || rotationOfScene < -9) {
+				    scene.rotation.y += (rotationOfScene / 1000);
+				} else {
+				    scene.rotation.y += (rotationOfScene / 100);
+				}
 
+               // ask Dr.Kirk 
+
+                
+
+				//scene.rotation.y += (rotationOfScene / 100);
 
 				step += 0.04;
 				sphere.position.x = 20 + 10 * Math.cos(step);
