@@ -44,7 +44,8 @@ sphereGeom.faces.forEach(
 
   );
   var sphereMaterial = new THREE.MeshLambertMaterial({
-    shading: THREE.FlatShading
+    shading: THREE.FlatShading,
+    color: 0xcccccc,
   });
   sphereMaterial.vertexColors = THREE.FaceColors;
 	var sphere = new THREE.Mesh(sphereGeom,sphereMaterial);
