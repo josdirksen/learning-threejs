@@ -8,11 +8,13 @@
 
 <style>
 body{
-
+  margin: 0;
+  overflow: hidden;
 }
 </style>
 
 </head>
+<body>
 
 <div id = "output"> </div>
 
@@ -33,11 +35,18 @@ camera.position.set(0,0,60);
 //light sources Spotlight & ambient light
 var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
 var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+spotLight.position.set(0,0,200);
+
 scene.add(ambLight);
 scene.add(spotLight);
 
 //Plane rendering
 var planeGeom = new THREE.PlaneGeometry();
+planeGeom.faces.forEach(
+  function (s){
+    s.y *= Math.Random();
+  }
+);
 var planeMaterial = new THREE.MeshLambertMaterial({
   shading: THREE.FlatShading,
 });
@@ -47,6 +56,12 @@ scene.add(plane);
 //Sphere rendering
 
 var sphereGeom = new THREE.SphereGeometry(10,10,10);
+sphereGeom.faces.forEach(
+  function(f){
+    f.y = Math.random();
+  }
+);
+
 var sphereMaterial = new THREE.MeshLambertMaterial({
   Shading: THREE.FlatShading,
 });
@@ -67,4 +82,5 @@ renderer.render(scene, camera);
 //rotation inside of an init
 
 </script>
+</body>
 </html>
