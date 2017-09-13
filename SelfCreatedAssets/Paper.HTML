@@ -19,11 +19,42 @@ body{
 <script>
 
 //scene
+var scene = new THREE.Scene();
+
 //camera
+var camera = new THREE.PerspectiveCamera();
+
 //light sources Spotlight & ambient light
-//shapes rendering
+var ambLight = new THREE.AmbientLight();
+var spotLight = new THREE.SpotLight();
+
+//Plane rendering
+var planeGeom = new THREE.PlaneGeometry();
+var planeMaterial = new THREE.MeshLambertMaterial({
+
+});
+var plane = new THREE.PlaneGeometry(planeGeom,planeMaterial);
+
+//Sphere rendering
+
+var sphereGeom = new THREE.SphereGeometry();
+var sphereMaterial = new THREE.MeshLambertMaterial({
+
+});
+var sphere = new THREE.SphereGeometry(sphereGeom, sphereGeom);
+
+
+
+
 //listener
+
+
+
 //rotation inside of an init
+function render {
+
+}
+
 
 </script>
 </html>
