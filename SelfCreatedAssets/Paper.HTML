@@ -20,8 +20,18 @@ body{
 
 <script>
 
+var scene;
+var sphereScene;
+var renderer;
+var camera;
+var ambLight;
+var spotLight;
+var sceneSwitcher = 0;
+
+function init(){
 //scene
-var scene = new THREE.Scene();
+scene = new THREE.Scene();
+sphereScene = new THREE.Scene();
 
 //renderer
 var renderer = new THREE.WebGLRenderer();
@@ -29,16 +39,19 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(new THREE.Color(0x111111));
 
 //camera
-var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .01, 1000);
+camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .01, 1000);
 camera.position.set(0,0,60);
 
 //light sources Spotlight & ambient light
-var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
-var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
 spotLight.position.set(0,0,200);
 
 scene.add(ambLight);
 scene.add(spotLight);
+
+sphereScene.add(ambLight);
+sphereScene.add(spotLight);
 
 //Plane rendering
 var planeGeom = new THREE.PlaneGeometry();
@@ -52,6 +65,8 @@ var planeMaterial = new THREE.MeshLambertMaterial({
 });
 var plane = new THREE.Mesh(planeGeom,planeMaterial);
 scene.add(plane);
+
+sphereScene.add(plane);
 
 //Sphere rendering
 
@@ -68,18 +83,49 @@ var sphereMaterial = new THREE.MeshLambertMaterial({
 var sphere = new THREE.Mesh(sphereGeom, sphereMaterial);
 scene.add(sphere);
 
-
-
-
+sphereScene.add.(sphere);
 
 document.getElementById("output").appendChild(renderer.domElement);
-renderer.render(scene, camera);
 
+}
+
+//if camera is resized it should auto-matically fix it to be the correct size
+function onResize(){
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  render.setSize(window.innerWidth,window.innerHeight);
+}
+
+//there are two scenes, regular (plane) and sphere scene which is for the sphere by term of sceneSwitcher
+function renderScene(){
+  if (sceneSwitcher == 0){
+    renderer.render(scene, camera);
+    requestAnimationFrame(renderScene);
+  }else if (SceneSwitcher == 1) {
+    renderer.render(sphereScene, camera);
+    requestAnimationFramerenderScene();
+  }else {
+    console.log(event.which);
+  }
+}
+
+//this function should enable if any key is pressed and if it is, it will look
+//what the scene is and auto-matically change to the other scene.
+function onKeyDown (){
+  if (sceneSwitcher == 0){
+    sceneSwitcher = 0;
+  }else if (sceneSwitcher == 1) {
+    sceneSwitcher = 1;
+  }
+}
+
+window.onload = init;
+window.addEventListener('keydown', onKeyDown, false);
+window.addEventListener('resize', onResize, false);
 //listener
 
 
 
-//rotation inside of an init
 
 </script>
 </body>
