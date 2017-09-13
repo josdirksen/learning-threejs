@@ -14,47 +14,57 @@ body{
 
 </head>
 
-<div> </div>
+<div id = "output"> </div>
 
 <script>
 
 //scene
 var scene = new THREE.Scene();
 
+//renderer
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(new THREE.Color(0x111111));
+
 //camera
-var camera = new THREE.PerspectiveCamera();
+var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .01, 1000);
+camera.position.set(0,0,60);
 
 //light sources Spotlight & ambient light
-var ambLight = new THREE.AmbientLight();
-var spotLight = new THREE.SpotLight();
+var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+scene.add(ambLight);
+scene.add(spotLight);
 
 //Plane rendering
 var planeGeom = new THREE.PlaneGeometry();
 var planeMaterial = new THREE.MeshLambertMaterial({
-
+  shading: THREE.FlatShading,
 });
-var plane = new THREE.PlaneGeometry(planeGeom,planeMaterial);
+var plane = new THREE.Mesh(planeGeom,planeMaterial);
+scene.add(plane);
 
 //Sphere rendering
 
-var sphereGeom = new THREE.SphereGeometry();
+var sphereGeom = new THREE.SphereGeometry(10,10,10);
 var sphereMaterial = new THREE.MeshLambertMaterial({
-
+  Shading: THREE.FlatShading,
 });
-var sphere = new THREE.SphereGeometry(sphereGeom, sphereGeom);
+var sphere = new THREE.Mesh(sphereGeom, sphereMaterial);
+scene.add(sphere);
 
 
 
+
+
+document.getElementById("output").appendChild(renderer.domElement);
+renderer.render(scene, camera);
 
 //listener
 
 
 
 //rotation inside of an init
-function render {
-
-}
-
 
 </script>
 </html>
