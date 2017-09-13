@@ -26,7 +26,7 @@ var renderer = new THREE.WebGLRenderer();
 var camera;
 var ambLight;
 var spotLight;
-var sceneSwitcher = 1;
+var sceneSwitcher = 0;// 0 is plane, 1 is sphere.
 
 function init(){
     //scene
@@ -57,21 +57,28 @@ function init(){
     sphereScene.add(spotLight);
 
     //Plane rendering
+
+/*
+seem to be having trouble getting the plane to work it seems to want to not pull
+out, current idea is that it is because I used a PlaneGeometry. plan to try
+creating my own point plane and seeing if that helps in the future.
+*/
+
     var planeGeom = new THREE.PlaneGeometry(20, 20, 40, 40);
 
-    planeGeom.vertices.forEach(
+    planeGeom.faces.forEach(
     function (p){
-      if (p.z >= 0){
-        p.x *= 5 * Math.random();
-        p.y *= 5 * Math.random();
-        p.z *= 5 * Math.random();
+      if (p.z <= p.z){
+        //p.x *= 2 * Math.random();
+        //p.y *= 2 * Math.random();
+        p.z *= 100 * Math.random();
       }
     }
     );
 
     var planeMaterial = new THREE.MeshBasicMaterial({
       shading: THREE.FlatShading,
-      color: 0x222222,
+      color: 0x0033aa,
       side: THREE.DoubleSide,
     });
     var plane = new THREE.Mesh(planeGeom,planeMaterial);
@@ -89,8 +96,7 @@ function init(){
 
       function (f){
         f.color.setRGB(Math.random(),Math.random(), Math.random());
-      }
-      );
+      });
 
     sphereGeom.vertices.forEach(
       function (v){
@@ -104,7 +110,7 @@ function init(){
 
 
     var sphereMaterial = new THREE.MeshLambertMaterial({
-    Shading: THREE.FlatShading
+      Shading: THREE.FlatShading
     });
     sphereMaterial.vertexColors = THREE.FaceColors;
     var sphere = new THREE.Mesh(sphereGeom, sphereMaterial);
