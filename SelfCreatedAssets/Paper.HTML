@@ -63,7 +63,7 @@ seem to be having trouble getting the plane to work it seems to want to not pull
 out, current idea is that it is because I used a PlaneGeometry. plan to try
 creating my own point plane and seeing if that helps in the future.
 */
-
+/*
     var planePts = [];
     planePts.push(new THREE.Vector3 ( -5,5,0 ));
     planePts.push(new THREE.Vector3 ( 5,5,0 ));
@@ -76,10 +76,10 @@ creating my own point plane and seeing if that helps in the future.
 
     var planeShape = new THREE.Shape( planePts );
     scene.add(planeShape);
+*/
 
-    /*
     var planeGeom = new THREE.PlaneGeometry(20, 20, 40, 40);
-
+/*
     planeGeom.faces.forEach(
     function (p){
       if (p.z <= p.z){
@@ -89,7 +89,7 @@ creating my own point plane and seeing if that helps in the future.
       }
     }
     );
-
+*/
     var planeMaterial = new THREE.MeshBasicMaterial({
       shading: THREE.FlatShading,
       color: 0x0033aa,
@@ -99,9 +99,9 @@ creating my own point plane and seeing if that helps in the future.
     plane.position.set(0, 0, 0);
     scene.add(plane);
 
-    */
 
-    //sphereScene.add(plane);
+
+    sphereScene.add(plane);
 
     //Sphere rendering
 
