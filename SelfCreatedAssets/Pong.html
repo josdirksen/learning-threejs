@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <script src="../libs/three.js"></script>
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="output"></div>
+    <script>
+        //Some Coders really like marshmellows
+        //scene
+        var scene = new THREE.Scene();
+        //camera
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 1000);
+        camera.position.set(0, 0, 300);
+        camera.lookAt(scene.position);
+        scene.add(camera);
+        //renderer
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(new THREE.Color(0xffffff));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        //lights
+        var spotlight = new THREE.SpotLight();
+        spotlight.position.set(0, 0, 300);
+        var leftPaddle = new Paddle(10, 50, -200, 0, 0, 0x00ff00, scene);
+        var rightPaddle = new Paddle(10, 50, 200, 0, 0, 0x00ff00, scene);
+        var gameBall = new Ball(5, 0, 0, 0, 0xff0000, scene);
+        gameBall.dX = 1;
+        gameBall.dY = 1;
+        document.getElementById("output").appendChild(renderer.domElement);
+        window.addEventListener("keydown", onKeyDown, false);
+        renderScene();
+        function renderScene() {
+            //gameBall.move();
+            requestAnimationFrame(renderScene);
+            renderer.render(scene, camera);
+        }
+        function onKeyDown(e) {
+            switch (e.which) {
+                case 38:
+                    rightPaddle.object.position.y += 1;//.moveUp();
+                    break;
+                case 40:
+                    rightPaddle.object.position.y -= 1;//.moveDown();
+                    break;
+                case 87:
+                    leftPaddle.object.position.y += 1;//.moveUp();
+                    break;
+                case 83:
+                    leftPaddle.object.position.y -= 1;//.moveDown();
+                    break;
+            }
+        }
+        function Paddle(height, width, x, y, z, colorInHex, scene) {
+            this.height = height;
+            this.width = width;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.object = new THREE.Mesh(new THREE.PlaneGeometry(height, width, 5, 5), new THREE.MeshBasicMaterial({ color: colorInHex }));
+            this.object.position.set(x, y, z);
+            scene.add(this.object);
+            this.moveUp = function () {
+                this.object.position.y += 1;
+                this.y += 1;
+            }
+            this.moveDown = function () {
+                this.object.position.y -= 1;
+                this.y -= 1;
+            }
+        }
+        function Ball(radius, x, y, z, colorInHex, scene) {
+            this.radius = radius;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.dX = 0;
+            this.dY = 0;
+            this.object = new THREE.Mesh(new THREE.SphereGeometry(radius,10,10),new THREE.MeshBasicMaterial({color:colorInHex}));
+            this.object.position.set(x,y,z);
+            scene.add(this.object);
+            this.move = function () {
+                this.x += this.dX;
+                this.y += this.dY;
+                alert(window.innerHeight);
+                if (this.x > window.innerWidth/2||this.x<-1*window.innerWidth/2) {
+                    this.dX = -1 * this.dX;
+                    this.x += 2 * this.dX;
+                } else if (this.y > window.innerHeight/2||this.y<-1*window.innerHeight/2){
+                    this.dY = -1 * this.dY;
+                    this.y += 2 * this.dY;
+
+                }
+                this.object.position.x = this.x;
+                this.object.position.y = this.y;
+            }
+        }
+    </script>
+</body>
+</html>
