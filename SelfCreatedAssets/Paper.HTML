@@ -46,9 +46,9 @@ function init(){
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     //light sources Spotlight & ambient light
-    ambLight = new THREE.AmbientLight(0x222222);
+    ambLight = new THREE.AmbientLight(0xffffff);
     spotLight = new THREE.SpotLight(0xffffff);
-    spotLight.position.set(10,10,60);
+    spotLight.position.set(0,0,0);
 
     scene.add(ambLight);
     scene.add(spotLight);
@@ -78,22 +78,30 @@ creating my own point plane and seeing if that helps in the future.
     scene.add(planeShape);
 */
 
-    var planeGeom = new THREE.PlaneGeometry(20, 20, 40, 40);
+    var planeGeom = new THREE.PlaneGeometry(50,50, 40, 40);
 
     planeGeom.vertices.forEach(
     function (p){
       if (p.z <= p.z){
-        p.x *= 2 * Math.random();
-        p.y *= 2 * Math.random();
-        p.z *= 2 * Math.random();
+        p.x +=  Math.random();
+        p.y +=  Math.random();
+        p.z +=  Math.random();
       }
     }
+
     );
 
-    var planeMaterial = new THREE.MeshBasicMaterial({
+    planeGeom.faces.forEach(function(f){
+          f.color.setRGB(Math.random(),Math.random(), Math.random());
+        });
+
+    planeGeom.vertexColors = THREE.FaceColors;
+
+    var planeMaterial = new THREE.MeshLambertMaterial({
       shading: THREE.FlatShading,
       color: 0x0033aa,
       side: THREE.DoubleSide,
+      wireframe: true,
     });
     var plane = new THREE.Mesh(planeGeom,planeMaterial);
     plane.position.set(0, 0, 0);
@@ -116,9 +124,9 @@ creating my own point plane and seeing if that helps in the future.
     sphereGeom.vertices.forEach(
       function (v){
       if (v.y == v.y){
-        v.x += 2*Math.random();
-        v.y += 2*Math.random();
-        v.z += 2*Math.random();
+        v.x += 4*Math.random();
+        v.y += 4*Math.random();
+        v.z += 4*Math.random();
       }
 
     });
