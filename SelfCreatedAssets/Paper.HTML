@@ -79,17 +79,17 @@ creating my own point plane and seeing if that helps in the future.
 */
 
     var planeGeom = new THREE.PlaneGeometry(20, 20, 40, 40);
-/*
-    planeGeom.faces.forEach(
+
+    planeGeom.vertices.forEach(
     function (p){
       if (p.z <= p.z){
-        //p.x *= 2 * Math.random();
-        //p.y *= 2 * Math.random();
+        p.x *= 2 * Math.random();
+        p.y *= 2 * Math.random();
         p.z *= 2 * Math.random();
       }
     }
     );
-*/
+
     var planeMaterial = new THREE.MeshBasicMaterial({
       shading: THREE.FlatShading,
       color: 0x0033aa,
@@ -101,7 +101,7 @@ creating my own point plane and seeing if that helps in the future.
 
 
 
-    sphereScene.add(plane);
+
 
     //Sphere rendering
 
