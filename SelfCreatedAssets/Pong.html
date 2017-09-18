@@ -36,13 +36,40 @@
         gameBall.dX = 1;
         gameBall.dY = 1;
         document.getElementById("output").appendChild(renderer.domElement);
-        window.addEventListener("keydown", onKeyDown, false);
+        window.addEventListener("keydown", Right, false);
+
+        function Right(e){
+          switch (e.which) {
+              case 38:
+                  rightPaddle.object.position.y += 1;//.moveUp();
+                  Left();
+                  break;
+              case 40:
+                  rightPaddle.object.position.y -= 1;//.moveDown();
+                  Left();
+                  break;
+        }}
+
+        window.addEventListener("keydown", Left, false);
+
+        function Left(e){
+          switch(e.which){
+            case 87:
+              leftPaddle.object.position.y += 1;//.moveUp();
+              Right();
+              break;
+            case 83:
+              leftPaddle.object.position.y -= 1;//.moveDown();
+              Right();
+              break;}
+        }
         renderScene();
         function renderScene() {
             //gameBall.move();
             requestAnimationFrame(renderScene);
             renderer.render(scene, camera);
         }
+        /*
         function onKeyDown(e) {
             switch (e.which) {
                 case 38:
@@ -59,6 +86,7 @@
                     break;
             }
         }
+        */
         function Paddle(height, width, x, y, z, colorInHex, scene) {
             this.height = height;
             this.width = width;
