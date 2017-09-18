@@ -99,9 +99,9 @@ creating my own point plane and seeing if that helps in the future.
 
     var planeMaterial = new THREE.MeshLambertMaterial({
       shading: THREE.FlatShading,
-      color: 0x0033aa,
+      //color: 0x0033aa,
       side: THREE.DoubleSide,
-      wireframe: true,
+      //wireframe: true,
     });
     var plane = new THREE.Mesh(planeGeom,planeMaterial);
     plane.position.set(0, 0, 0);
@@ -133,7 +133,8 @@ creating my own point plane and seeing if that helps in the future.
 
 
     var sphereMaterial = new THREE.MeshLambertMaterial({
-      Shading: THREE.FlatShading
+      Shading: THREE.FlatShading,
+      side: THREE.DoubleSide,
     });
     sphereMaterial.vertexColors = THREE.FaceColors;
     var sphere = new THREE.Mesh(sphereGeom, sphereMaterial);
