@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title> Example 01.01 - Basic skeleton </title>
+    <script src="../libs/three.js"> </script>
+    <style>
+      body{
+        /*set margin to 0 and overflow to hidden, to use the complete page*/
+        margin: 0;
+        overflow:hidden;
+      }
+      </style>
+    </head>
+  <body>
+    <!--Div which would hold Output -->
+    <div id="WebGL-output">
+    </div>
+    <!-- Javascript code that runs our Three.js examples -->
+    <script>
+
+      //once everything is loaded, we run our Three.js stuff.
+      function init() {
+
+        function makeCube(x,y,z,){
+          var cubeGeometry = new THREE.cubeGeometry(this.x,this.y,this.z);
+          var cubeMaterial = new THREE.MeshLambertMaterial({
+
+          });
+
+          return (cubeGeometry,cubeMaterial)
+
+        }
+
+
+        var cube1 = new THREE.Mesh(makeCube(5,5,5));
+        var cube2 = new THREE.Mesh(makeCube(5,5,5));
+        var cube3 = new THREE.Mesh(makeCube(5,5,5));
+
+        cube1.position.set = (0,5,0);
+        cube2.position.set = (0,10,0);
+        cube3.position.set = (0,15,0);
+
+        cube1.rotate.y = Math.Random();
+        cube2.rotate.y = Math.Random();
+        cube3.rotate.y = Math.Random();
+
+
+
+      };
+      window.onload = init;
+      </script>
+    </body>
+    <html>
