@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Crumpled Paper</title>
+		<script src="libs/three.js"></script>
+		<style>
+			body{
+				/* Set margin to 0 and overflow to hidden to use the complete page. */
+				margin: 0;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="output"></div>
+		
+		<script>
+            function init() {
+                var sheetOrWad = 0;
+                var scene = new THREE.Scene();
+                var renderer = new THREE.WebGLRenderer();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(new THREE.Color(0x00FFFF));
+                var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, .1, 1000);
+                camera.position.set(0, 0, 50);
+                camera.lookAt(new THREE.Vector3(0, 0, 0));
+                var dirLight1 = new THREE.DirectionalLight(0xeeeeee);
+                dirLight1.position.set(100, 100, 100);
+                var dirLight2 = new THREE.DirectionalLight(0xeeeeee);
+                dirLight2.position.set(-100, -100, 0);
+                var ambLight = new THREE.AmbientLight(0x353535);
+                scene.add(dirLight1);
+                scene.add(ambLight);
+                scene.add(dirLight2);
+                var planeGeom = new THREE.PlaneGeometry(42, 55, 42, 55);
+                planeGeom.vertices.forEach(
+                    function (v) {
+                        v.x += Math.random() * .75;
+                        v.y += Math.random() * .75;
+                        v.z += Math.random() * .5;
+                    });
+                planeGeom.computeFaceNormals();
+                var planeMat = new THREE.MeshLambertMaterial({ color: 0xffffff, shading: THREE.FlatShading, side:THREE.DoubleSide });
+                var plane = new THREE.Mesh(planeGeom, planeMat);
+                var normals = new THREE.FaceNormalsHelper(plane, 5, 0xffff00, 1);
+                //                scene.add(normals);
+                scene.add(plane);
+                var sphereGeom = new THREE.SphereGeometry(20, 50, 30);
+                sphereGeom.vertices.forEach(
+                    function (v) {
+                        v.x += Math.random() * 3;
+                        v.y += Math.random() * 3;
+                        v.z += Math.random() * 3;
+                    });
+                sphereGeom.computeFaceNormals();
+                var sphereMat = new THREE.MeshLambertMaterial({ color: 0xffffff, shading: THREE.FlatShading, size:THREE.DoubleSide });
+                var sphere = new THREE.Mesh(sphereGeom, sphereMat);
+                sphere.position.set(0, 0, -20);
+//                scene.add(sphere);
+                document.getElementById("output").appendChild(renderer.domElement);
+                document.addEventListener("keydown", onMyKeyDown, false);
+                window.addEventListener('resize', onResize, false);
+
+                render();
+
+                function render() {
+                    plane.rotateY(.01);
+                    sphere.rotateY(.01);
+                    if (sheetOrWad == 1) {
+                        scene.remove(plane);
+                        scene.add(sphere);
+                    }
+                    else {
+                        scene.remove(sphere);
+                        scene.add(plane);
+                    }
+
+                    renderer.render(scene, camera);
+                    window.requestAnimationFrame(render);
+                }
+
+                function onResize() {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                }
+
+                function onMyKeyDown(event) {
+                    if (event.which == 32)
+                      sheetOrWad = 1 - sheetOrWad;
+                }
+            }
+			window.onload = init;
+		</script>
+	</body>
+</html>
