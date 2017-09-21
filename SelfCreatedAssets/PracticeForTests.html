@@ -1,5 +1,5 @@
 <!DOCTYPE HTML><html>
-
+<head>
   <title>Practice for Graphics</title>
   <script src="../libs/THREE.js"></script>
   <style>
@@ -14,6 +14,7 @@
 //scene
 var scene = new THREE.Scene();
 
+var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerHeight/window.innerWidth);
 renderer.setClearColor(new THREE.Color(0xffffff));
 
@@ -21,12 +22,15 @@ document.getElementById("output").appendChild(renderer.domElement);
 
 //camera
 var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .01,1000);//cant remember firest few arguments
-var renderer = new THREE.WebGLRenderer();
+scene.add(camera);
 
 //renderer
 
 //lights
 var ambLight = new THREE.AmbientLight({color: 0x555555});
+var spotlight = new THREE.SpotLight(0xaaaaaa);
+scene.add(ambLight);
+
 //matreials
 var sphereGeom = new THREE.SphereGeometry(10,10,10);
 var sphereMat = new THREE.MeshLambertMaterial({color: 0xaa0000});
