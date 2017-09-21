@@ -1,0 +1,59 @@
+<!DOCTYPE HTML><html>
+<head>
+  <title>Blue Sphere</title>
+  <style>
+    body{
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+  <script src="../libs/THREE.js"></script>
+</head>
+<body>
+<div id="output"></div><script>
+
+/*
+Without looking at notes, books, old code, or the web, create a simple THREE.js program that displays a blue sphere with black background. Light your sphere so that it can be seen, but there's no reason to spend time trying to make it more attractive. If I can see it, you have full credit!
+
+You can earn 5% of the total value of this problem just by making sure the path to the three.js library file is "libs/three.js".
+
+When you submit this file, the 2nd part of the exam will become available.
+*/
+//scene renderer camera light material
+//I do appologize for writing in where I believe that I have an error, as for
+//some strange reason, this is the first time My IDE didn't auto complete.
+//very strange I am feeling very frustrated with it.
+var myScene = new THREE.Scene();
+var myRenderer = new THREE.WebGlRenderer(); //I believe there is an error here
+
+myRenderer.setSize(window.innerWidth, window.innerHeight);
+myRenderer.setClearColor(new THREE.Color("black"));
+
+var myCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+var ambLight = new THREE.AmbientLight(0x000000);
+var spotLight = new THREE.SpotLight(0xaaaaaa);
+
+myScene.add(ambLight, spotLight);
+
+var SphereGeom = new THREE.SphereGeometry(10,20,20);
+var SphereMat = new THREE.MeshLambertMaterial({//I believe there is an error here
+  color: 0x0000aa
+});
+
+var myBlueSPhere = new THREE.Mesh(SphereGeom,SphereMat);
+
+myCamera.position.x = 30;
+myCamera.position.y = 30;
+myCamera.position.z = 40;
+
+
+
+myScene.add(myBlueSPhere);
+
+document.getElementById("output").appendChild(domElement);
+
+myRenderer.render(myScene,myCamera);
+
+</script>
+</body>
+</html>
