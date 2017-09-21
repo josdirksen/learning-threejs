@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<Html>
+<head>
+     <title>
+          Practice1.1
+     </title>
+     <style>
+          Body{
+               Margin: 0;
+               overflow: hidden;
+          }
+     </style>
+     <script src = "../libs/THREE.js"></script>
+</head>
+<body>
+     <div id="output"> </div>
+
+<script>
+     //scene
+     var myScene = new THREE.Scene();
+     //renderer
+     var myRenderer = new THREE.WebGLRenderer();
+     myRenderer.setClearColor(0xdddddd);
+     myRenderer.setSize(window.innerWidth / window.innerHeight);
+
+     //camera
+     var myCamera = new THREE.PerspectiveCamera(45,window.innerHeight,window.innerWidth,.01,1000);
+
+     //ambient light
+     var ambLight = new THREE.AmbientLight(0xaaaaaa);
+     //spotlight
+     var spotlight = new THREE.SpotLight(0x888888);
+     //materials
+     var planeGeom = new THREE.PlaneGeometry(10,10,5,5);
+     var planeMat = new THREE.MeshLambertMaterial({
+          color: 0xaa0000,
+          wireFrame: true,
+     });
+     var myPlane = new THREE.Mesh(planeGeom,planeMat);
+     myScene.add(myPlane);
+
+     document.getElementById("output").appendChild(myRenderer.domElement);
+
+     myRenderer.render(myScene,myCamera);
+</script>
+
+</body>
+</html>
