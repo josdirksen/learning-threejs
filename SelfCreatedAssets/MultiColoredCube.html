@@ -18,9 +18,12 @@ body {
 	var renderer = new THREE.WebGLRenderer();
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.setClearColor(new THREE.Color(0xffffff));
+
+  var myTimer = 0; //something just for fun
+
     //Camera
 	var camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
-	camera.position.set(0,0,100);
+	camera.position.set(0,0,400);
     //Lights
 	var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
 	var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
@@ -75,14 +78,14 @@ I need to figure out the actual dimensions of the cube, to use in the XYZ in bel
 -40 - 40 z
 */
 
-    var cube = new cubeCreate(10,10,0,0x12ac47,scene);
-    var cube1 = new cubeCreate(10,10,20,0xaaaaaa,scene);
-    var cube2 = new cubeCreate(10,-10,0,0x557327,scene);
-    var cube3 = new cubeCreate(10,-10,20,0x81740a,scene);
-    var cube4 = new cubeCreate(-10,-10,20,0x0000ff,scene);
-    var cube5 = new cubeCreate(-10,10,20,0x990033,scene);
-    var cube6 = new cubeCreate(-10,-10,0,0x83ffd3,scene);
-    var cube7 = new cubeCreate(-10,10,0,0x5813af,scene);
+    var cube = new cubeCreate(10,10,0,0x12ac47,scene); // back top right
+    var cube1 = new cubeCreate(10,10,20,0xaaaaaa,scene); //front top Right
+    var cube2 = new cubeCreate(10,-10,0,0x557327,scene);//back bottom right
+    var cube3 = new cubeCreate(10,-10,20,0x81740a,scene);//front bottom right
+    var cube4 = new cubeCreate(-10,-10,20,0x0000ff,scene);//front bottom left
+    var cube5 = new cubeCreate(-10,10,20,0x990033,scene);//front top Left
+    var cube6 = new cubeCreate(-10,-10,0,0x83ffd3,scene);//back bottom left
+    var cube7 = new cubeCreate(-10,10,0,0x5813af,scene);//back left top
 
 
 
@@ -98,6 +101,83 @@ I need to figure out the actual dimensions of the cube, to use in the XYZ in bel
 
         scene.rotateY(.01);
         scene.rotateX(.01);
+
+        myTimer += 1;
+        console.log(myTimer);
+
+        if(myTimer > 500 && myTimer < 1000){
+          /*
+          Goal of this is to have the cubes seporate into different pieces along the diagional plane and then come back together over time.
+          */
+
+          cube.object.position.y += .1;
+          cube.object.position.x += .1;
+          cube.object.position.z += -.1;
+
+          cube1.object.position.y += .1;
+          cube1.object.position.x += .1;
+          cube1.object.position.z += .1;
+
+          cube2.object.position.y += -.1;
+          cube2.object.position.x += .1;
+          cube2.object.position.z += -.1;
+
+          cube3.object.position.y += -.1;
+          cube3.object.position.x += .1;
+          cube3.object.position.z += .1;
+
+          cube4.object.position.y += -.1;
+          cube4.object.position.x += -.1;
+          cube4.object.position.z += .1;
+
+          cube5.object.position.y += .1;
+          cube5.object.position.x += -.1;
+          cube5.object.position.z += .1;
+
+          cube6.object.position.y += -.1;
+          cube6.object.position.x += -.1;
+          cube6.object.position.z += -.1;
+
+          cube7.object.position.y += .1;
+          cube7.object.position.x += -.1;
+          cube7.object.position.z += -.1;
+
+        }else if(myTimer >= 1000 && myTimer < 1500 ){
+          cube.object.position.y += -.1;
+          cube.object.position.x += -.1;
+          cube.object.position.z += .1;
+
+          cube1.object.position.y += -.1;
+          cube1.object.position.x += -.1;
+          cube1.object.position.z += -.1;
+
+          cube2.object.position.y += .1;
+          cube2.object.position.x += -.1;
+          cube2.object.position.z += .1;
+
+          cube3.object.position.y += .1;
+          cube3.object.position.x += -.1;
+          cube3.object.position.z += -.1;
+
+          cube4.object.position.y += .1;
+          cube4.object.position.x += .1;
+          cube4.object.position.z += -.1;
+
+          cube5.object.position.y += -.1;
+          cube5.object.position.x += .1;
+          cube5.object.position.z += -.1;
+
+          cube6.object.position.y += .1;
+          cube6.object.position.x += .1;
+          cube6.object.position.z += .1;
+
+          cube7.object.position.y += -.1;
+          cube7.object.position.x += .1;
+          cube7.object.position.z += .1;
+
+        }else if(myTimer > 1500){
+          myTimer = 0;
+        }
 
         renderer.render(scene, camera);
         requestAnimationFrame(renderScene);
