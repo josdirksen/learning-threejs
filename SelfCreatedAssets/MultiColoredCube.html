@@ -48,7 +48,7 @@ body {
       this.hex = hex
       var cubeSize = 20;
       var cubeGeometry = new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize);
-      this.object = new THREE.Mesh(new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize), new THREE.MeshBasicMaterial({color:this.hex}));
+      this.object = new THREE.Mesh(new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize), new THREE.MeshBasicMaterial({color: Math.random() * 0xffffff}));
 
       //lesson learned, one must do this.object = new THREE.Mesh() and define eveything inside of the () for the geometry and the material
 
