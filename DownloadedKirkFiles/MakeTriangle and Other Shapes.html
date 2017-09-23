@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+    <script src="../libs/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="output"></div>
+
+    <script>
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        var renderer = new THREE.WebGLRenderer();
+
+        renderer.setClearColor(new THREE.Color(0xFF8888, 1.0));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+//        renderer.shadowMapEnabled = true;
+
+        document.getElementById("output").appendChild(renderer.domElement);
+
+        camera.position.x = 20;
+        camera.position.y = 20;
+        camera.position.z = 30;
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+        var spotlight = new THREE.SpotLight(0xffffff);
+        spotlight.position.set(0, 10, 20);
+        spotlight.castShadow = true;
+        scene.add(spotlight);
+
+
+        var vertices = [
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(0, 5, 0),
+            new THREE.Vector3(5, 0, 0)
+        ];
+        var faces = [
+            new THREE.Face3(0, 2, 1)
+        ];
+        var triangleGeom = new THREE.Geometry();
+        triangleGeom.vertices = vertices;
+        triangleGeom.faces = faces;
+        triangleGeom.computeFaceNormals();
+        var triangleMaterial = new THREE.MeshLambertMaterial({ color: 0x00ff00, transparent: false });
+        var myTriangle = new THREE.Mesh(triangleGeom, triangleMaterial);
+        scene.add(myTriangle);
+
+
+        var boxGeom = new THREE.BoxGeometry(5, 5, 5);
+        var boxMat = new THREE.MeshLambertMaterial({ color: 0x0088FF, transparent: false });
+        var box = new THREE.Mesh(boxGeom, boxMat);
+        box.position.set(-5, -5, -5);
+        scene.add(box);
+
+        var lineGeom = new THREE.Geometry();
+        lineGeom.vertices.push(
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(10, 0, 0),
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(0, 10, 0),
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(0, 0, 10)
+            );
+        var lineMat = new THREE.LineBasicMaterial({ color: 0xFFFFFF });
+        var lines = new THREE.Line(lineGeom, lineMat, THREE.LineStrip);
+        scene.add(lines);
+        // scene.add(new THREE.AxisHelper(10, 10, 10));
+
+        var sphereGeom = new THREE.SphereGeometry(4, 20, 20);
+        var sphereMat = new THREE.MeshBasicMaterial({ color: 0xff4444, wireframe: true });
+        var sphere = new THREE.Mesh(sphereGeom, sphereMat);
+        sphere.position.set(0, 0, 10);
+        scene.add(sphere);
+
+        renderer.render(scene, camera);
+    </script>
+
+</body>
+</html>
