@@ -33,30 +33,24 @@
     scene.add(spotLightRight);
     scene.add(ambLight);
 
-    function makeVector(x,y,z){
-      this.object = new THREE.Vector3(this.x,this.y,this.z);
-    }
 
-    function makeTriangle(myVector, myVector1, myVector2){
-      var triangleVertices = [
-          new THREE.Vector3(this.myVector),
-          new THREE.Vector3(this.myVector1),
-          new THREE.Vector3(this.myVector2),
-      ];
-      var triangleFaces = [
-          new THREE.Face3(0, 2, 1)
-      ];
-      triangleGeom = new THREE.Geometry();
-      triangleGeom.vertices = triangleVertices;
-      triangleGeom.faces = triangleFaces;
-      this.object = new THREE.Mesh(triangleGeom, new THREE.MeshBasicMaterial({
-        color: 0x0000aa
-      }));
-      scene.add(this.object);
-    }
+    var vertices = [
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(0, 5, 0),
+        new THREE.Vector3(5, 0, 0)
+    ];
+    var faces = [
+        new THREE.Face3(0, 2, 1)
+    ];
+    var triangleGeom = new THREE.Geometry();
+    triangleGeom.vertices = vertices;
+    triangleGeom.faces = faces;
+    triangleGeom.computeFaceNormals();
+    var triangleMaterial = new THREE.MeshLambertMaterial({ color: 0x00ff00, transparent: false });
+    var myTriangle = new THREE.Mesh(triangleGeom, triangleMaterial);
+    scene.add(myTriangle);
 
     triangle1 = new makeTriangle(makeVector(0,0,0), makeVector(5,0,0), makeVector(0,5,0));
-
 
     document.getElementById("output").appendChild(renderer.domElement);
 
