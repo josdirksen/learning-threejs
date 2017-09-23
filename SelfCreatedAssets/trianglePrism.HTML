@@ -14,7 +14,7 @@
     </head>
   <body>
     <!--Div which would hold Output -->
-    <div id="WebGL-output">
+    <div id="output">
     </div>
     <!-- Javascript code that runs our Three.js examples -->
     <script>
@@ -33,33 +33,35 @@
     scene.add(spotLightRight);
     scene.add(ambLight);
 
-    var verts = [
-        new THREE.Vector3(0, 10),
-        new THREE.Vector3(2.94, 4.05),
-        new THREE.Vector3(9.51, 3.09),
-        new THREE.Vector3(4.76, -1.55),
-        new THREE.Vector3(5.88, -8.09),
-        new THREE.Vector3(0, -5),
+    function makeVector(x,y,z){
+      this.object = new THREE.Vector3(this.x,this.y,this.z);
+    }
+
+    function makeTriangle(myVector, myVector1, myVector2){
+      var triangleVertices = [
+          new THREE.Vector3(this.myVector),
+          new THREE.Vector3(this.myVector1),
+          new THREE.Vector3(this.myVector2),
       ];
-      var faces = [
-          new THREE.Face3(0, 9, 1),
-          new THREE.Face3(1, 3, 2),
-          new THREE.Face3(3, 5, 4),
-        ];
-      var triangleGeom = new THREE.Geometry();
-      triangleGeom.vertices = verts;
-      triangleGeom.faces = faces;
-      //triangleGeom.computerFaceNormals();
-      var triangleMat = new THREE.MeshLambertMaterial({
-        color:'white',
-        side: THREE.DoubleSide
-      });
-      var triangle = new THREE.Mesh(triangleGeom, triangleMat);
-      scene.add(triangle);
+      var triangleFaces = [
+          new THREE.Face3(0, 2, 1)
+      ];
+      triangleGeom = new THREE.Geometry();
+      triangleGeom.vertices = triangleVertices;
+      triangleGeom.faces = triangleFaces;
+      this.object = new THREE.Mesh(triangleGeom, new THREE.MeshBasicMaterial({
+        color: 0x0000aa
+      }));
+      scene.add(this.object);
+    }
+
+    triangle1 = new makeTriangle(makeVector(0,0,0), makeVector(5,0,0), makeVector(0,5,0));
 
 
-          renderer.render(scene, camera);
-      document.getElementById("output").appendChild(renderer.domElement);
+    document.getElementById("output").appendChild(renderer.domElement);
+
+    renderer.render(scene, camera);
+
 
       </script>
     </body>
