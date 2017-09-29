@@ -1,0 +1,178 @@
+<html>
+<head>
+<title>Represent the U </title>
+<script src ="../libs/three.js"></script>
+<style>
+body {
+    margin: 0;
+	overflow: hidden;
+}
+</style>
+</head>
+<body>
+  <div id = "output"></div>
+  <script>
+    //Scene
+	var scene = new THREE.Scene();
+    //Renderer
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.setClearColor(new THREE.Color(0xffffff));
+
+  var myTimer = 0; //something just for fun
+
+    //Camera
+	var camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
+	camera.position.set(0,0,300);
+    //Lights
+	var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+	var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+  var spotLight2 = new THREE.SpotLight (new THREE.Color(0xffffff));
+  var spotLight3 = new THREE.SpotLight (new THREE.Color(0xffffff));
+  var spotLight4 = new THREE.SpotLight (new THREE.Color(0xffffff));
+  var spotLight5 = new THREE.SpotLight (new THREE.Color(0xffffff));
+  var spotLight6 = new THREE.SpotLight (new THREE.Color(0xffffff));
+	spotLight.position.set(0,0,-500);
+  spotLight2.position.set(500,0,0);
+  spotLight3.position.set(0,500,0);
+  spotLight4.position.set(0,-500,0);
+  spotLight5.position.set(-500,0,0);
+  spotLight6.position.set(0,0,500);
+
+	scene.add(ambLight);
+	scene.add(spotLight,spotLight2,spotLight3,spotLight4, spotLight5,spotLight6);
+    //Model
+
+    var cube = new THREE.Mesh(new THREE.BoxGeometry(600,600,600), new  THREE.MeshLambertMaterial({color: 'skyblue', side: THREE.DoubleSide}));
+    scene.add(cube);//for whatever reason there is a random white line when a vertice collides it together.
+
+    var verticesInner = [
+        new THREE.Vector3(9,60,0),//0
+        new THREE.Vector3(9,70,0),//1
+        new THREE.Vector3(35,70,0),//2
+        new THREE.Vector3(35,60,0),//3
+        new THREE.Vector3(35,-10,0),//4
+        new THREE.Vector3(18.5,-27,0),//5
+        new THREE.Vector3(-18.5,-27,0),//6
+        new THREE.Vector3(-35,-10,0),//7
+        new THREE.Vector3(-35,60,0),//8
+        new THREE.Vector3(-35,70,0),//9
+        new THREE.Vector3(-9,70,0),//10
+        new THREE.Vector3(-9,60,0),//11
+        new THREE.Vector3(-24,60,0),//12
+        new THREE.Vector3(-24,-5,0),//13
+        new THREE.Vector3(-16,-15,0),//14
+        new THREE.Vector3(16,-15,0),//15
+        new THREE.Vector3(24,-5,0),//16
+        new THREE.Vector3(24,60,0)//17
+    ];
+    var facesInner = [
+        new THREE.Face3(0,1,2), //1
+        new THREE.Face3(2,3,0), //2
+        new THREE.Face3(3,4,17),//3
+        new THREE.Face3(4,17,16),//4
+        new THREE.Face3(4,5,16),//5
+        new THREE.Face3(5,6,15),//6
+        new THREE.Face3(6,14,15),//7
+        new THREE.Face3(6,14,7),//8
+        new THREE.Face3(7,14,13),//9
+        new THREE.Face3(7,13,8),//10
+        new THREE.Face3(12,13,8),//11
+        new THREE.Face3(8,9,10),//12
+        new THREE.Face3(10,11,12),//13
+        new THREE.Face3(5,15,16),//14
+        new THREE.Face3(10,8,12)
+    ];
+
+    var verticesOuter = [
+      new THREE.Vector3(50,70,0),//0
+      new THREE.Vector3(70,70,0),//1
+      new THREE.Vector3(70,60,0),//2
+      new THREE.Vector3(60,60,0),//3
+      new THREE.Vector3(60,-18,0),//4
+      new THREE.Vector3(36,-45,0),//5
+      new THREE.Vector3(-36,-45,0),//6
+      new THREE.Vector3(-60,-20,0),//7
+      new THREE.Vector3(-60,60,0),//8
+      new THREE.Vector3(-70,60,0),//9
+      new THREE.Vector3(-70,70,0),//10
+      new THREE.Vector3(-50,70,0),//11
+      new THREE.Vector3(-50,60,0),//12
+      new THREE.Vector3(-50,-16,0),//13
+      new THREE.Vector3(-31,-37,0),//14
+      new THREE.Vector3(31,-37,0),//15
+      new THREE.Vector3(50,-16,0),//16
+      new THREE.Vector3(50,60,0)//17
+    ];
+
+    var facesOuter = [
+        new THREE.Face3(17,0,1), //1
+        new THREE.Face3(17,2,1), //2
+        new THREE.Face3(3,4,17),//3
+        new THREE.Face3(4,17,16),//4
+        new THREE.Face3(4,5,16),//5
+        new THREE.Face3(5,16,15),//6
+        new THREE.Face3(6,14,15),//7
+        new THREE.Face3(5,15,6),//8
+        new THREE.Face3(7,14,13),//9
+        new THREE.Face3(6,14,7),//10
+        new THREE.Face3(7,13,14),//11
+        new THREE.Face3(13,8,12),//12
+        new THREE.Face3(9,10,11),//13
+        new THREE.Face3(9,11,12),//14
+        new THREE.Face3(7,13,8)
+    ];
+
+    var logoGeomOutside = new THREE.Geometry();
+    logoGeomOutside.vertices = verticesOuter;
+    logoGeomOutside.faces = facesOuter;
+    logoGeomOutside.computeFaceNormals();
+
+    var logoMaterialOutside = new THREE.MeshLambertMaterial({
+      color:0xff0000,
+      side: THREE.DoubleSide,
+     //wireframe: true,
+     });
+    var myLogoOutside = new THREE.Mesh(logoGeomOutside, logoMaterialOutside);
+    scene.add(myLogoOutside);
+
+    var logoGeom = new THREE.Geometry();
+    logoGeom.vertices = verticesInner;
+    logoGeom.faces = facesInner;
+    logoGeom.computeFaceNormals();
+
+    var logoMaterial = new THREE.MeshLambertMaterial({
+      color:0xff0000,
+      side: THREE.DoubleSide,
+      //wireframe : true
+      });
+    var myLogo = new THREE.Mesh(logoGeom, logoMaterial);
+    scene.add(myLogo);
+
+    document.getElementById("output").appendChild(renderer.domElement);
+
+
+
+      renderScene();
+
+    function onResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function renderScene() {
+
+        scene.rotateY(.01);
+        renderer.render(scene, camera);
+        requestAnimationFrame(renderScene);
+    }
+
+
+
+
+      window.addEventListener('resize', onResize, false);
+
+  </script>
+</body>
+</html>
