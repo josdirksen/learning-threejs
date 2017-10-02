@@ -36,7 +36,7 @@ var spotLight = new THREE.SpotLight(0xaaaaaa);
 myScene.add(ambLight, spotLight);
 
 var SphereGeom = new THREE.SphereGeometry(10,20,20);
-var SphereMat = new THREE.MeshLambertMaterial({//I believe there is an error here
+var SphereMat = new  THREE.MeshLambertMaterial({//I believe there is an error here
   color: 0x0000aa
 });
 
@@ -51,7 +51,6 @@ myCamera.position.z = 40;
 myScene.add(myBlueSPhere);
 
 document.getElementById("output").appendChild(domElement);
-
 myRenderer.render(myScene,myCamera);
 
 </script>
