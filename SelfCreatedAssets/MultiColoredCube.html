@@ -175,8 +175,18 @@ I need to figure out the actual dimensions of the cube, to use in the XYZ in bel
           cube7.object.position.x += .1;
           cube7.object.position.z += .1;
 
-        }else if(myTimer > 1500){
+        }else if(myTimer >= 1500){
           myTimer = 0;
+
+          cube.object.position.set(10,10,0);
+           cube1.object.position.set(10,10,20);
+           cube2.object.position.set(10,-10,0);
+           cube3.object.position.set(10,-10,20);
+           cube4.object.position.set(-10,-10,20);
+           cube5.object.position.set(-10,10,20);
+           cube6.object.position.set(-10,-10,0);
+          cube7.object.position.set(-10,10,0);
+
         }
 
         renderer.render(scene, camera);
