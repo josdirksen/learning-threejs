@@ -42,7 +42,11 @@
 
       //---------------------Model-----------------------------------
 
-  
+      var model;
+      var loader = new THREE.JSONLoader();
+      loader.load('LaurasModelFromBlender.js', loadedFunc);
+
+
       //-------------------------------------------------------------
 
     renderScene();
