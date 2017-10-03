@@ -62,7 +62,10 @@
 
     renderScene();
 
-    function renderScene() {
+    function renderScene()
+    {
+        if (model)
+          scene.rotateY = .1;
         renderer.render(scene, camera);
         requestAnimationFrame(renderScene);
     }
