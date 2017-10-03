@@ -38,7 +38,7 @@
 
       var ambLight = new THREE.AmbientLight(new THREE.Color(0x050505));
     	var spotLight = new THREE.SpotLight(new THREE.Color(0xcccccc));
-      scene.add(ambLight, SpotLight);
+      scene.add(ambLight, spotLight);
 
       //---------------------Model-----------------------------------
 
@@ -48,6 +48,18 @@
 
 
       //-------------------------------------------------------------
+
+    document.getElementById("output").appendChild(renderer.domElement);
+
+    function loadedFunc(geom, mat)
+    {
+      model = new THREE.Mesh(geom,mat[0]);
+      var scale = 17;
+      model.scale.x = scale;
+      model.scale.y = scale;
+      model.scale.z = scale;
+      scene.add(model);
+    }
 
     renderScene();
 
