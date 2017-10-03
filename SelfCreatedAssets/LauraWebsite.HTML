@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title> Blender project </title>
+    <script src="../libs/three.js"> </script>
+    <style>
+      body{
+        /*set margin to 0 and overflow to hidden, to use the complete page*/
+        margin: 0;
+        overflow:hidden;
+      }
+      </style>
+    </head>
+  <body>
+    <!--Div which would hold Output -->
+    <div id="output">
+    </div>
+    <!-- Javascript code that runs our Three.js examples -->
+    <script>
+
+
+      //looking at point light, json import an dother things
+
+
+      //Scene
+      var scene = new THREE.Scene();
+      //Renderer
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor(new THREE.Color('black'));
+
+      var myTimer = 0; //something just for fun
+
+      //Camera
+      var camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
+      camera.position.set(0,135,500);
+
+      var ambLight = new THREE.AmbientLight(new THREE.Color(0x050505));
+    	var spotLight = new THREE.SpotLight(new THREE.Color(0xcccccc));
+      scene.add(ambLight, SpotLight);
+
+      //---------------------Model-----------------------------------
+
+  
+      //-------------------------------------------------------------
+
+    renderScene();
+
+    function renderScene() {
+        renderer.render(scene, camera);
+        requestAnimationFrame(renderScene);
+    }
+
+    function onResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+      window.addEventListener('resize', onResize, false);
+
+    </script>
+  </body>
+<html>
