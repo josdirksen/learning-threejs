@@ -55,6 +55,7 @@
     {
       model = new THREE.Mesh(geom,mat[0]);
       var scale = 17;
+      model.rotateY(-Math.Pi / 2);
       model.scale.set(scale,scale,scale);
       scene.add(model);
     }
