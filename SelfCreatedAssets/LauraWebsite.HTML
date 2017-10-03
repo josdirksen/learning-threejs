@@ -55,9 +55,7 @@
     {
       model = new THREE.Mesh(geom,mat[0]);
       var scale = 17;
-      model.scale.x = scale;
-      model.scale.y = scale;
-      model.scale.z = scale;
+      model.scale.set(scale,scale,scale);
       scene.add(model);
     }
 
