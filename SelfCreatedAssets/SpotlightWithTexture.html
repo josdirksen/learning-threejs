@@ -28,6 +28,12 @@
         var ambLight = new THREE.AmbientLight(0x050505);
         scene.add(ambLight);
 
+        //--------------target light --------------
+        var lightTarget = new THREE.Object3D();
+        lightTarget.position.set(0,0,0);
+        scene.add(lightTarget);
+        spotLight1.target = lightTarget;
+
         //creating textrue
         var texture = THREE.ImageUtils.loadTexture("UUatNight.jpg");
         //-----texture for wraping -----
@@ -57,6 +63,18 @@
           renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
+        function onKeyDown(event) {
+            console.log(event.which);
+            switch (event.which) {
+                case 38: lightTarget.position.y += 2 ; break;//up
+                case 40: lightTarget.position.y -= 2; break;//down
+                case 37: lightTarget.position.x -= 2; break;//left
+                case 39: lightTarget.position.x += 2; break;//righ
+
+            }
+        }
+
+        window.addEventListener('keydown', onKeyDown, false);
         window.addEventListener('resize', onResize, false);
     </script>
 </body>
