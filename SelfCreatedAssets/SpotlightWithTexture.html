@@ -29,12 +29,15 @@
 
         //creating textrue
         var texture = THREE.ImageUtils.loadTexture("UUatNight.jpg");
+        //-----texture for wraping -----
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.WrapT = THREE.RepeatWrapping;
+        texture.repeat.set(2,1);
+        //------------------------------
 
         //creating plane
-        var plane = new THREE.Mesh(new THREE.PlaneGeometry(1024,512,1024,512), new THREE.MeshPhongMaterial({map: texture}));
+        var plane = new THREE.Mesh(new THREE.PlaneGeometry(1024,512,512,256), new THREE.MeshPhongMaterial({map: texture}));
         scene.add(plane);
-
-
 
         //render scene function
         renderScene();
