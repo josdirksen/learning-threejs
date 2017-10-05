@@ -13,6 +13,7 @@
     <div id="output">
     </div>
     <script>
+        //all the normal stuff
         var scene = new THREE.Scene();
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -26,21 +27,33 @@
         var ambLight = new THREE.AmbientLight(0x050505);
         scene.add(ambLight);
 
-        var plane = new THREE.Mesh(new THREE.PlaneGeometry(1024,512,1024,512), new THREE.MeshLambertMaterial({color: 'blue'}));
+        //creating textrue
+        var texture = THREE.ImageUtils.loadTexture("UUatNight.jpg");
+
+        //creating plane
+        var plane = new THREE.Mesh(new THREE.PlaneGeometry(1024,512,1024,512), new THREE.MeshPhongMaterial({map: texture}));
         scene.add(plane);
 
+
+
+        //render scene function
         renderScene();
 
         document.getElementById("output").appendChild(renderer.domElement);
-
-
-
 
         function renderScene() {
 
             requestAnimationFrame(renderScene);
             renderer.render(scene, camera);
         }
+
+        function onResize(){
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('resize', onResize, false);
     </script>
 </body>
 </html>
