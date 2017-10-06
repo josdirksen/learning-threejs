@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>Represent the U </title>
-<script src ="../libs/three.js"></script>
+<script src ="three.js"></script>
 <style>
 body {
     margin: 0;
@@ -12,6 +12,7 @@ body {
 <body>
   <div id = "output"></div>
   <script>
+    var myTurnTimer = 0;
     //Scene
 	var scene = new THREE.Scene();
     //Renderer
@@ -43,8 +44,16 @@ body {
 	scene.add(spotLight,spotLight2,spotLight3,spotLight4, spotLight5,spotLight6);
     //Model
 
-    var cube = new THREE.Mesh(new THREE.BoxGeometry(600,600,600), new  THREE.MeshLambertMaterial({color: 'skyblue', side: THREE.DoubleSide}));
-    scene.add(cube);//for whatever reason there is a random white line when a vertice collides it together.
+    var texture = THREE.ImageUtils.loadTexture("logos.jpg");
+
+    var sphere = new THREE.Mesh(new THREE.SphereGeometry(600,600,600), new  THREE.MeshLambertMaterial({color: 'skyblue', side: THREE.DoubleSide, map: texture}));
+    scene.add(sphere);//for whatever reason there is a random white line when a vertice collides it together.
+
+    var dogTexture = THREE.ImageUtils.loadTexture("UUBusterBullDog.png");
+
+    var dogPlane = new THREE.Mesh(new THREE.PlaneGeometry(45,45,25,25), new THREE.MeshLambertMaterial({side: THREE.BackSide, map: dogTexture, transparent: true }));
+    dogPlane.position.set(0,25,0);
+    scene.add(dogPlane);
 
     var verticesInner = [
         new THREE.Vector3(9,60,0),//0
@@ -66,6 +75,7 @@ body {
         new THREE.Vector3(24,-5,0),//16
         new THREE.Vector3(24,60,0)//17
     ];
+
     var facesInner = [
         new THREE.Face3(0,1,2), //1
         new THREE.Face3(2,3,0), //2
@@ -162,15 +172,41 @@ body {
     }
 
     function renderScene() {
-
-        scene.rotateY(.01);
+        if(myTurnTimer > 200){
+            dogPlane.rotateY(-.01);
+            myLogo.rotateY(-.01);
+            myLogoOutside.rotateY(-.01);
+        }else {
+            myTurnTimer += 1;
+        }
+        sphere.rotateY(.0045);
         renderer.render(scene, camera);
         requestAnimationFrame(renderScene);
     }
 
+    function onKeyDown(event) {
+        console.log(event.which);
+        switch (event.which) {
+
+            case 37:
+            myLogo.rotateY(.03);
+            myLogoOutside.rotateY(.03);
+            dogPlane.rotateY(.03);
+            myTurnTimer = -150;
+                break;//left
+            case 39:
+            myLogo.rotateY(-.03);
+            myLogoOutside.rotateY(-.03);
+            dogPlane.rotateY(-.03);
+            myTurnTimer = -150;
+                break;//righ
+
+        }
+    }
 
 
 
+    window.addEventListener('keydown', onKeyDown, false);
       window.addEventListener('resize', onResize, false);
 
   </script>
