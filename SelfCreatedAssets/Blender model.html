@@ -1,0 +1,72 @@
+
+<!-- saved from url=(0076)http://online.uu.edu/pluginfile.php/602239/mod_resource/content/0/Laura.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Blender model</title>
+    <script src="three.js"></script>
+    <style>
+        body {
+            margin:0;
+            overflow:hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="output"></div>
+    <script>
+        var scene = new THREE.Scene();
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(new THREE.Color('black'));
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .1, 100000);
+        camera.position.set(0, 135, 500);
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+        var spotLight1 = new THREE.SpotLight(0xcccccc);
+        spotLight1.position.set(camera.position.x, camera.position.y, camera.position.z);
+        scene.add(spotLight1);
+        var ambLight = new THREE.AmbientLight(0x050505);
+        scene.add(ambLight);
+        // -------------------- Model ------------------------------
+        var model;
+        var loader = new THREE.JSONLoader();
+        loader.load('Suzan.js', loadedFunc);
+
+        // ---------------------------------------------------------
+        document.getElementById("output").appendChild(renderer.domElement);
+        renderScene();
+
+        function loadedFunc(geom, mat) {
+            model = new THREE.Mesh(geom, mat[0]);
+            model.material = new THREE.MeshPhongMaterial({ color: 'red',shininess: 411 });
+            var scale = 75;
+            model.rotateY(-Math.PI / 2);
+            model.scale.set(scale, scale, scale);
+            scene.add(model);
+        }
+
+        function renderScene() {
+            if(model)
+                model.rotateY(.01);
+            requestAnimationFrame(renderScene);
+            renderer.render(scene, camera);
+
+        }
+
+        function renderSceneMove(){
+            if (model.positionZ < 30){
+                model.position.z =+ 5;
+                requestAnimationFrame(renderSceneMove);
+            }else {
+                requestAnimationFrame(renderScene);
+            }
+        }
+
+        function onKeyDown() {
+            model.position.set(0,0,-500);
+            renderSceneMove();
+        }
+
+        window.addEventListener('keydown', onKeyDown, false);
+
+    </script>
+
+</body></html>
