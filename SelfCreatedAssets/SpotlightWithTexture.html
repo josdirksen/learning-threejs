@@ -36,6 +36,7 @@
 
         //creating textrue
         var texture = THREE.ImageUtils.loadTexture("UUatNight.jpg");
+
         //-----texture for wraping -----
         texture.wrapS = THREE.RepeatWrapping;
         texture.WrapT = THREE.RepeatWrapping;
@@ -52,7 +53,6 @@
         document.getElementById("output").appendChild(renderer.domElement);
 
         function renderScene() {
-
             requestAnimationFrame(renderScene);
             renderer.render(scene, camera);
         }
