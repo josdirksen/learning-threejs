@@ -19,7 +19,7 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(new THREE.Color('black'));
         var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .1, 1000);
-        camera.position.set(-15, 25, 35);        camera.lookAt(new THREE.Vector3(0, 0, 0));
+        camera.position.set(-15, 25, 75);        camera.lookAt(new THREE.Vector3(0, 0, 0));
         var spotLight1 = new THREE.SpotLight(0xcccccc);
         spotLight1.angle = Math.PI / 8;
         spotLight1.position.set(camera.position.x, camera.position.y, camera.position.z - 250);
@@ -38,9 +38,7 @@
 
 
         //------------------------------
-        var wolf1 = new CreateWolf();
-        //var wolf2 = new CreateWolf();
-        //var wolf3 = new CreateWolf();
+
 
 
 
@@ -48,34 +46,64 @@
         renderScene();
 
         var mixer;
-        //creating wolf model
-        function CreateWolf(){
-          this.model;
-          this.wolfModel = new THREE.JSONLoader();
-          this.wolfModel.load("WolfRun.js", loadedFunc);
-          scene.add(this.wolfModel);
-        }
+        //------------creating wolf model1---------
+
+          var model;
+          var wolfModel = new THREE.JSONLoader();
+
+          wolfModel.load("WolfRun.js", loadedFunc1);
+          scene.add(wolfModel);
 
 
 
-
-        function loadedFunc(geom, mat) {
-            model = new THREE.Mesh(geom, mat[0]);
-            model.material = new THREE.MeshNormalMaterial({
-              map: texture,
+        function loadedFunc1(geom1, mat) {
+            this.model = new THREE.Mesh(geom1, mat[0]);
+            this.model.material = new THREE.MeshNormalMaterial({
+              //map: texture,
               //side: THREE.DoubleSide,
               morphTargets: true,
            });
 
+           this.model.position.set(0,0,0);
 
             var scale = 17;
-            model.rotateY(-Math.PI / 2);
-            model.scale.set(scale, scale, scale);
-            scene.add(model);
+            this.model.rotateY(-Math.PI / 2);
+            this.model.scale.set(scale, scale, scale);
+            scene.add(this.model);
 
-            mixer = new THREE.AnimationMixer(model);
-            var clip = THREE.AnimationClip.CreateFromMorphTargetSequence( "run", geom.morphTargets,30);
-            mixer.clipAction(clip).setDuration(1).play();
+            mixer = new THREE.AnimationMixer(this.model);
+            clip1 = THREE.AnimationClip.CreateFromMorphTargetSequence( "run1", geom1.morphTargets,30);
+            mixer.clipAction(clip1).setDuration(3).play();
+
+        }
+
+//-------------------------------------------------
+        var model2;
+        var wolfModel2 = wolfModel;
+
+        wolfModel2.load("WolfRun.js", loadedFunc2);
+        //scene.add(wolfModel2);
+
+
+
+        function loadedFunc2(geom2, mat) {
+          this.model = new THREE.Mesh(geom2, mat[0]);
+          this.model.material = new THREE.MeshNormalMaterial({
+            //map: texture,
+            //side: THREE.DoubleSide,
+            morphTargets: true,
+         });
+
+         this.model.position.set(50,0,25);
+
+          var scale = 17;
+          this.model.rotateY(-Math.PI / 2);
+          this.model.scale.set(scale, scale, scale);
+          scene.add(this.model);
+
+          mixer2 = new THREE.AnimationMixer(this.model);
+          clip2 = THREE.AnimationClip.CreateFromMorphTargetSequence( "run2", geom2.morphTargets,30);
+          mixer2.clipAction(clip2).setDuration(1).play();
         }
 
         var prevTime = Date.now();
