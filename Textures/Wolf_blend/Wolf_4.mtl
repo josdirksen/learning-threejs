@@ -1,0 +1,58 @@
+# Blender MTL File: 'Wolf_4.blend'
+# Material Count: 5
+
+newmtl Wolf_Body
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.472432 0.472432 0.472432
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd C:\Users\noah.franck\Documents\learning-threejs\Textures\AppData\Local\Temp\AppData\Local\Temp\Rar$DIa0.388\02_wolf\wolf col.jpg
+
+newmtl Wolf_Claws
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.167357 0.159407 0.136949
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+
+newmtl Wolf_Eyes
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd -s 0.800000 0.800000 1.000000 textures\\Wolf_Eyes_1.jpg
+map_Ke -s 0.800000 0.800000 1.000000 textures\\Wolf_Eyes_1.jpg
+
+newmtl Wolf_Fur
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.026142 0.022739 0.020186
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Kd textures\\Wolf_Body.jpg
+map_d textures\\Wolf_Fur.jpg
+
+newmtl Wolf_Teeth
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.167357 0.159407 0.136949
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd C:\Users\noah.franck\Documents\learning-threejs\Textures\AppData\Local\Temp\AppData\Local\Temp\Rar$DIa0.388\02_wolf\fella3.jpg
