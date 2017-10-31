@@ -17,7 +17,7 @@
         var scene = new THREE.Scene();
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(new THREE.Color('black'));
+        renderer.setClearColor(new THREE.Color('blue'));
         var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .1, 1000);
         camera.position.set(-15, 25, 35);
         camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -38,16 +38,18 @@
             model = new THREE.Mesh(geom, materials);
             model.scale.x = model.scale.y = model.scale.z = 100;
             scene.add(model);
-        })
+        });
         //------------------------------
 
         renderScene();
 
         document.getElementById("output").appendChild(renderer.domElement);
 
-        function renderScene()
-            requestAnimationFrame(renderScene);
+        function renderScene(){
+
             renderer.render(scene, camera);
+            requestAnimationFrame(renderScene);
+
         }
 
         function onResize(){
@@ -58,7 +60,7 @@
 
 
 
-        window.addEventListener('keydown', onKeyDown, false);
+
         window.addEventListener('resize', onResize, false);
     </script>
 </body>
