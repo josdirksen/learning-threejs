@@ -19,32 +19,45 @@
         //---------------Renderer--------------------------
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(new THREE.Color('black'));
+        renderer.setClearColor(new THREE.Color('blue'));
         //--------------Camera--------------------------
         var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 10000);
-        camera.position.set(0, 300,999);
+        camera.position.set(0, 0,50);
 
         //---------------Lights----------------------------
         var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
         var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
-        spotLight.position.set(0, 0,999);
+        spotLight.position.set(0, 0,100);
         var spotLight2 = new THREE.SpotLight(new THREE.Color(0xffffff));
-        spotLight.position.set(0, 999,999);
+        spotLight.position.set(0, -100,100);
         scene.add(ambLight);
         scene.add(spotLight,spotLight2);
 
         //------------------textures---------------------
-
+        var kirkTexture =  THREE.ImageUtils.loadTexture("../Textures/KirkTeachingNoBackground.png");
         //------------------models-----------------------
 
+        var cube = new THREE.Mesh(new THREE.BoxGeometry(20,20,20),new THREE.MeshPhongMaterial({color: 'silver'}));
+        scene.add(cube);
+
+        var plane = new THREE.Mesh(new THREE.PlaneGeometry(20,10,10), new THREE.MeshLambertMaterial({map: kirkTexture}));
+        cube.add(plane);
         //----------------functions----------------------
+        renderScene();
         function onResize(){
           camera.aspect = window.innerWidth / window.innerHeight;
           camera.updateProjectionMatrix();
           renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
+        function renderScene(){
+            cube.rotateX(.01);
+            cube.rotateY(.01);
+            cube.rotateZ(.01);
 
+            renderer.render(scene, camera);
+            requestAnimationFrame(renderScene);
+        }
 
         window.addEventListener('resize', onResize, false);
 
