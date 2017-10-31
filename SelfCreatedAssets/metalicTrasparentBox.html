@@ -1,0 +1,56 @@
+<html>
+
+<head>
+    <title>Saturn</title>
+    <script src="three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="output"></div>
+    <script>
+        //---------------Scene--------------------------
+        var scene = new THREE.Scene();
+        //---------------Renderer--------------------------
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(new THREE.Color('black'));
+        //--------------Camera--------------------------
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.set(0, 300,999);
+
+        //---------------Lights----------------------------
+        var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+        var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+        spotLight.position.set(0, 0,999);
+        var spotLight2 = new THREE.SpotLight(new THREE.Color(0xffffff));
+        spotLight.position.set(0, 999,999);
+        scene.add(ambLight);
+        scene.add(spotLight,spotLight2);
+
+        //------------------textures---------------------
+
+        //------------------models-----------------------
+
+        //----------------functions----------------------
+        function onResize(){
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+
+
+        window.addEventListener('resize', onResize, false);
+
+        document.getElementById("output").appendChild(renderer.domElement);
+
+    </script>
+</body>
+
+</html>
