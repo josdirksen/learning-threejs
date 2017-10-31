@@ -1,0 +1,202 @@
+<html>
+
+<head>
+    <title>Saturn</title>
+    <script src="three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="output"></div>
+    <script>
+        //---------------Scene--------------------------
+        var scene = new THREE.Scene();
+        //---------------Renderer--------------------------
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(new THREE.Color('black'));
+        //--------------Camera--------------------------
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.set(0, 300,999);
+        
+        //---------------Lights----------------------------
+        var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+        var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+        spotLight.position.set(0, 0,999);
+        var spotLight2 = new THREE.SpotLight(new THREE.Color(0xffffff));
+        spotLight.position.set(0, 999,999);
+        scene.add(ambLight);
+        scene.add(spotLight,spotLight2);
+
+        //------------------textures---------------------
+        
+        var jupitorTexture = THREE.ImageUtils.loadTexture("jupitertexture.jpg");
+        var sunTexture = THREE.ImageUtils.loadTexture("suntexture.jpg");
+        var earthTexture = THREE.ImageUtils.loadTexture("earthtexture.jpg");
+        var mercuryTexture = THREE.ImageUtils.loadTexture("mercurymap.jpg");
+        var venusTexture = THREE.ImageUtils.loadTexture("venus.jpg");
+        var marsTexture = THREE.ImageUtils.loadTexture("marstexture.jpg");
+        var uranusTexture = THREE.ImageUtils.loadTexture("uranustexture.jpg");
+        var saturnTexture = THREE.ImageUtils.loadTexture("saturntexture.jpg");
+        var moonTexture = THREE.ImageUtils.loadTexture("moontexture.jpg");
+        var neptuneTexture = THREE.ImageUtils.loadTexture("neptunetexture.jpg");
+        var starsTexture = THREE.ImageUtils.loadTexture("stars_texture.jpg");
+
+
+        //------------------Model--------------------------
+        var earthSize = 10.0;
+        var sunSize = earthSize * 109; 
+        var sphereGeom = new THREE.SphereGeometry(/*earthSize* */ 109,100,100);
+        var sphereMaterial = new THREE.MeshLambertMaterial({
+            shading: THREE.FlatShading,
+            map: sunTexture,
+        });
+
+        var background = new THREE.Mesh(new THREE.SphereGeometry(1000,1000,1000), new THREE.MeshLambertMaterial({side: THREE.DoubleSide, map: starsTexture}));
+        scene.add(background);
+
+        //-----------------Movement circles----------------
+        sphereMaterial.vertexColors = THREE.FaceColors;
+        var sphere = new THREE.Mesh(sphereGeom, sphereMaterial);
+        scene.add(sphere);
+        camera.lookAt(sphere.position);
+        var speedSphere = new THREE.Mesh(new THREE.SphereGeometry(5,5,5), new THREE.MeshLambertMaterial({}));
+        scene.add(speedSphere);
+        var speedSphere1 = new THREE.Mesh(new THREE.SphereGeometry(6,6,6), new THREE.MeshLambertMaterial({}));
+        scene.add(speedSphere1);
+        var marsSpeed = new THREE.Mesh(new THREE.SphereGeometry(5,5,5), new THREE.MeshLambertMaterial({}));
+        scene.add(marsSpeed);
+        var jupitorSpeed = new THREE.Mesh(new THREE.SphereGeometry(7,7,7), new THREE.MeshLambertMaterial({}));
+        scene.add(jupitorSpeed);
+        var saturnSpeed = new THREE.Mesh(new THREE.SphereGeometry(8,8,8), new THREE.MeshLambertMaterial({}));
+        scene.add(saturnSpeed);
+        var uranusSpeed = new THREE.Mesh(new THREE.SphereGeometry(9,9,9), new THREE.MeshLambertMaterial({}));
+        scene.add(uranusSpeed);
+        var neptuneSpeed = new THREE.Mesh(new THREE.SphereGeometry(3,3,3), new THREE.MeshLambertMaterial({}));
+        scene.add(neptuneSpeed);
+
+        //-----------------------planets-----------------------------
+
+        var earthGeom = new THREE.SphereGeometry(earthSize,100,100);
+        var earthMat = new THREE.MeshPhongMaterial ({side: THREE.DoubleSide, map:earthTexture});
+        var earth = new THREE.Mesh(earthGeom, earthMat);
+        earth.position.set(0,0,/*earthSize * 109*/ + 300);
+        var earthMovement = .02;
+        var earthSize = 10.0;
+        sphere.add(earth);
+
+        var moonGeom = new THREE.SphereGeometry(earthSize * .07, 100, 100);
+        var moonMat = new THREE.MeshLambertMaterial({side: THREE.DoubleSide, map: moonTexture,});
+        var moon = new THREE.Mesh(moonGeom, moonMat)
+        moon.position.set(0,2,25);
+        earth.add(moon);
+
+        var mercury = new THREE.Mesh(new THREE.SphereGeometry(earthSize * .38 ,100 ,100 ), new THREE.MeshLambertMaterial({side: THREE.DoubleSide, map: mercuryTexture}));
+        mercury.position.set(0,0,120);
+        speedSphere1.add(mercury);
+
+        var venus = new THREE.Mesh(new THREE.SphereGeometry(earthSize * .95,earthSize * .95,earthSize * .95), new THREE.MeshLambertMaterial({side: THREE.DoubleSide, map: venusTexture}));
+        venus.position.set(0,0,200);
+        speedSphere.add(venus);
+
+        var mars  = new THREE.Mesh(new THREE.SphereGeometry(earthSize * .53,earthSize * .53,earthSize * .53), new THREE.MeshLambertMaterial({side: THREE.DoubleSide, map: marsTexture}));
+        mars.position.set(0,0,450);
+        marsSpeed.add(mars);
+
+        var jupitor = new THREE.Mesh(new THREE.SphereGeometry(earthSize * 3.320 ,100,100), new THREE.MeshLambertMaterial({side: THREE.DoubleSide, map: jupitorTexture}));
+        jupitor.position.set(0,0,600);
+        jupitorSpeed.add(jupitor);
+
+        var sphereGeomSaturn = new THREE.SphereGeometry(earthSize * 2.120 ,100,100);
+        var Saturn = new THREE.Mesh(sphereGeomSaturn, new THREE.MeshLambertMaterial({side: THREE.DoubleSide, map: saturnTexture}));
+        sphereGeomSaturn.vertices.forEach(
+                    function (v) {
+                        if (v.y > -0.1 && v.y <= 0.1) {
+                            v.x *= 1.9;
+                            v.y *= 1.9;
+                            v.z *= 1.9;
+                        }
+                    })
+        Saturn.position.set(0,0,725);
+        saturnSpeed.add(Saturn);
+        
+        sphereGeomUranus = new THREE.SphereGeometry(earthSize * 4 ,100,100);
+       
+        var uranus = new THREE.Mesh(sphereGeomUranus, new THREE.MeshLambertMaterial({side: THREE.DoubleSide, map: uranusTexture}));
+        
+        sphereGeomUranus.vertices.forEach(
+            function (v) {
+                    if (v.y > -0.1 && v.y <= 0.1) {
+                        v.x *= 1.5;
+                        v.y *= 1.5;
+                        v.z *= 1.5;
+                        }
+            }); 
+        uranus.rotateX(90);
+        uranus.position.set(0,0,900);
+        uranusSpeed.add(uranus);
+        
+        
+        var neptune = new THREE.Mesh(new THREE.SphereGeometry(earthSize * 3.9 ,100,100), new THREE.MeshLambertMaterial({side: THREE.DoubleSide, map: neptuneTexture}));
+        neptune.position.set(0,0,1400);
+        neptuneSpeed.add(neptune);
+        
+        renderScene();
+        //functions
+
+        function renderScene(){
+
+            function onKeyDown(event) {
+            console.log(event.which);
+            switch (event.which) {
+                case 38: 
+                camera.position.set(earth.position.x,earth.position.y,earth.position.z);
+                    break;//up
+                case 40: 
+                camera.position.set(moon.position.x,moon,position.y,moon.position.z); 
+                    break;//down
+                case 37: 
+                camera.position.set(sun.position.x,sun.position.y,sun.position.z); 
+                    break;//left
+                case 39: camera.position.set(0,300,999); 
+                    break;//righ
+
+            }
+        }
+            
+            sphere.rotateY(earthMovement);
+            earth.rotateY(.05);
+            earth.rotateX(.01);
+            jupitorSpeed.rotateY(earthMovement / 11.8618);
+            speedSphere1.rotateY(earthMovement / 0.061369);
+            speedSphere.rotateY(earthMovement / 0.24109);
+            marsSpeed.rotateY(earthMovement / 1.88219);
+            saturnSpeed.rotateY(earthMovement / 29.5);
+            uranusSpeed.rotateY(earthMovement / 84);
+            neptuneSpeed.rotateY(earthMovement / 165);
+            renderer.render(scene, camera);
+            Saturn.rotateX(.001);
+            requestAnimationFrame(renderScene);
+        }
+
+        function onResize(){
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        
+
+        window.addEventListener('resize', onResize, false);
+
+        document.getElementById("output").appendChild(renderer.domElement);
+
+    </script>
+</body>
+
+</html>
