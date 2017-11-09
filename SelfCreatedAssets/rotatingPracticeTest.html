@@ -18,12 +18,33 @@
     </div>
     <!-- Javascript code that runs our Three.js examples -->
     <script>
-
-      
-      function init() {
+         //---------------Scene--------------------------
+         var scene = new THREE.Scene();
+        //---------------Renderer--------------------------
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(new THREE.Color('black'));
+        //--------------Camera--------------------------
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    
         
-      };
-      window.onload = init;
+        //---------------Lights----------------------------
+        var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+        var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+        spotLight.position.set(camera.position0,camera.position0,camera.position);
+        scene.add(ambLight);
+        scene.add(spotLight);
+        //------------------textures---------------------
+        var bear = new THREE.ImageUtils.loadTexture("bear.jpg");
+        //------------------Model--------------------------
+        var sphere = new THREE.Mesh(new THREE.SphereGeometry(7,7,7), new THREE.MeshLambertMaterial({Color: 'purple'}));
+        var cube = new THREE.Mesh(new THREE.BoxGeometry(7,7,7), new THREE.MeshLambertMaterial({map: bear}));
+        scene.add(sphere, cube);
+        sphere.position.set(0,0,10);
+        cube.position.set(0,0,-10);
+        //------------------Functions----------------------
+
+
       </script>
     </body>
     <html>
