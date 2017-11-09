@@ -27,9 +27,9 @@
         //---------------Lights----------------------------
         var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
         var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
-        spotLight.position.set(0, 0,999);
+        spotLight.position.set(camera.position0,camera.position0,camera.position);
         var spotLight2 = new THREE.SpotLight(new THREE.Color(0xffffff));
-        spotLight.position.set(0, 999,999);
+        spotLight.position.set(0, 500,2000);
         scene.add(ambLight);
         scene.add(spotLight,spotLight2);
 
@@ -47,7 +47,6 @@
         var neptuneTexture = THREE.ImageUtils.loadTexture("neptunetexture.jpg");
         var starsTexture = THREE.ImageUtils.loadTexture("stars_texture.jpg");
 
-
         //------------------Model--------------------------
         var earthSize = 10.0;
         var sunSize = earthSize * 109; 
@@ -57,8 +56,8 @@
             map: sunTexture,
         });
 
-        var background = new THREE.Mesh(new THREE.SphereGeometry(1000,1000,1000), new THREE.MeshLambertMaterial({side: THREE.DoubleSide, map: starsTexture}));
-        scene.add(background);
+        //var background = new THREE.Mesh(new THREE.SphereGeometry(1000,1000,1000), new THREE.MeshLambertMaterial({side: THREE.DoubleSide, map: starsTexture}));
+        //scene.add(background);
 
         //-----------------Movement circles----------------
         sphereMaterial.vertexColors = THREE.FaceColors;
@@ -149,26 +148,19 @@
         renderScene();
         //functions
 
+        var camSun, camEarth, camMoon;
         function renderScene(){
 
-            function onKeyDown(event) {
-            console.log(event.which);
-            switch (event.which) {
-                case 38: 
+            if (camSun == true){
+                camera.position.set(sphere.getWorldPosition()); 
+            }else if(camEarth == true){
                 camera.position.set(earth.position.x,earth.position.y,earth.position.z);
-                    break;//up
-                case 40: 
-                camera.position.set(moon.position.x,moon,position.y,moon.position.z); 
-                    break;//down
-                case 37: 
-                camera.position.set(sun.position.x,sun.position.y,sun.position.z); 
-                    break;//left
-                case 39: camera.position.set(0,300,999); 
-                    break;//righ
-
+            }else if(camMoon == true){
+                camera.position.set(moon.position.x,moon.position.y,moon.position.z); 
+            }else{
+                camera.position.set(0, 300,999);
             }
-        }
-            
+
             sphere.rotateY(earthMovement);
             earth.rotateY(.05);
             earth.rotateX(.01);
@@ -181,7 +173,31 @@
             neptuneSpeed.rotateY(earthMovement / 165);
             renderer.render(scene, camera);
             Saturn.rotateX(.001);
+
+
+
             requestAnimationFrame(renderScene);
+        }
+
+        function onKeyDown(event) {
+            console.log(event.which);
+            switch (event.which) {
+                case 69: 
+                
+                camEarth = !camEarth;
+                    break;//up
+                case 77: 
+                
+                camMoon = !camMoon;
+                    break;//down
+                case 83: 
+                
+                camSun = !camSun; 
+                    break;//left
+                case 32: camera.position.set(0,300,999); 
+                    break;//righ
+
+            }
         }
 
         function onResize(){
@@ -193,7 +209,7 @@
         
 
         window.addEventListener('resize', onResize, false);
-
+        window.addEventListener('keydown', onKeyDown, false);
         document.getElementById("output").appendChild(renderer.domElement);
 
     </script>
