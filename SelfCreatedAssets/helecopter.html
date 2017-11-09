@@ -3,7 +3,7 @@
 <html>
   <head>
     <title> Example 01.01 - Basic skeleton </title>
-    <script src="../libs/three.js"> </script>
+    <script src="three.js"> </script>
     <style>
       body{
         /*set margin to 0 and overflow to hidden, to use the complete page*/
@@ -19,11 +19,29 @@
     <!-- Javascript code that runs our Three.js examples -->
     <script>
 
+        //---------------Scene--------------------------
+        var scene = new THREE.Scene();
+        //---------------Renderer--------------------------
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(new THREE.Color('black'));
+        //--------------Camera--------------------------
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    
+        
+        //---------------Lights----------------------------
+        var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+        var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+        spotLight.position.set(camera.position0,camera.position0,camera.position);
+        scene.add(ambLight);
+        scene.add(spotLight);
+
+        //------------------textures---------------------
+        
+        //------------------Model--------------------------
       
-      function init() {
-        //here we'll put the Three.js stuff
-      };
-      window.onload = init;
+        //------------------Functions----------------------
+      
       </script>
     </body>
     <html>
