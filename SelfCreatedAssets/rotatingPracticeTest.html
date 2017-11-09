@@ -3,7 +3,7 @@
 <html>
   <head>
     <title> Example 01.01 - Basic skeleton </title>
-    <script src="../libs/three.js"> </script>
+    <script src="three.js"> </script>
     <style>
       body{
         /*set margin to 0 and overflow to hidden, to use the complete page*/
@@ -14,7 +14,7 @@
     </head>
   <body>
     <!--Div which would hold Output -->
-    <div id="WebGL-output">
+    <div id="output">
     </div>
     <!-- Javascript code that runs our Three.js examples -->
     <script>
@@ -23,28 +23,35 @@
         //---------------Renderer--------------------------
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(new THREE.Color('black'));
+        renderer.setClearColor(new THREE.Color('white'));
         //--------------Camera--------------------------
         var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-    
+        camera.position.set(0,0,30);
         
         //---------------Lights----------------------------
-        var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+        //var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
         var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
-        spotLight.position.set(camera.position0,camera.position0,camera.position);
-        scene.add(ambLight);
+        spotLight.position.set(0,0,30);
         scene.add(spotLight);
+        //scene.add(ambLight);
+        
         //------------------textures---------------------
-        var bear = new THREE.ImageUtils.loadTexture("bear.jpg");
+        var bear = THREE.ImageUtils.loadTexture("bear.jpg");
+        //bear.wrapS = THREE.MirrorRepeatWrapping;
+        //bear.wrapT = THREE.Repeatwraping;
+
         //------------------Model--------------------------
-        var sphere = new THREE.Mesh(new THREE.SphereGeometry(7,7,7), new THREE.MeshLambertMaterial({Color: 'purple'}));
-        var cube = new THREE.Mesh(new THREE.BoxGeometry(7,7,7), new THREE.MeshLambertMaterial({map: bear}));
-        scene.add(sphere, cube);
-        sphere.position.set(0,0,10);
-        cube.position.set(0,0,-10);
+        var sphere = new THREE.Mesh(new THREE.SphereGeometry(5,7,7), new THREE.MeshLambertMaterial({color: 'purple'}));
+        var cube = new THREE.Mesh(new THREE.BoxGeometry(7,7,7), new THREE.MeshPhongMaterial({}));
+        sphere.position.set(-10,0,0);
+        cube.position.set(10,0,0);
+        scene.add(sphere);
+        scene.add(cube);
+        
         //------------------Functions----------------------
 
-
+        renderer.render(scene, camera);
+        document.getElementById("output").appendChild(renderer.domElement);
       </script>
     </body>
     <html>
