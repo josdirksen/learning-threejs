@@ -29,11 +29,13 @@
         var myCamera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
         myCamera.position.set(0,50,150);
         //---------------Lights----------------------------
-        var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+        var ambLight = new THREE.AmbientLight(new THREE.Color(0x444444));
         var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
         spotLight.position.set(0,50,100);
+        var backSpotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+        backSpotLight.position.set(0,50,-100);
         scene.add(ambLight);
-        scene.add(spotLight);
+        scene.add(spotLight, backSpotLight);
         //------------------Model--------------------------
         var body = new THREE.Mesh(new THREE.BoxGeometry(45,55,40,5), new THREE.MeshLambertMaterial({color: "blue"}));
         body.position.set(0,27.5,0)
@@ -44,15 +46,23 @@
         var connector = new THREE.Mesh(new THREE.CylinderGeometry(5,5,7,10,10), new THREE.MeshLambertMaterial({color: 'green'}));
         connector.position.set(0,30,0);
         body.add(connector);
-        var tail = new THREE.Mesh(new THREE.CylinderGeometry(15,5,35,6,6), new THREE.MeshLambertMaterial({color:'green'}));
+        var tail = new THREE.Mesh(new THREE.CylinderGeometry(15,5,55,6,6), new THREE.MeshLambertMaterial({color:'green'}));
         tail.position.set(37.5,0,0);
         tail.rotateZ(-4.75);
         body.add(tail);
-        var rearProppeller = new THREE.Mesh(new THREE.PlaneGeometry(23,3,6), new THREE.MeshLambertMaterial({}));
-        rearProppeller.position.set(0,-10,8.5)
+        var rearProppeller = new THREE.Mesh(new THREE.PlaneGeometry(25,3,10), new THREE.MeshLambertMaterial({
+          side: THREE.DoubleSide,
+        }));
+        rearProppeller.position.set(0,-20,8.5)
         tail.add(rearProppeller);
-        //------------------Functions----------------------
+        var Wilms = new THREE.Mesh(new THREE.SphereGeometry(6,5,5), new THREE.MeshLambertMaterial({color: 'red'}));
+        Wilms.position.set(0,18,0);
+        cockpit.add(Wilms);
+
+        //------------------Global variables & calling functions---------------------
         renderScene();
+        var topPropellerMoving = backPropellerMoving =  false;
+        //--------------------------------Functions--------------------------------
         function renderScene(){
           scene.rotateY(.001);
           renderer.render(scene,myCamera);
