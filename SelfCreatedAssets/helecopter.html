@@ -24,24 +24,23 @@
         //---------------Renderer--------------------------
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(new THREE.Color('black'));
+        renderer.setClearColor(new THREE.Color('yellow'));
         //--------------Camera--------------------------
         var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-    
-        
+        camera.positition.set(0,50,100);
         //---------------Lights----------------------------
         var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
         var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
         spotLight.position.set(camera.position0,camera.position0,camera.position);
         scene.add(ambLight);
         scene.add(spotLight);
-
-        //------------------textures---------------------
-        
         //------------------Model--------------------------
-      
+
         //------------------Functions----------------------
-      
+        function renderScene(){
+          renderer.render(camera,scene);
+          requestAnimationFrame(renderScene);
+        }
       </script>
     </body>
     <html>
