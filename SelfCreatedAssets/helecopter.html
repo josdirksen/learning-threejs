@@ -27,7 +27,7 @@
         renderer.setClearColor(new THREE.Color('yellow'));
         //--------------Camera--------------------------
         var myCamera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-        myCamera.position.set(0,25,100);
+        myCamera.position.set(0,50,150);
         //---------------Lights----------------------------
         var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
         var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
@@ -35,12 +35,15 @@
         scene.add(ambLight);
         scene.add(spotLight);
         //------------------Model--------------------------
-        var body = new THREE.Mesh(new THREE.BoxGeometry(45,55,5,5), new THREE.MeshLambertMaterial({color: "blue"}));
+        var body = new THREE.Mesh(new THREE.BoxGeometry(45,55,25,5), new THREE.MeshLambertMaterial({color: "blue"}));
         body.position.set(0,27.5,0)
         scene.add(body);
-        var cockpit = new THREE.Mesh(new THREE.BoxGeometry(30,27.5,5,5), new THREE.MeshLambertMaterial({color: 'white'}));
+        var cockpit = new THREE.Mesh(new THREE.BoxGeometry(30,27.5,25,5), new THREE.MeshLambertMaterial({color: 'white'}));
         cockpit.position.set(-37.5,-13.8,0);
         body.add(cockpit);
+        var connector = new THREE.Mesh(new THREE.CylinderGeometry(5,5,7,10,10), new THREE.MeshLambertMaterial({color: 'green'}));
+        connector.position.set(0,30,0);
+        body.add(connector);
         //------------------Functions----------------------
         renderScene();
         function renderScene(){
