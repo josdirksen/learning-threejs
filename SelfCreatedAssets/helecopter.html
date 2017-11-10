@@ -14,7 +14,7 @@
     </head>
   <body>
     <!--Div which would hold Output -->
-    <div id="WebGL-output">
+    <div id="output">
     </div>
     <!-- Javascript code that runs our Three.js examples -->
     <script>
@@ -26,21 +26,29 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(new THREE.Color('yellow'));
         //--------------Camera--------------------------
-        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.positition.set(0,50,100);
+        var myCamera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        myCamera.position.set(0,25,100);
         //---------------Lights----------------------------
         var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
         var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
-        spotLight.position.set(camera.position0,camera.position0,camera.position);
+        spotLight.position.set(0,50,100);
         scene.add(ambLight);
         scene.add(spotLight);
         //------------------Model--------------------------
-
+        var body = new THREE.Mesh(new THREE.BoxGeometry(45,55,5,5), new THREE.MeshLambertMaterial({color: "blue"}));
+        body.position.set(0,27.5,0)
+        scene.add(body);
+        var cockpit = new THREE.Mesh(new THREE.BoxGeometry(30,27.5,5,5), new THREE.MeshLambertMaterial({color: 'white'}));
+        cockpit.position.set(-37.5,-13.8,0);
+        body.add(cockpit);
         //------------------Functions----------------------
+        renderScene();
         function renderScene(){
-          renderer.render(camera,scene);
+          scene.rotateY(.001);
+          renderer.render(scene,myCamera);
           requestAnimationFrame(renderScene);
         }
+        document.getElementById("output").appendChild(renderer.domElement);
       </script>
     </body>
     <html>
