@@ -60,12 +60,33 @@
         cockpit.add(Wilms);
         //TODO: make test planes that will give me the points for the windows!!!
 
-        //------------------Global variables & calling functions---------------------
+        //--------------------------------test planes--------------------------------
+        /* the z coordinates for the cockpit geometry
+        var testPlane1 = new THREE.Mesh(new THREE.PlaneGeometry(50,50,50), new THREE.MeshLambertMaterial({}));
+        testPlane1.position.set(0,0,20.1);
+        scene.add(testPlane1);
+        var testPlane2 = new THREE.Mesh(new THREE.PlaneGeometry(50,50,50), new THREE.MeshLambertMaterial({
+          side: THREE.DoubleSide
+        }));
+        testPlane2.position.set(0,0,-20.1);
+        scene.add(testPlane2);
+        
+        var testPlane3 = new THREE.Mesh(new THREE.PlaneGeometry(60,60,50), new THREE.MeshLambertMaterial({side: THREE.DoubleSide}));
+        testPlane3.position.set(0,55,0);
+        testPlane3.rotateX(Math.PI * .5);
+        scene.add(testPlane3);
+        
+        var testPlane4 = new THREE.Mesh(new THREE.PlaneGeometry(60,60,50), new THREE.MeshLambertMaterial({side: THREE.DoubleSide}));
+        testPlane4.position.set(0,27.5,0);
+        testPlane4.rotateX(Math.PI * .5);
+        scene.add(testPlane4);
+        */
+
         renderScene();
         var topPropellerMoving = backPropellerMoving =  false;
         //--------------------------------Functions--------------------------------
         function renderScene(){
-          scene.rotateY(.001);
+          scene.rotateY(.005);
           renderer.render(scene,myCamera);
           requestAnimationFrame(renderScene);
         }
