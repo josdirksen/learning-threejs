@@ -27,7 +27,7 @@
         renderer.setClearColor(new THREE.Color('yellow'));
         //--------------Camera--------------------------
         var myCamera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-        myCamera.position.set(0,50,150);
+        myCamera.position.set(0,75,200);
         //---------------Lights----------------------------
         var ambLight = new THREE.AmbientLight(new THREE.Color(0x444444));
         var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
@@ -40,7 +40,7 @@
         var body = new THREE.Mesh(new THREE.BoxGeometry(45,55,40,5), new THREE.MeshLambertMaterial({color: "blue"}));
         body.position.set(0,27.5,0)
         scene.add(body);
-        var cockpit = new THREE.Mesh(new THREE.BoxGeometry(30,27.5,40,5), new THREE.MeshLambertMaterial({color: 'white'}));
+        var cockpit = new THREE.Mesh(new THREE.BoxGeometry(30,27.5,40,5), new THREE.MeshLambertMaterial({color: 'white', }));
         cockpit.position.set(-37.5,-13.8,0);
         body.add(cockpit);
         var connector = new THREE.Mesh(new THREE.CylinderGeometry(5,5,7,10,10), new THREE.MeshLambertMaterial({color: 'green'}));
@@ -58,6 +58,10 @@
         var Wilms = new THREE.Mesh(new THREE.SphereGeometry(6,5,5), new THREE.MeshLambertMaterial({color: 'red'}));
         Wilms.position.set(0,18,0);
         cockpit.add(Wilms);
+        var blades = new THREE.Mesh(new THREE.PlaneGeometry(120,10,5), new THREE.MeshLambertMaterial({side: THREE.DoubleSide}));
+        blades.rotateX(.5 * Math.PI);
+        blades.position.set(0,2.5,0);
+        connector.add(blades);
         //TODO: make test planes that will give me the points for the windows!!!
 
         //--------------------------------test planes--------------------------------
@@ -70,12 +74,12 @@
         }));
         testPlane2.position.set(0,0,-20.1);
         scene.add(testPlane2);
-        
+
         var testPlane3 = new THREE.Mesh(new THREE.PlaneGeometry(60,60,50), new THREE.MeshLambertMaterial({side: THREE.DoubleSide}));
         testPlane3.position.set(0,55,0);
         testPlane3.rotateX(Math.PI * .5);
         scene.add(testPlane3);
-        
+
         var testPlane4 = new THREE.Mesh(new THREE.PlaneGeometry(60,60,50), new THREE.MeshLambertMaterial({side: THREE.DoubleSide}));
         testPlane4.position.set(0,27.5,0);
         testPlane4.rotateX(Math.PI * .5);
@@ -104,13 +108,17 @@
         triangleGeom.faces = faces;
         triangleGeom.computeFaceNormals();
 
-        var triangle = new THREE.Mesh(triangleGeom, new THREE.MeshLambertMaterial({side: THREE.DoubleSide, }));
-        triangle.position.set(-22.5,0,0);
-        scene.add(triangle);
+        var triangle = new THREE.Mesh(triangleGeom, new THREE.MeshLambertMaterial({side: THREE.DoubleSide, transparent: true, opacity: .60}));
+        triangle.position.set(-22.5,-27.5,0);
+        body.add(triangle);
 
         //------------------Globl variables & calling functions---------------------
         renderScene();
-        var topPropellerMoving = backPropellerMoving =  false;
+        var topPropellerAccelerating, topPropellerDecelerating,  backPropellerLeft, backPropellerRight;
+        topPropellerAccelerating = topPropellerDecelerating = backPropellerLeft = backPropellerRight = false;
+        var bladesCounter = 0;
+        var backbladesCounter = 0;
+        var neutralPropeller = false;
         //--------------------------------Functions--------------------------------
         function renderScene(){
           scene.rotateY(.005);
