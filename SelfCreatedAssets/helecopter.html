@@ -121,12 +121,92 @@
         var neutralPropeller = false;
         //--------------------------------Functions--------------------------------
         function renderScene(){
-          scene.rotateY(.005);
+          console.log(backbladesCounter);
+          if (topPropellerAccelerating == true) {
+            blades.rotateZ(.08);
+            if (bladesCounter < 300) {
+              bladesCounter = bladesCounter + 1;
+            }
+          } else if (topPropellerDecelerating == true) {
+            if (bladesCounter > -300) {
+              bladesCounter = bladesCounter - 1;
+            }
+            if (bladesCounter == 0) {
+              blades.rotateZ(0);
+            }
+          }
+          if (backPropellerLeft == true) {
+            if (backbladesCounter < 500) {
+              backbladesCounter = backbladesCounter + 1;
+            }
+            rearProppeller.rotateZ(backbladesCounter / 1000);
+          } else if (backPropellerRight == true) {
+            if (backbladesCounter > -500) {
+              backbladesCounter = backbladesCounter - 1;
+            }
+            rearProppeller.rotateZ(backbladesCounter / 1000);
+          }
+          if (backbladesCounter % 500) {
+            scene.rotateY(backbladesCounter / 3000);
+          }else if(backbladesCounter == 500 || backbladesCounter == -500) {
+            scene.rotateY(backbladesCounter / 3000);
+          }
+          if(neutralPropeller == true){
+            if (backbladesCounter < 0) {
+              backbladesCounter += 1;
+            }
+            if (backbladesCounter > 0) {
+              backbladesCounter -=1;
+            }
+            if (backbladesCounter == 0) {
+              neutralPropeller == false;
+            }
+          }
+
+          //rearProppeller.rotateZ(.01);
+
           renderer.render(scene,myCamera);
           requestAnimationFrame(renderScene);
         }
+        function onKeyDown(event) {
+            console.log(event.which);
+            switch(event.which){
+            case 38://up
+              topPropellerAccelerating = true;
+              topPropellerDecelerating = false;
+              break;
+            case 40://down
+              topPropellerAccelerating = false;
+              topPropellerDecelerating = true;
+              break;
+            case 37://left
+              backPropellerRight = false;
+              neutralPropeller = false;
+              backPropellerLeft = true;
+              break;
+            case 39://right
+              backPropellerLeft = false;
+              neutralPropeller = false;
+              backPropellerRight = true;
+              break;
+            case 32://space
+              backPropellerRight = false;
+              backPropellerLeft = false;
+              neutralPropeller = true;
+              break;
+
+        }
+      }
+
+        function onResize(){
+          myCamera.aspect = window.innerWidth / window.innerHeight;
+          myCamera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('resize', onResize, false);
+        window.addEventListener('keydown', onKeyDown, false);
         document.getElementById("output").appendChild(renderer.domElement);
       </script>
     </body>
     <html>
-    
