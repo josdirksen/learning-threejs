@@ -34,19 +34,21 @@
         spotLight.position.set(0,50,100);
         var backSpotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
         backSpotLight.position.set(0,50,-100);
+        var spotlight = new THREE.SpotLight(new THREE.Color(0xffffff));
+        spotlight.position.set(0,500,100)
         scene.add(ambLight);
-        scene.add(spotLight, backSpotLight);
+        scene.add(spotLight, backSpotLight,spotlight);
         //------------------Model--------------------------
-        var body = new THREE.Mesh(new THREE.BoxGeometry(45,55,40,5), new THREE.MeshLambertMaterial({color: "blue"}));
+        var body = new THREE.Mesh(new THREE.BoxGeometry(45,55,40,5), new THREE.MeshLambertMaterial({color: 0x6960Ec}));
         body.position.set(0,27.5,0)
         scene.add(body);
-        var cockpit = new THREE.Mesh(new THREE.BoxGeometry(30,27.5,40,5), new THREE.MeshLambertMaterial({color: 'white', }));
+        var cockpit = new THREE.Mesh(new THREE.BoxGeometry(30,27.5,40,5), new THREE.MeshLambertMaterial({color: 0x6960Ec, }));
         cockpit.position.set(-37.5,-13.8,0);
         body.add(cockpit);
-        var connector = new THREE.Mesh(new THREE.CylinderGeometry(5,5,7,10,10), new THREE.MeshLambertMaterial({color: 'green'}));
+        var connector = new THREE.Mesh(new THREE.CylinderGeometry(5,5,7,10,10), new THREE.MeshLambertMaterial({color: 0x6960Ec}));
         connector.position.set(0,30,0);
         body.add(connector);
-        var tail = new THREE.Mesh(new THREE.CylinderGeometry(15,5,55,6,6), new THREE.MeshLambertMaterial({color:'green'}));
+        var tail = new THREE.Mesh(new THREE.CylinderGeometry(15,5,55,6,6), new THREE.MeshLambertMaterial({color:0x6960Ec}));
         tail.position.set(37.5,0,0);
         tail.rotateZ(-4.75);
         body.add(tail);
