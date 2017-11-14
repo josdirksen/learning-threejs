@@ -10,12 +10,20 @@
         margin: 0;
         overflow:hidden;
       }
+      #instructions{
+        color: black;
+        position: absolute;
+        border-top: 25px;
+        border-left: 25px;
+        float: true;
+      }
       </style>
     </head>
   <body>
     <!--Div which would hold Output -->
     <div id="output">
     </div>
+    <div id="instructions">Use the arrow keys and the spacebar to control the helecopter</div>
     <!-- Javascript code that runs our Three.js examples -->
     <script>
 
@@ -208,6 +216,7 @@
               backPropellerRight = true;
               break;
             case 32://space
+              //TODO:first space is stop rotating second space is stop the altitude.
               backPropellerRight = false;
               backPropellerLeft = false;
               neutralPropeller = true;
