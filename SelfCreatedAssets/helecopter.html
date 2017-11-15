@@ -131,7 +131,9 @@
         var stationaryHeight = true;
         //--------------------------------Functions--------------------------------
         function renderScene(){
-          console.log(bladesCounter);
+          //console.log(bladesCounter);
+          //bladesCounter logic
+          console.log("blades counter : " + bladesCounter);
           if (topPropellerAccelerating == true) {
             if (bladesCounter < 300) {
               bladesCounter = bladesCounter + 1;
@@ -141,17 +143,17 @@
               bladesCounter = bladesCounter - 1;
             }
           }
-
-          if (bladesCounter % 50) {
+          //speed of the blades
+          if (bladesCounter > 0) {
             blades.rotateZ(bladesCounter / 3000);
           }else if(bladesCounter == 300 || bladesCounter == -500) {
             blades.rotateZ(bladesCounter / 2500);
-          }else if (bladesCounter == 0 && body.position.y > 30) {
+          }else if (topPropellerDecelerating == true && body.position.y > 30) {
             blades.rotateZ(bladesCounter / 3500);
           }
 
-          if (bladesCounter > 0 && body.position.y < 125) {
-            body.position.y = body.position.y + 1;
+          if (bladesCounter > 100 && body.position.y < 125 ) {
+            body.position.y = body.position.y + .5;
           }if (stationaryHeight == false && topPropellerDecelerating == true && body.position.y > 30) {
             body.position.y = body.position.y - 1
           }else if (stationaryHeight == true) {
@@ -186,7 +188,7 @@
             }
           }
 
-          //rearProppeller.rotateZ(.01);
+          rearProppeller.rotateZ(.01);
 
           renderer.render(scene,myCamera);
           requestAnimationFrame(renderScene);
@@ -205,14 +207,18 @@
               topPropellerDecelerating = true;
               break;
             case 37://left
+            if(body.position.y > 30){
               backPropellerRight = false;
               neutralPropeller = false;
               backPropellerLeft = true;
+            }
               break;
             case 39://right
+            if(body.position.y > 30){
               backPropellerLeft = false;
               neutralPropeller = false;
               backPropellerRight = true;
+            }
               break;
             case 32://space
               //TODO:first space is stop rotating second space is stop the altitude.
