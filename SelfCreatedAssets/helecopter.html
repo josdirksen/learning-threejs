@@ -59,9 +59,11 @@
         tail.position.set(37.5,0,0);
         tail.rotateZ(-4.75);
         body.add(tail);
-        var rearProppeller = new THREE.Mesh(new THREE.PlaneGeometry(25,3,10), new THREE.MeshLambertMaterial({
+        var rearProppeller = new THREE.Mesh(new THREE.SphereGeometry(15,10,10), new THREE.MeshLambertMaterial({
           side: THREE.DoubleSide,
         }));
+        rearProppeller.scale.y = .05;
+        rearProppeller.scale.z = .1;
         rearProppeller.position.set(0,-20,8.5)
         tail.add(rearProppeller);
         var Wilms = new THREE.Mesh(new THREE.SphereGeometry(6,5,5), new THREE.MeshLambertMaterial({color: 'red'}));
