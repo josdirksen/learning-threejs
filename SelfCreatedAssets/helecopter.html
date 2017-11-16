@@ -69,8 +69,10 @@
         var Wilms = new THREE.Mesh(new THREE.SphereGeometry(6,5,5), new THREE.MeshLambertMaterial({color: 'red'}));
         Wilms.position.set(0,18,0);
         cockpit.add(Wilms);
-        var blades = new THREE.Mesh(new THREE.PlaneGeometry(120,10,5), new THREE.MeshLambertMaterial({side: THREE.DoubleSide}));
+        var blades = new THREE.Mesh(new THREE.SphereGeometry(125,5,5), new THREE.MeshLambertMaterial({side: THREE.DoubleSide, color: 'black'}));
         blades.rotateX(.5 * Math.PI);
+        blades.scale.y =.05;
+        blades.scale.z = .01;
         blades.position.set(0,2.5,0);
         connector.add(blades);
         //TODO: make test planes that will give me the points for the windows!!!
@@ -146,6 +148,7 @@
             }
           }
           //speed of the blades
+          /*
           if (bladesCounter > 0) {
             blades.rotateZ(bladesCounter / 3000);
           }else if(bladesCounter == 300 || bladesCounter == -500) {
@@ -153,6 +156,36 @@
           }else if (topPropellerDecelerating == true && body.position.y > 30) {
             blades.rotateZ(bladesCounter / 3500);
           }
+          */
+          
+          if(topPropellerAccelerating == true){
+            console.log("propeller speed: " + bladesCounter);
+            if(bladesCounter < 50)
+              blades.rotateZ(.1);
+            if(bladesCounter < 100 && bladesCounter >= 50)
+              blades.rotateZ(1.5);
+            if(bladesCounter < 200 && bladesCounter >= 100)
+              blades.rotateZ(2);
+            if(bladesCounter >= 200)
+              blades.rotateZ(2.5);
+          }
+
+          if(topPropellerDecelerating == true){
+            console.log("propeller speed: " + bladesCounter);
+            if(bladesCounter < 50 && bladesCounter != 0){
+              blades.rotateZ(.1);
+              backPropellerLeft = backPropellerRight = false;
+            }
+            if(bladesCounter < 100 && bladesCounter >= 50){
+              blades.rotateZ(1.5);
+              backPropellerLeft = backPropellerRight = false;
+            }
+            if(bladesCounter < 200 && bladesCounter >= 100)
+              blades.rotateZ(2);
+            if(bladesCounter >= 200)
+              blades.rotateZ(2.5);
+          }
+
 
           if (bladesCounter > 100 && body.position.y < 125 ) {
             body.position.y = body.position.y + .5;
@@ -178,12 +211,12 @@
           }else if(backbladesCounter == 500 || backbladesCounter == -500) {
             scene.rotateY(backbladesCounter / 3000);
           }
-          if(neutralPropeller == true){
+          if(neutralPropeller == true || backPropellerLeft == false && backPropellerRight == false){
             if (backbladesCounter < 0) {
-              backbladesCounter += 1;
+              backbladesCounter += 10;
             }
             if (backbladesCounter > 0) {
-              backbladesCounter -=1;
+              backbladesCounter -= 10;
             }
             if (backbladesCounter == 0) {
               neutralPropeller == false;
@@ -227,7 +260,6 @@
               backPropellerRight = false;
               backPropellerLeft = false;
               neutralPropeller = true;
-              stationaryHeight = true;
               break;
 
         }
