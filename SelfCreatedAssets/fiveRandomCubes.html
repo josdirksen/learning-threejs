@@ -54,9 +54,11 @@
         }
         //on mouse down event going to use the mouse and if clicked on the cube
         document.onmousedown = function(event){
-
           //console.log(event);
           var vector = new THREE.Vector3(event.clientX / window.innerWidth * 2 - 1, -event.clientY / window.innerHeight * 2 + 1, 0.5);
+          //magic step
+          vector = vector.unproject(camera);//using the prjection matrix to unproject the click and throw it into 3d space
+          console.log("unprojected vector: ", vector)
         }
 
     </script>
