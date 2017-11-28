@@ -28,7 +28,7 @@
         //-----------------model----------------
         var cubes = [];
         var cube;
-        for (i = 0; i < 10; i++) {
+        for (i = 0; i < 7; i++) {
             cube = new THREE.Mesh(new THREE.BoxGeometry(30, 30, 30),
                 new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
             cube.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, -500 + Math.random() * 200);
@@ -64,6 +64,7 @@
           if(intersects.length > 0){
             var intersectedObjIndex = cubes.indexOf(intersects[0].object);
             scene.remove(intersects[0].object);
+            cubes.splice(intersectedObjIndex,1);
           }
         }
 
