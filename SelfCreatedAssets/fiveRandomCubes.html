@@ -59,7 +59,8 @@
           //magic step
           vector = vector.unproject(camera);//using the prjection matrix to unproject the click and throw it into 3d space
           console.log("unprojected vector: ", vector)
-        }
+          var raycaster = new THREE.Raycaster(camera.position, vector.subtact(camra.position).normalize()
+         }
 
     </script>
 </body>
