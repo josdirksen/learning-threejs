@@ -68,6 +68,37 @@
           }
         }
 
+        function renderScene() {
+            counter ++;
+            console.log(counter); 
+            cubes.forEach(function (c) {
+                c.rotateX(0.1 * Math.random());
+                c.rotateY(0.1 * Math.random());
+                c.position.set.z(+=1);
+            });
+            if(counter < 500){
+                if (counter % 30 == 0){
+                    addCube();
+                }
+            }else if(counter >=500 && counter < 1000){
+                if (counter % 10 == 0){
+                    addCube();
+                }
+            }else if(counter >= 1000){
+                if (counter % 5 == 0){
+                    addCube();
+                } 
+            }
+            requestAnimationFrame(renderScene);
+            renderer.render(scene, camera);
+        }
+        window.onresize = function() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+
     </script>
 </body>
 </html>
