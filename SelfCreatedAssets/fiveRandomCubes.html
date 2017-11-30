@@ -17,8 +17,9 @@
 </head>
 <body>
     <div id="score"> </div>
+    <div id="level"></div>
+    <div id="instructions"></div>
     <div id="output"></div>
-
     <script>
     //----------------scene--------------------
         var scene = new THREE.Scene();
@@ -51,22 +52,6 @@
             cubes.push(cube);
         }
 
-        //---------------------functions-----------------------------------
-        document.getElementById("output").appendChild(renderer.domElement);
-        renderScene();
-        function renderScene() {
-            cubes.forEach(function (c) {
-                c.rotateX(0.1 * Math.random());
-                c.rotateY(0.1 * Math.random());
-            });
-            requestAnimationFrame(renderScene);
-            renderer.render(scene, camera);
-        }
-        window.onresize = function() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
         //on mouse down event going to use the mouse and if clicked on the cube
         document.onmousedown = function(event){
           //console.log(event);
