@@ -36,20 +36,29 @@
         scene.add(dirLight);
         //-----------------model----------------
         var cubes = [];
+        var directions = [];
         var cube;
         var counter = 0;
+        var totalCubes = 0;
         for (i = 0; i < 7; i++) {
             addCube();
         }
         //---------------------functions-----------------------------------
         document.getElementById("output").appendChild(renderer.domElement);
         renderScene();
+        
         function addCube(){
+            totalCubes = totalCubes + 1; 
             cube = new THREE.Mesh(new THREE.BoxGeometry(30, 30, 30),
                 new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
-            cube.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, -500 + Math.random() * 200);
+            var startPosition = new THREE.Vector3(Math.random  * 500-250, Math.random() * 500-250, -500);
+            var direction = camera.getWorldPosition().sub(startPosition).normalize();
+            //console.log("start position: " +startPosition);
+            //console.log("direction " + direction);
+            cube.position.set(startPosition);
             scene.add(cube);
             cubes.push(cube);
+            directions.push(direction);
         }
 
         //on mouse down event going to use the mouse and if clicked on the cube
@@ -65,17 +74,26 @@
             var intersectedObjIndex = cubes.indexOf(intersects[0].object);
             scene.remove(intersects[0].object);
             cubes.splice(intersectedObjIndex,1);
+            directions.splice(intersectedObjIndex);
+            totalCubes = totalCubes - 1;
           }
         }
 
+        /*
+        
+        
+        */
+
         function renderScene() {
             counter ++;
-            console.log(counter); 
+            //console.log(counter); 
             cubes.forEach(function (c) {
                 c.rotateX(0.1 * Math.random());
                 c.rotateY(0.1 * Math.random());
-                c.position.set.z(+=1);
-            });
+            });/*
+            for(i = 0; i < totalCubes; i++){
+                cubes[i].position.add(directions[i]);
+            }*/
             if(counter < 500){
                 if (counter % 30 == 0){
                     addCube();
