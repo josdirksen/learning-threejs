@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Example 01.02 - First Scene</title>
+    <script type="text/javascript" src="../libs/three.js"></script>
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+  var renderer = new THREE.WebGLRenderer();
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+    // once everything is loaded, we run our Three.js stuff.
+
+    var sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
+    var sphereMaterial = new THREE.MeshBasicMaterial({color: 0x7777ff});
+    var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+    // position the sphere
+    sphere.position.x = 0;
+    sphere.position.y = 10;
+    sphere.position.z = 70;
+
+    // add the sphere to the scene
+    scene.add(sphere);
+
+    function init() {
+
+        // create a scene, that will hold all our elements such as objects, cameras and lights.
+
+
+        // create a camera, which defines where we're looking at.
+
+
+        // create a render and set the size
+
+        renderer.setClearColorHex();
+        renderer.setClearColor(new THREE.Color('skyblue'));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // create the ground plane
+        var planeGeometry = new THREE.PlaneGeometry(500, 150);
+        var planeMaterial = new THREE.MeshBasicMaterial({
+          color: 0x00ff00,
+          side: THREE.DoubleSided,
+        });
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+        // rotate and position the plane
+        plane.rotation.x = -45;
+        plane.position.y = 0;
+        plane.position.z = 75;
+
+        // add the plane to the scene
+        scene.add(plane);
+
+        // position and point the camera to the center of the scene
+        camera.position.x = 0;
+        camera.position.y = 25;
+        camera.position.z = 250;
+        camera.lookAt(scene.position);
+
+        // add the output of the renderer to the html element
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+        // render the scene
+        renderScene();
+
+
+
+    }
+
+    function renderScene(){
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(renderScene);
+    }
+
+    function MoveBall(e){
+          console.log(e.which);
+          switch (e.which) {
+            //87,83,65,68,38,40,37,39
+              case 87: sphere.position.z -= 2;break;
+              case 83: sphere.position.z += 2; break;
+              case 65: sphere.position.x -= 2; break;
+              case 68: sphere.position.x += 2; break;
+              case 38: sphere.position.z -= 2; break;
+              case 40: sphere.position.z += 2; break;
+              case 37: sphere.position.x -= 2; break;
+              case 39: sphere.position.x += 2; break;
+          }
+      }
+
+
+
+    window.onload = init;
+    window.addEventListener('keydown', MoveBall, false);
+</script>
+</body>
+</html>

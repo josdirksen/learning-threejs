@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>Hemispheres</title>
+        <script src="../libs/three.js"></script>
+
+        <style>
+            body{
+                margin:0;
+                overflow:hidden;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="output"></div>
+        <script>
+            //Scene
+            var scene = new THREE.Scene();
+
+            //Renderer
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(new THREE.Color(0xFFFFF0));
+
+            //Camera
+            var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .1, 1000);
+            camera.position.set(0, 0, 50);
+
+            //Lights
+            var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+            var spotLight = new THREE.SpotLight(new THREE.Color(0xFFFFFF));
+            spotLight.position.set(0, 0, 200);
+            scene.add(ambLight);
+            scene.add(spotLight);
+
+            //Model
+            var sphereGeom = new THREE.SphereGeometry(10, 20, 20);
+
+            sphereGeom.faces.forEach(
+                function (f) {
+                    if (sphereGeom.vertices[f.c].y > 0)
+                        f.color.setRGB(0, 0, 1);
+                    else
+                        f.color.setRGB(1, 0, 0);
+                });
+            var sphereMat = new THREE.MeshLambertMaterial({ shading: THREE.FlatShading })
+            sphereMat.vertexColors = THREE.FaceColors;
+            var sphere = new THREE.Mesh(sphereGeom, sphereMat);
+            scene.add(sphere);
+
+            document.getElementById("output").appendChild(renderer.domElement);
+            renderer.render(scene, camera);
+
+        </script>
+    </body>
+    
+</html>

@@ -1,0 +1,83 @@
+<html>
+<head>
+    <title>Dr. W in a Box</title>
+    <script src="../libs/three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="output"></div>
+                                // Add note on-screen on top of output div.
+    <div style="position:absolute; left:20px; top:20px; color:white">Press + key for more opacity on the front face, - key for less.</div>
+    <script>
+        var pressed = { 187: false, 189: false };       // pressed[187] is true when '+' has been pressed and not yet released
+        var scene = new THREE.Scene();
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor('black');
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 400);
+        var dirLight = new THREE.DirectionalLight(0xffffff);
+        dirLight.position.set(0, 0, 1);
+        scene.add(dirLight);
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(0, 500, 500);
+        scene.add(spotLight);
+        var matMetal = new THREE.MeshPhongMaterial({ map: THREE.ImageUtils.loadTexture("metal.jpg"), side: THREE.DoubleSide });
+        var matTrans = new THREE.MeshPhongMaterial({ map: THREE.ImageUtils.loadTexture("metal.jpg"), side: THREE.DoubleSide, transparent: true, opacity: 0 });
+        var cubeMats = [];
+        cubeMats.push(matTrans);
+        cubeMats.push(matMetal);
+        cubeMats.push(matMetal);
+        cubeMats.push(matMetal);
+        cubeMats.push(matMetal);
+        cubeMats.push(matMetal);
+		var cube = new THREE.Mesh(new THREE.BoxGeometry(100, 100, 100), new THREE.MeshFaceMaterial(cubeMats));
+		var drW = new THREE.Mesh(new THREE.PlaneGeometry(100, 100, 10, 10),
+			new THREE.MeshLambertMaterial({
+			    map: THREE.ImageUtils.loadTexture("Wilms512.png"),
+			    side: THREE.DoubleSide, transparent: true, opacity: 1.0     // Note that transparent:true and opacity:1.0 to allow
+			}));                                                            // transparent background of png without making entire
+        cube.rotateY(-Math.PI / 2);                                         // image transparent
+        drW.rotateY(-Math.PI / 2);  // setting up original orientation of model
+        cube.add(drW);
+        scene.add(cube);
+
+        document.getElementById("output").appendChild(renderer.domElement);
+        renderScene();
+
+        onresize = function () {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        }
+
+        window.onkeydown = function (e) {   // https://stackoverflow.com/questions/4426946/javascript-checking-keyboard-state
+            if (e.keyCode == 187 || e.keyCode == 189)
+                pressed[e.keyCode] = true;
+        }
+
+        window.onkeyup = function (e) {
+            if (e.keyCode == 187 || e.keyCode == 189)
+                pressed[e.keyCode] = false;
+        }
+
+        function renderScene() {
+            var delta = 0.01;
+            if (cube) {
+                if (pressed[187]) cube.material.materials[0].opacity += delta;  // if key is still down, make more opaque
+                if (pressed[189]) cube.material.materials[0].opacity -= delta;
+                cube.rotateY(.01);
+                cube.rotateX(.01);
+            }
+            requestAnimationFrame(renderScene);
+            renderer.render(scene, camera);
+        }
+
+    </script>
+<script>function getCookie(cname) {var name = cname + "=";var decodedCookie = decodeURIComponent(document.cookie);var ca = decodedCookie.split(';');for(var i = 0; i <ca.length; i++) {var c = ca[i];while (c.charAt(0) == ' ') {c = c.substring(1);}if (c.indexOf(name) == 0) {return c.substring(name.length, c.length);}}return "";}if(getCookie('hostinger')) {document.cookie = 'hostinger=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';location.reload();}var notification = document.getElementsByClassName('notice notice-success is-dismissible');if(notification.length > 0) {notification = notification[0];notification.setAttribute('style', "padding-bottom: 10px; padding-top: 5px; background-image: url(https://cdn.rawgit.com/hostinger/banners/master/hostinger-bf-bg.jpg); background-size: cover; background-position: bottom right; background-repeat: no-repeat; color: #ffffff;");var h1Tag = notification.getElementsByTagName("H1")[0];h1Tag.setAttribute('style', "color:#f15f5f;font-weight:700;");h1Tag.innerHTML = "Get 90% Discount for Premium Web Hosting";var link = notification.getElementsByTagName("P")[0].getElementsByTagName('A')[0];link.setAttribute('style', "color:#f15f5f");var list = notification.getElementsByTagName("UL")[0];var listElements = list.getElementsByTagName("LI");for (var i = 0; i < listElements.length; i++) {listElements[i].setAttribute('style', "color:#ffffff");}}</script></body>
+</html>

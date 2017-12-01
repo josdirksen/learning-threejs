@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>UU at Night</title>
+    <script src="../New3/three.js"></script>
+    <style>
+        body {
+            margin:0;
+            overflow:hidden;
+        }
+    </style>
+</head><body>
+    <div id="output">
+    </div>
+    <script>
+        //all the normal stuff
+        var scene = new THREE.Scene();
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(new THREE.Color('black'));
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .1, 1000);
+        camera.position.set(-15, 25, 75);        camera.lookAt(new THREE.Vector3(0, 0, 0));
+        var spotLight1 = new THREE.SpotLight(0xcccccc);
+        spotLight1.angle = Math.PI / 8;
+        spotLight1.position.set(camera.position.x, camera.position.y, camera.position.z - 250);
+        scene.add(spotLight1);
+        var ambLight = new THREE.AmbientLight(0xffffff);
+        scene.add(ambLight);
+
+        //--------------target light --------------
+        var lightTarget = new THREE.Object3D();
+        lightTarget.position.set(0,0,0);
+        scene.add(lightTarget);
+        spotLight1.target = lightTarget;
+
+        //creating textrue
+        var texture = THREE.ImageUtils.loadTexture("../Textures/textures/Wolf_Body.jpg");
+
+
+        //------------------------------
+
+
+
+
+        //render scene function
+        renderScene();
+
+        var mixer;
+        //------------creating wolf model1---------
+
+          var model;
+          var wolfModel = new THREE.JSONLoader();
+
+          wolfModel.load("WolfRun.js", loadedFunc1);
+          scene.add(wolfModel);
+
+
+
+        function loadedFunc1(geom1, mat) {
+            this.model = new THREE.Mesh(geom1, mat[0]);
+            this.model.material = new THREE.MeshNormalMaterial({
+              //map: texture,
+              //side: THREE.DoubleSide,
+              morphTargets: true,
+           });
+
+           this.model.position.set(0,0,0);
+
+            var scale = 17;
+            this.model.rotateY(-Math.PI / 2);
+            this.model.scale.set(scale, scale, scale);
+            scene.add(this.model);
+
+            mixer = new THREE.AnimationMixer(this.model);
+            clip1 = THREE.AnimationClip.CreateFromMorphTargetSequence( "run1", geom1.morphTargets,30);
+            mixer.clipAction(clip1).setDuration(3).play();
+
+        }
+
+//-------------------------------------------------
+        var model2;
+        var wolfModel2 = wolfModel;
+
+        wolfModel2.load("WolfRun.js", loadedFunc2);
+        //scene.add(wolfModel2);
+
+
+
+        function loadedFunc2(geom2, mat) {
+          this.model = new THREE.Mesh(geom2, mat[0]);
+          this.model.material = new THREE.MeshNormalMaterial({
+            //map: texture,
+            //side: THREE.DoubleSide,
+            morphTargets: true,
+         });
+
+         this.model.position.set(50,0,25);
+
+          var scale = 17;
+          this.model.rotateY(-Math.PI / 2);
+          this.model.scale.set(scale, scale, scale);
+          scene.add(this.model);
+
+          mixer2 = new THREE.AnimationMixer(this.model);
+          clip2 = THREE.AnimationClip.CreateFromMorphTargetSequence( "run2", geom2.morphTargets,30);
+          mixer2.clipAction(clip2).setDuration(1).play();
+        }
+
+        var prevTime = Date.now();
+        var time;
+
+        document.getElementById("output").appendChild(renderer.domElement);
+
+        function renderScene() {
+          if (mixer) {
+            time = Date.now();
+            mixer.update((time - prevTime) * .001);
+            prevTime = time;
+          }
+
+            requestAnimationFrame(renderScene);
+            renderer.render(scene, camera);
+        }
+
+        function onResize(){
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onKeyDown(event) {
+            console.log(event.which);
+            switch (event.which) {
+                case 38: lightTarget.position.y += 2 ; break;//up
+                case 40: lightTarget.position.y -= 2; break;//down
+                case 37: lightTarget.position.x -= 2; break;//left
+                case 39: lightTarget.position.x += 2; break;//righ
+
+            }
+        }
+
+        window.addEventListener('keydown', onKeyDown, false);
+        window.addEventListener('resize', onResize, false);
+    </script>
+</body>
+</html>

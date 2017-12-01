@@ -1,0 +1,108 @@
+<html>
+
+<head>
+    <title>Saturn</title>
+    <script src="three.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="output"></div>
+    <script>
+        //---------------Scene--------------------------
+        var scene = new THREE.Scene();
+        //---------------Renderer--------------------------
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(new THREE.Color('white'));
+        //--------------Camera--------------------------
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.set(0, 100,100);
+
+        //---------------Lights----------------------------
+        var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+        var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+        spotLight.position.set(camera.position0,camera.position0,camera.position);
+        var spotLight2 = new THREE.SpotLight(new THREE.Color(0xffffff));
+        spotLight.position.set(0, 500,2000);
+        scene.add(ambLight);
+        scene.add(spotLight,spotLight2);
+        /*
+        function cubeCreate(x,y,z,hex,){
+          this.x = x;
+          this.y = y;
+          this.z = z;
+          this.hex = hex
+          var cubeSize = 20;
+          var cubeGeometry = new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize);
+          this.object = new THREE.Mesh(new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize), new THREE.MeshBasicMaterial({color: Math.random() * 0xffffff}));
+          this.object.position.set(x, y, z);
+          scene.add(this.object);
+
+          console.log(x,y,z,hex);
+        };
+
+        cubeCreate(Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 0x123456, );
+        cubeCreate(Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 0x123456, );
+        cubeCreate(Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 0x123456, );
+        cubeCreate(Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 0x123456, );
+        cubeCreate(Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 0x123456, );
+        function cubeCreate(x,y,z,hex,){
+          this.x = x;
+          this.y = y;
+          this.z = z;
+          this.hex = hex
+          var cubeSize = 20;
+          var cubeGeometry = new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize);
+          this.object = new THREE.Mesh(new THREE.BoxGeometry(cubeSize,cubeSize,cubeSize), new THREE.MeshBasicMaterial({color: Math.random() * 0xffffff}));
+          this.object.position.set(x, y, z);
+          scene.add(this.object);
+
+          console.log(x,y,z,hex);
+        };
+        */
+        var cube1 = new THREE.Mesh(new THREE.BoxGeometry(5,5,5), new THREE.MeshLambertMaterial({color: 0x111111 * Math.random()}));
+        var cube2 = new THREE.Mesh(new THREE.BoxGeometry(5,5,5), new THREE.MeshLambertMaterial({color: 0x111111 * Math.random()}));
+        var cube3 = new THREE.Mesh(new THREE.BoxGeometry(5,5,5), new THREE.MeshLambertMaterial({color: 0x111111 * Math.random()}));
+        var cube4 = new THREE.Mesh(new THREE.BoxGeometry(5,5,5), new THREE.MeshLambertMaterial({color: 0x111111 * Math.random()}));
+        var cube5 = new THREE.Mesh(new THREE.BoxGeometry(5,5,5), new THREE.MeshLambertMaterial({color: 0x111111 * Math.random()}));
+
+        cube1.position.set(Math.random() * 10,Math.random() * 10,Math.random() * 10);
+        cube2.position.set(Math.random() * 10,Math.random() * 10,Math.random() * 10);
+        cube3.position.set(Math.random() * 10,Math.random() * 10,Math.random() * 10);
+        cube4.position.set(Math.random() * 10,Math.random() * 10,Math.random() * 10);
+        cube5.position.set(Math.random() * 10,Math.random() * 10,Math.random() * 10);
+
+        scene.add(cube1,cube2,cube3,cube4,cube5);
+        console.log(cube1.position);
+        renderScene();
+        function renderScene(){
+          cube1.rotateY(Math.random() * 10);
+          cube2.rotateY(Math.random() * 10);
+          cube3.rotateY(Math.random() * 10);
+          cube4.rotateY(Math.random() * 10);
+          cube5.rotateY(Math.random() * 10);
+          renderer.render(scene, camera);
+          requestAnimationFrame(renderScene);
+        }
+        function onResize(){
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+
+
+        window.addEventListener('resize', onResize, false);
+
+        document.getElementById("output").appendChild(renderer.domElement);
+
+    </script>
+</body>
+
+</html>

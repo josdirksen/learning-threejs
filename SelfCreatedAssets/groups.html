@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Groupse</title>
+    <script type="text/javascript" src="../libs/three.js"></script>
+    <style>
+        body {
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+  var renderer = new THREE.WebGLRenderer();
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+  var groupOfCubes = new THREE.Group();
+
+
+    function init() {
+
+      var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+    	var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+      var spotLight2 = new THREE.SpotLight (new THREE.Color(0xffffff));
+      var spotLight3 = new THREE.SpotLight (new THREE.Color(0xffffff));
+      var spotLight4 = new THREE.SpotLight (new THREE.Color(0xffffff));
+      var spotLight5 = new THREE.SpotLight (new THREE.Color(0xffffff));
+      var spotLight6 = new THREE.SpotLight (new THREE.Color(0xffffff));
+    	spotLight.position.set(0,0,-200);
+      spotLight2.position.set(200,0,0);
+      spotLight3.position.set(0,200,0);
+      spotLight4.position.set(0,-200,0);
+      spotLight5.position.set(-200,0,0);
+      spotLight6.position.set(0,0,200);
+
+    	scene.add(ambLight);
+    	scene.add(spotLight,spotLight2,spotLight3,spotLight4, spotLight5,spotLight6);
+
+        renderer.setClearColorHex();
+        renderer.setClearColor(new THREE.Color('skyblue'));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+                camera.position.x = 0;
+        camera.position.y = 25;
+        camera.position.z = 250;
+        camera.lookAt(scene.position);
+
+        stationaryPlane = new THREE.Mesh(
+          new THREE.PlaneGeometry(100,100,100),
+          new THREE.MeshLambertMaterial({color: 'green'}));
+        stationaryPlane.position.set(0,0,-100);
+        scene.add(stationaryPlane)
+
+        // add the output of the renderer to the html element
+        document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+        function makeCube(size,x,y,z,color){
+          var cube = new THREE.Mesh();
+          cube.geometry = new THREE.BoxGeometry(size,size,size);
+          cube.material = new THREE.MeshLambertMaterial({color: color});
+          cube.position.set(x,y,z);
+          return cube;
+        }
+
+
+        for(x = -20; x <=20 ; x+=20)
+          for(y = -20; y <= 20; y+=20)
+            for(z = -20; z<= 20; z+=20)
+              groupOfCubes.add(makeCube(10,x,y,z, Math.random() * 0xffffff));
+        scene.add(groupOfCubes);
+
+        // render the scene
+        renderScene();
+
+
+
+    }
+
+    function renderScene(){
+      groupOfCubes.rotateY(0.01);
+      groupOfCubes.rotateX(0.01);
+      //groupOfCubes.rotate(0.1);
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(renderScene);
+
+    }
+
+
+
+
+    window.onload = init;
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>UU at Night</title>
+    <script src="../../three.js/build/three.js"></script>
+    <style>
+        body {
+            margin:0;
+            overflow:hidden;
+        }
+    </style>
+</head><body>
+    <div id="output">
+    </div>
+    <script>
+        //all the normal stuff
+        var scene = new THREE.Scene();
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(new THREE.Color('black'));
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .1, 1000);
+        camera.position.set(-15, 25, 35);        camera.lookAt(new THREE.Vector3(0, 0, 0));
+        var spotLight1 = new THREE.SpotLight(0xcccccc);
+        spotLight1.angle = Math.PI / 8;
+        spotLight1.position.set(camera.position.x, camera.position.y, camera.position.z - 250);
+        scene.add(spotLight1);
+        var ambLight = new THREE.AmbientLight(0xffffff);
+        scene.add(ambLight);
+
+        //--------------target light --------------
+        var lightTarget = new THREE.Object3D();
+        lightTarget.position.set(0,0,0);
+        scene.add(lightTarget);
+        spotLight1.target = lightTarget;
+
+        //creating textrue
+        var texture = THREE.ImageUtils.loadTexture("../Textures/textures/Wolf_Body.jpg");
+
+
+        //------------------------------
+        var wolf1 = new CreateWolf();
+        //var wolf2 = new CreateWolf();
+        //var wolf3 = new CreateWolf();
+
+
+
+        //render scene function
+        renderScene();
+
+        var mixer;
+        //creating wolf model
+        function CreateWolf(){
+          this.model;
+          this.wolfModel = new THREE.JSONLoader();
+          this.wolfModel.load("WolfRun.js", loadedFunc);
+          scene.add(this.wolfModel);
+        }
+
+
+
+
+        function loadedFunc(geom, mat) {
+            model = new THREE.Mesh(geom, mat[0]);
+            model.material = new THREE.MeshNormalMaterial({
+              map: texture,
+              //side: THREE.DoubleSide,
+              morphTargets: true,
+           });
+
+
+            var scale = 17;
+            model.rotateY(-Math.PI / 2);
+            model.scale.set(scale, scale, scale);
+            scene.add(model);
+
+            mixer = new THREE.AnimationMixer(model);
+            var clip = THREE.AnimationClip.CreateFromMorphTargetSequence( "run", geom.morphTargets,30);
+            mixer.clipAction(clip).setDuration(1).play();
+        }
+
+        var prevTime = Date.now();
+        var time;
+
+        document.getElementById("output").appendChild(renderer.domElement);
+
+        function renderScene() {
+          if (mixer) {
+            time = Date.now();
+            mixer.update((time - prevTime) * .001);
+            prevTime = time;
+          }
+
+            requestAnimationFrame(renderScene);
+            renderer.render(scene, camera);
+        }
+
+        function onResize(){
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onKeyDown(event) {
+            console.log(event.which);
+            switch (event.which) {
+                case 38: lightTarget.position.y += 2 ; break;//up
+                case 40: lightTarget.position.y -= 2; break;//down
+                case 37: lightTarget.position.x -= 2; break;//left
+                case 39: lightTarget.position.x += 2; break;//righ
+
+            }
+        }
+
+        window.addEventListener('keydown', onKeyDown, false);
+        window.addEventListener('resize', onResize, false);
+    </script>
+</body>
+</html>

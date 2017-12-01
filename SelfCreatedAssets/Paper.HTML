@@ -1,0 +1,226 @@
+<!Doctype HTML>
+<html>
+
+<head>
+
+<title>Crumpled Paper</title>
+<script src="libs/three.js"></script>
+
+<style>
+body{
+  margin: 0;
+  overflow: hidden;
+}
+</style>
+
+</head>
+<body>
+
+<div id = "output"> </div>
+
+<script>
+
+var scene;
+var sphereScene;
+var renderer = new THREE.WebGLRenderer();
+var camera;
+var ambLight;
+var spotLight;
+var sceneSwitcher = 1;// 0 is plane, 1 is sphere.
+
+function init(){
+    //scene
+    scene = new THREE.Scene();
+    sphereScene = new THREE.Scene();
+
+    //renderer
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(new THREE.Color('lightgoldenrodyellow'));
+
+    document.getElementById("output").appendChild(renderer.domElement);
+
+    //camera
+    camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, .01, 1000);
+    camera.position.set(10,10,90);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    var axes = new THREE.AxisHelper(90);
+    scene.add(axes);
+    sphereScene.add(axes);
+
+    //light sources Spotlight & ambient
+    ambLight = new THREE.AmbientLight(0xcccccc);
+    sphereAmbLight = new THREE.AmbientLight(0x999999);
+
+
+    spotLight = new THREE.SpotLight(0x555555);
+    spotLight.position.set(0,0,100);
+
+    spotLight2 = new THREE.SpotLight(0x7777777);
+    spotLight2.position.set(10,10,90);
+
+    spotLightLeft = new THREE.SpotLight(0x888888);
+    spotLightLeft.position.set(-60,10,0);
+
+    spotLightRight = new THREE.SpotLight(0x888888);
+    spotLightRight.position.set(60,10,0);
+
+    spotLightBack = new THREE.SpotLight(0x333333);
+    spotLightBack.position.set(0,0,-75);
+
+    spotLightPlaneFront = new THREE.SpotLight(0x333333);
+    spotLightPlaneFront.position.set(10,10,60);
+
+    spotLight.castShadow = true;
+    spotLight2.castShadow = true;
+    spotLightBack.castShadow = true;
+    spotLightPlaneFront.castShadow = true;
+
+
+
+
+
+    scene.add(ambLight, spotLight, spotLight2, spotLightPlaneFront,spotLightBack);
+
+
+    sphereScene.add(sphereAmbLight);
+    sphereScene.add( spotLight, spotLightBack);
+    sphereScene.add(spotLightBack);
+
+    //Plane rendering
+
+/*
+seem to be having trouble getting the plane to work it seems to want to not pull
+out, current idea is that it is because I used a PlaneGeometry. plan to try
+creating my own point plane and seeing if that helps in the future.
+*/
+/*
+    var planePts = [];
+    planePts.push(new THREE.Vector3 ( -5,5,0 ));
+    planePts.push(new THREE.Vector3 ( 5,5,0 ));
+    planePts.push(new THREE.Vector3 ( 5,-5,0 ));
+    planePts.push(new THREE.Vector3 ( -5,-5,0 ));
+
+    for(var i = 0; i < planePts.Length; i ++){
+      planePts[ i ]. multiplyScalar(3);
+    }
+
+    var planeShape = new THREE.Shape( planePts );
+    scene.add(planeShape);
+*/
+
+    var planeGeom = new THREE.PlaneGeometry(50,50, 40, 40);
+
+    planeGeom.vertices.forEach(
+    function (p){
+      if (p.z <= p.z){
+        p.x +=  3 * Math.random();
+        p.y +=  3 * Math.random();
+        p.z +=  3 * Math.random();
+      }
+    }
+
+    );
+
+
+
+
+
+    var planeMaterial = new THREE.MeshLambertMaterial({
+      shading: THREE.FlatShading,
+      //color: 0x0033aa,
+      side: THREE.DoubleSide,
+      //wireframe: true,
+      shadowmap: true,
+    });
+    var plane = new THREE.Mesh(planeGeom,planeMaterial);
+    plane.position.set(0, 0, 0);
+    scene.add(plane);
+
+
+
+
+
+    //Sphere rendering
+
+    var sphereGeom = new THREE.SphereGeometry(25,10,10);
+
+
+
+    sphereGeom.vertices.forEach(
+      function (v){
+      if (v.y == v.y){
+        v.x += 8*Math.random();
+        v.y += 8*Math.random();
+        v.z += 8*Math.random();
+      }
+
+    });
+
+
+    var sphereMaterial = new THREE.MeshLambertMaterial({
+      Shading: THREE.FlatShading,
+      side: THREE.DoubleSide,
+      shadowmap: true,
+    });
+    sphereMaterial.vertexColors = THREE.FaceColors;
+    var sphere = new THREE.Mesh(sphereGeom, sphereMaterial);
+    sphere.position.set(0, 0, 0);
+
+    scene.add(sphere);
+
+    sphereScene.add(sphere);
+
+    renderScene();
+
+}
+
+//if camera is resized it should auto-matically fix it to be the correct size
+function onResize(){
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+
+
+//this function should enable if any key is pressed and if it is, it will look
+//what the scene is and auto-matically change to the other scene.
+function onKeyDown (){
+  if (sceneSwitcher == 0){
+    sceneSwitcher = 1;
+  }else if (sceneSwitcher == 1) {
+    sceneSwitcher = 0;
+  }
+  console.log(sceneSwitcher);
+}
+
+//there are two scenes, regular (plane) and sphere scene which is for the sphere by term of sceneSwitcher
+function renderScene(){
+
+  scene.rotation.y += .02;
+  sphereScene.rotation.y += .02;
+
+  if (sceneSwitcher == 0){
+    renderer.render(scene, camera);
+    requestAnimationFrame(renderScene);
+  }else if (sceneSwitcher == 1) {
+    renderer.render(sphereScene, camera);
+    requestAnimationFrame(renderScene);
+  }else {
+    renderer.render(scene, camera);
+  }
+}
+
+window.onload = init;
+window.addEventListener('keydown', onKeyDown, false);
+window.addEventListener('resize', onResize, false);
+//listener
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title> Example 01.01 - Basic skeleton </title>
+    <script src="../libs/three.js"> </script>
+    <style>
+      body{
+        /*set margin to 0 and overflow to hidden, to use the complete page*/
+        margin: 0;
+        overflow:hidden;
+      }
+      </style>
+    </head>
+  <body>
+    <!--Div which would hold Output -->
+    <div id="output">
+    </div>
+    <!-- Javascript code that runs our Three.js examples -->
+    <script>
+
+      //once everything is loaded, we run our Three.js stuff.
+      var ChangeColor = 0x000000;
+      var PlaneinScene = true;
+      var Spin = false;
+      var scene = new THREE.Scene();
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor(new THREE.Color(0x4488cc));
+      var camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1000);
+      camera.position.set(0,0,60);
+      scene.add(camera);
+      var ambLight = new THREE.AmbientLight(new THREE.Color(0x222222));
+      var spotLight = new THREE.SpotLight(new THREE.Color(0xffffff));
+      spotLight.position.set(0,0,200);
+      scene.add(ambLight);
+      scene.add(spotLight);
+
+      function init() {
+          //Scene
+
+          //Renderer
+
+
+          //Camera
+
+
+          //Lights
+
+
+        var planeGeom = new THREE.PlaneGeometry(10,10);
+        var planeMaterial = new THREE.MeshLambertMaterial({
+          side: THREE.DoubleSide,
+          color: ChangeColor
+        });
+        plane = new THREE.Mesh(planeGeom, planeMaterial);
+
+        document.getElementById("output").appendChild(renderer.domElement);
+        renderScene();
+
+
+      function onResize() {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      function renderScene() {
+        if (PlaneinScene == false) {
+          scene.remove(plane);
+        }else if (PlaneinScene == true){
+          scene.add(plane);
+        }
+
+        if (Spin == true)
+        plane.rotation.y += .4;
+
+        plane.material.color.set(ChangeColor);
+
+          renderer.render(scene, camera);
+          requestAnimationFrame(renderScene);
+      }
+
+      function onKeyDown(event) {
+          console.log(event.which);
+          switch (event.which) {
+              case 82: ChangeColor =  0xff0000; break;
+              case 71: ChangeColor =  0x00ff00; break;
+              case 66: ChangeColor =  0x0000ff; break;
+              case 32: PlaneinScene = !PlaneinScene; break;
+              case 83: Spin = !Spin
+          }
+      }
+
+
+      window.addEventListener('resize', onResize, false);
+      window.addEventListener('keydown', onKeyDown, false);
+
+      }
+      window.onload = init;
+      </script>
+    </body>
+    <html>
