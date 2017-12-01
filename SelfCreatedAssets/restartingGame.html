@@ -49,7 +49,22 @@
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
-
+        document.onmousedown = function(event){
+          //console.log(event);
+          var vector = new THREE.Vector3(event.clientX / window.innerWidth * 2 - 1, -event.clientY / window.innerHeight * 2 + 1, 0.5);
+          //magic step
+          vector = vector.unproject(camera);//using the prjection matrix to unproject the click and throw it into 3d space
+          console.log("unprojected vector: ", vector)
+          var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+          var intersects = raycaster.intersectObjects(cubes);
+          if(intersects.length > 0){
+            var intersectedObjIndex = cubes.indexOf(intersects[0].object);
+            scene.remove(intersects[0].object);
+            cubes.splice(intersectedObjIndex,1);
+//            directions.splice(intersectedObjIndex);
+//            totalCubes = totalCubes - 1;
+          }
+        }
     </script>
 </body>
 </html>
