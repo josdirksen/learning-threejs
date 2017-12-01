@@ -50,6 +50,7 @@
         var cubes = [];
         var directions = [];
         var cube;
+<<<<<<< HEAD
         var counter = 0;
         var totalCubes = 0;
         var score = 0;
@@ -62,6 +63,9 @@
         function addCube(){
             console.log("cube created : "  + totalCubes);
             totalCubes = totalCubes + 1; 
+=======
+        for (i = 0; i < 7; i++) {
+>>>>>>> parent of 6321912... moved creating cube into a function
             cube = new THREE.Mesh(new THREE.BoxGeometry(30, 30, 30),
                 new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
 //            var startPosition = new THREE.Vector3(Math.random()  * 500-250, Math.random() * 500-250, -500);
