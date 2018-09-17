@@ -7,8 +7,7 @@ The examples in this branch are based on r63 and correspond to the second editio
 
 ## Third edition Learning Three.js
 
-Currently I'm in progress of converting all the examples to the latest (r88 as of now) of Three.js for the
- third edition of "Learning Three.js", if you want to follow the progress check the following repository:
+The examples for the third edition of this book can be found in the following repo
 
-https://github.com/josdirksen/learning-threejs-third/tree/inventorize
+https://github.com/josdirksen/learning-threejs-third
 
