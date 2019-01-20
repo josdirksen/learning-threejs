@@ -30,6 +30,7 @@
     // once everything is loaded, we run our Three.js stuff.
     function init() {
 
+        var file_dir = "assets/textures/general/";
         var stats = initStats();
 
         // create a scene, that will hold all our elements such as objects, cameras and lights.
@@ -55,7 +56,7 @@
         scene.add(sphere2);
         console.log(sphere2.geometry.faceVertexUvs);
 
-        var floorTex = THREE.ImageUtils.loadTexture("../assets/textures/general/floor-wood.jpg");
+        var floorTex = THREE.ImageUtils.loadTexture(file_dir + "floor-wood.jpg");
         var plane = new THREE.Mesh(new THREE.BoxGeometry(200, 100, 0.1, 30), new THREE.MeshPhongMaterial({
             color: 0x3c3c3c,
             map: floorTex
@@ -93,11 +94,11 @@
             this.rotate = false;
 
             this.changeTexture = function (e) {
-                var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + e + ".jpg");
+                var texture = THREE.ImageUtils.loadTexture(file_dir + "" + e + ".jpg");
                 sphere2.material.map = texture;
                 sphere1.material.map = texture;
 
-                var bump = THREE.ImageUtils.loadTexture("../assets/textures/general/" + e + "-bump.jpg");
+                var bump = THREE.ImageUtils.loadTexture(file_dir + "" + e + "-bump.jpg");
                 sphere2.material.bumpMap = bump;
             };
 
@@ -117,13 +118,13 @@
         render();
 
         function createMesh(geom, imageFile, bump) {
-            var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + imageFile);
+            var texture = THREE.ImageUtils.loadTexture(file_dir + "" + imageFile);
             geom.computeVertexNormals();
             var mat = new THREE.MeshPhongMaterial();
             mat.map = texture;
 
             if (bump) {
-                var bump = THREE.ImageUtils.loadTexture("../assets/textures/general/" + bump);
+                var bump = THREE.ImageUtils.loadTexture(file_dir + bump);
                 mat.bumpMap = bump;
                 mat.bumpScale = 0.2;
                 console.log('d');

@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-
+<!--
+BUGFIX
+1. loader.load("../assets/models/test.ply" => loader.load("assets/models/test.ply"
+-->
 <html>
 
 <head>
@@ -76,7 +79,7 @@
 
         var loader = new THREE.PLYLoader();
         var group = new THREE.Object3D();
-        loader.load("../assets/models/test.ply", function (geometry) {
+        loader.load("assets/models/test.ply", function (geometry) {
             var material = new THREE.PointCloudMaterial({
                 color: 0xffffff,
                 size: 0.4,

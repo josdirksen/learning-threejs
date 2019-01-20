@@ -1,5 +1,14 @@
 <!DOCTYPE html>
+<!--
+BUGFIX
 
+        loader.load('../assets/models/gltf/Cesium_Air.gltf', function (scene) {
+
+=>
+
+        loader.load('assets/models/gltf/Cesium_Air.gltf', function (scene) {
+        
+-->
 <html>
 
 <head>
@@ -70,7 +79,7 @@
         var clock = new THREE.Clock();
 
         var loader = new THREE.glTFLoader();
-        loader.load('../assets/models/gltf/Cesium_Air.gltf', function (scene) {
+        loader.load('assets/models/gltf/Cesium_Air.gltf', function (scene) {
             console.log(scene);
 
 

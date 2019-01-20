@@ -17,7 +17,7 @@
 //    context.lineWidth   = 2;
 
     var deg_to_rad = Math.PI / 180.0;
-    var depth = 10;
+    var depth = 11;
 
     function drawLine(x1, y1, x2, y2, brightness){
         context.lineWidth=brightness;
@@ -41,7 +41,6 @@
             context.beginPath();
 
             drawLine(x1, y1, x2, y2, depth);
-            context.closePath();
             context.stroke();
             drawTree(x2, y2, angle/1.4 - 40, depth - 1);
             drawTree(x2, y2, angle + 20, depth - 1);
@@ -49,8 +48,8 @@
     }
 
     drawTree(300, 800, -90, depth);
-//    context.closePath();
-//    context.stroke();
+    //context.closePath();
+    //context.stroke();
 </script>
 </body>
 </html>

@@ -1,5 +1,13 @@
 <!DOCTYPE html>
+<!--
+BUGFIX
 
+        loader.load('../assets/models/monster.dae', function (collada) {
+
+=>        
+        
+        loader.load('assets/models/monster.dae', function (collada) {
+-->        
 <html>
 
 <head>
@@ -68,7 +76,7 @@
         var clock = new THREE.Clock();
 
         var loader = new THREE.ColladaLoader();
-        loader.load('../assets/models/monster.dae', function (collada) {
+        loader.load('assets/models/monster.dae', function (collada) {
 
             var child = collada.skins[0];
             scene.add(child);

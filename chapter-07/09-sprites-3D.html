@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<!--
+BUGFIX
+1. THREE.ImageUtils.loadTexture("../assets/textures/particles/sprite-sheet.png") => THREE.ImageUtils.loadTexture("assets/textures/particles/sprite-sheet.png")
+-->
 
 <html>
 
@@ -71,7 +75,7 @@
 
 
         function getTexture() {
-            var texture = new THREE.ImageUtils.loadTexture("../assets/textures/particles/sprite-sheet.png");
+            var texture = new THREE.ImageUtils.loadTexture("assets/textures/particles/sprite-sheet.png");
             return texture;
         }
 

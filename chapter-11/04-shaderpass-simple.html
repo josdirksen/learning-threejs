@@ -16,6 +16,7 @@
     <script type="text/javascript" src="../libs/postprocessing/ShaderPass.js"></script>
     <script type="text/javascript" src="../libs/postprocessing/RenderPass.js"></script>
     <script type="text/javascript" src="../libs/postprocessing/MaskPass.js"></script>
+    
     <script type="text/javascript" src="../libs/shaders/CopyShader.js"></script>
     <script type="text/javascript" src="../libs/shaders/BrightnessContrastShader.js"></script>
     <script type="text/javascript" src="../libs/shaders/ColorifyShader.js"></script>
@@ -95,8 +96,8 @@
         var cube = new THREE.Mesh(plane, new THREE.MeshPhongMaterial(
                 {
                     color: 0xffffff,
-                    map: THREE.ImageUtils.loadTexture("../assets/textures/general/plaster-diffuse.jpg"),
-                    normalMap: THREE.ImageUtils.loadTexture("../assets/textures/general/plaster-normal.jpg"),
+                    map: THREE.ImageUtils.loadTexture("assets/textures/general/plaster-diffuse.jpg"),
+                    normalMap: THREE.ImageUtils.loadTexture("assets/textures/general/plaster-normal.jpg"),
                     normalScale: new THREE.Vector2(0.6, 0.6)
                 }));
         cube.material.map.wrapS = THREE.RepeatWrapping;
@@ -141,7 +142,7 @@
 
 
         var loader = new THREE.OBJMTLLoader();
-        loader.load('../assets/models/sol/libertStatue.obj', '../assets/models/sol/libertStatue.mtl',
+        loader.load('assets/models/sol/LibertStatue.obj', 'assets/models/sol/LibertStatue.mtl',
                 function (event) {
 
                     var object = event;
@@ -451,7 +452,7 @@
             }
 
             requestAnimationFrame(render);
-//        webGLRenderer.render(scene, camera);
+            webGLRenderer.render(scene, camera);
             composer.render();
         }
 

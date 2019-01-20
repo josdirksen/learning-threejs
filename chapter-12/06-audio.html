@@ -83,17 +83,17 @@
 
         var material_1 = new THREE.MeshBasicMaterial({
             color: 0xffffff,
-            map: THREE.ImageUtils.loadTexture("../assets/textures/animals/cow.png")
+            map: THREE.ImageUtils.loadTexture("assets/textures/animals/cow.png")
         });
 
         var material_2 = new THREE.MeshBasicMaterial({
             color: 0xffffff,
-            map: THREE.ImageUtils.loadTexture("../assets/textures/animals/dog.jpg")
+            map: THREE.ImageUtils.loadTexture("assets/textures/animals/dog.jpg")
         });
 
         var material_3 = new THREE.MeshBasicMaterial({
             color: 0xffffff,
-            map: THREE.ImageUtils.loadTexture("../assets/textures/animals/cat.jpg")
+            map: THREE.ImageUtils.loadTexture("assets/textures/animals/cat.jpg")
         });
 
         // sound spheres
@@ -110,21 +110,21 @@
         scene.add(mesh3);
 
         var sound1 = new THREE.Audio(listener1);
-        sound1.load('../assets/audio/cow.ogg');
+        sound1.load('assets/audio/cow.ogg');
         sound1.setRefDistance(20);
         sound1.setLoop(true);
         sound1.setRolloffFactor(2);
         mesh1.add(sound1);
 
         var sound2 = new THREE.Audio(listener2);
-        sound2.load('../assets/audio/dog.ogg');
+        sound2.load('assets/audio/dog.ogg');
         sound2.setRefDistance(20);
         sound2.setLoop(true);
         sound2.setRolloffFactor(2);
         mesh2.add(sound2);
 
         var sound3 = new THREE.Audio(listener3);
-        sound3.load('../assets/audio/cat.ogg');
+        sound3.load('assets/audio/cat.ogg');
         sound3.setRefDistance(20);
         sound3.setLoop(true);
         sound3.setRolloffFactor(2);

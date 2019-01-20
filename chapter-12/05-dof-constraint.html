@@ -24,8 +24,8 @@
 
         'use strict';
 
-        Physijs.scripts.worker = '../libs/physijs_worker.js';
-        Physijs.scripts.ammo = '../libs/ammo.js';
+        Physijs.scripts.worker = 'libs/physijs_worker.js';
+        Physijs.scripts.ammo = 'libs/ammo.js';
 
         var scale = chroma.scale(['white', 'blue', 'red', 'yellow']);
 
@@ -246,7 +246,7 @@
                     new THREE.MeshPhongMaterial(
                             {
 //                                color: 0xaaaaaa,
-                                map: THREE.ImageUtils.loadTexture('../assets/textures/general/floor-wood.jpg')
+                                map: THREE.ImageUtils.loadTexture('assets/textures/general/floor-wood.jpg')
                             }),
                     1, // high friction
                     .7 // low restitution

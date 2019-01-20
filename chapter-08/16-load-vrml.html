@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-
+<!--
+BUGFIX
+1. loader.load("../assets/models/vrml/tree.wrl" => loader.load("assets/models/vrml/tree.wrl"
+-->
 <html>
 
 <head>
@@ -92,7 +95,7 @@
 
         var loader = new THREE.VRMLLoader();
         var group = new THREE.Object3D();
-        loader.load("../assets/models/vrml/tree.wrl", function (model) {
+        loader.load("assets/models/vrml/tree.wrl", function (model) {
 
             console.log(model);
 

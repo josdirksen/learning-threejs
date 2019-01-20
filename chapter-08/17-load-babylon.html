@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-
+<!--
+BUGFIX
+1. loader.load("../assets/models/babylon/skull.babylon" => loader.load("assets/models/babylon/skull.babylon"
+-->
 <html>
 
 <head>
@@ -91,7 +94,7 @@
 
         var loader = new THREE.BabylonLoader();
         var group = new THREE.Object3D();
-        loader.load("../assets/models/babylon/skull.babylon", function (loadedScene) {
+        loader.load("assets/models/babylon/skull.babylon", function (loadedScene) {
 
             // babylon loader contains a complete scene.
             console.log(loadedScene.children[1].material = new THREE.MeshLambertMaterial());

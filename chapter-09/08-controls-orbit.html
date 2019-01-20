@@ -1,5 +1,15 @@
 <!DOCTYPE html>
+<!--
+BUGFIX
 
+  var planetTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/mars_1k_color.jpg");
+  var normalTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/mars_1k_normal.jpg");
+
+  =>
+
+  var planetTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/mars_1k_color.jpg");
+  var normalTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/mars_1k_normal.jpg");
+-->            
 <html>
 
 <head>
@@ -76,8 +86,8 @@
         render();
 
         function createMesh(geom) {
-            var planetTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/mars_1k_color.jpg");
-            var normalTexture = THREE.ImageUtils.loadTexture("../assets/textures/planets/mars_1k_normal.jpg");
+            var planetTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/mars_1k_color.jpg");
+            var normalTexture = THREE.ImageUtils.loadTexture("assets/textures/planets/mars_1k_normal.jpg");
 
             var planetMaterial = new THREE.MeshPhongMaterial({map: planetTexture, bumpMap: normalTexture});
 

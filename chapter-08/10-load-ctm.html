@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-
+<!--
+BUGFIX
+1. loader.load("../assets/models/auditt_wheel.ctm" => loader.load("assets/models/auditt_wheel.ctm"
+-->
 <html>
 
 <head>
-    <title>Example 08.10 - Load pdb model </title>
+    <title>Example 08.10 - Load ctm model </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/CTMLoader.js"></script>
     <script type="text/javascript" src="../libs/ctm.js"></script>
@@ -73,7 +76,7 @@
         var loader = new THREE.CTMLoader();
         var group = new THREE.Object3D();
 
-        loader.load("../assets/models/auditt_wheel.ctm", function (geometry) {
+        loader.load("assets/models/auditt_wheel.ctm", function (geometry) {
             var mat = new THREE.MeshLambertMaterial({color: 0xff8888});
             group = new THREE.Mesh(geometry, mat);
             group.scale.set(20, 20, 20);

@@ -30,6 +30,7 @@
     // once everything is loaded, we run our Three.js stuff.
     function init() {
 
+        var working_dir = "assets/textures/general/";
         var stats = initStats();
 
         // create a scene, that will hold all our elements such as objects, cameras and lights.
@@ -55,7 +56,7 @@
         scene.add(sphere2);
         console.log(sphere2.geometry.faceVertexUvs);
 
-        var floorTex = THREE.ImageUtils.loadTexture("../assets/textures/general/floor-wood.jpg");
+        var floorTex = THREE.ImageUtils.loadTexture(working_dir+"floor-wood.jpg");
         var plane = new THREE.Mesh(new THREE.BoxGeometry(200, 100, 0.1, 30), new THREE.MeshPhongMaterial({
             color: 0x3c3c3c,
             map: floorTex
@@ -115,11 +116,11 @@
             this.rotate = false;
 
             this.changeTexture = function (e) {
-                var texture = THREE.ImageUtils.loadTexture("../assets/textures/general/" + e + ".jpg");
+                var texture = THREE.ImageUtils.loadTexture(working_dir + e + ".jpg");
                 sphere2.material.map = texture;
                 sphere1.material.map = texture;
 
-                var bump = THREE.ImageUtils.loadTexture("../assets/textures/general/" + e + "-normal.jpg");
+                var bump = THREE.ImageUtils.loadTexture(working_dir + e + "-normal.jpg");
                 sphere2.material.normalMap = bump;
             };
 
@@ -140,8 +141,8 @@
         function createMesh(geom, imageFile, normal) {
 
             if (normal) {
-                var t = THREE.ImageUtils.loadTexture("../assets/textures/general/" + imageFile);
-                var m = THREE.ImageUtils.loadTexture("../assets/textures/general/" + normal);
+                var t = THREE.ImageUtils.loadTexture(working_dir + imageFile);
+                var m = THREE.ImageUtils.loadTexture(working_dir + normal);
                 var mat2 = new THREE.MeshPhongMaterial();
                 mat2.map = t;
                 mat2.normalMap = m;
@@ -149,7 +150,7 @@
                 var mesh = new THREE.Mesh(geom, mat2);
                 return mesh;
             } else {
-                var t = THREE.ImageUtils.loadTexture("../assets/textures/general/" + imageFile);
+                var t = THREE.ImageUtils.loadTexture(working_dir + imageFile);
                 var mat1 = new THREE.MeshPhongMaterial({
                     map: t
                 });

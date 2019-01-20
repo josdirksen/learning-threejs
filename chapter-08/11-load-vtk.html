@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-
+<!--
+BUGFIX
+1. loader.load("../assets/models/moai_fixed.vtk" => loader.load("assets/models/moai_fixed.vtk"
+-->
 <html>
 
 <head>
-    <title>Example 08.11 - Load pdb model </title>
+    <title>Example 08.11 - Load vtk model </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/VTKLoader.js"></script>
 
@@ -76,7 +79,7 @@
 
         var loader = new THREE.VTKLoader();
         var group = new THREE.Object3D();
-        loader.load("../assets/models/moai_fixed.vtk", function (geometry) {
+        loader.load("assets/models/moai_fixed.vtk", function (geometry) {
             var mat = new THREE.MeshLambertMaterial({color: 0xaaffaa});
             group = new THREE.Mesh(geometry, mat);
             group.scale.set(9, 9, 9);

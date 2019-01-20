@@ -1,5 +1,13 @@
 <!DOCTYPE html>
+<!--
+BUGFIX
 
+        loader.load('../assets/models/horse.js', function (geometry, mat) {
+        
+=>
+
+        loader.load('assets/models/horse.js', function (geometry, mat) {
+-->                
 <html>
 
 <head>
@@ -80,7 +88,7 @@
         var clock = new THREE.Clock();
 
         var loader = new THREE.JSONLoader();
-        loader.load('../assets/models/horse.js', function (geometry, mat) {
+        loader.load('assets/models/horse.js', function (geometry, mat) {
 
             var mat = new THREE.MeshLambertMaterial(
                     {

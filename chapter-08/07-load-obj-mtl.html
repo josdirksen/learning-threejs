@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-
+<!--
+BUGFIX
+1. loader.load('../assets/models/butterfly.obj', '../assets/models/butterfly.mtl' => loader.load('assets/models/butterfly.obj', 'assets/models/butterfly.mtl'
+-->
 <html>
 
 <head>
@@ -79,7 +82,7 @@
 
         var loader = new THREE.OBJMTLLoader();
 
-        loader.load('../assets/models/butterfly.obj', '../assets/models/butterfly.mtl', function (object) {
+        loader.load('assets/models/butterfly.obj', 'assets/models/butterfly.mtl', function (object) {
 
             // configure the wings
             var wing2 = object.children[5].children[0];

@@ -1,0 +1,86 @@
+# 
+# Wavefront material file
+# Converted by the DEEP Exploration  Deep Exploration 5.5 5.5.3.2642 Release
+# Right Hemisphere, LTD
+# http://www.righthemisphere.com/
+# 
+
+newmtl Jessica_06
+Ka 0.4 0.4 0.4
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 25.9921
+map_Kd jessica\\Jessica Body.png
+#map_bump jessica\\Jessica Body Normals.png
+#bump jessica\\Jessica Body Normals.png
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Jessica_05
+Ka 0.4 0.4 0.4
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 39.3966
+map_Kd jessica\\hair_bits.png
+map_bump 
+bump 
+map_opacity jessica\\hair_bits.png
+map_d jessica\\hair_bits.png
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Jessica_Jessica_Reference_smd_m
+Ka 0.4 0.4 0.4
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 84.4485
+map_Kd jessica\\1174.jpg
+map_bump jessica\\1174-normal.jpg
+bump jessica\\1174-normal.jpg
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Jessica__02
+Ka 0.4 0.4 0.4
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 21.1121
+map_Kd jessica\\jessica_head_skin_d.png
+map_bump 
+bump 
+map_opacity jessica\\jessica_head_skin_d.png
+map_d jessica\\jessica_head_skin_d.png
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Jessica_01
+Ka 0.4 0.4 0.4
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 181.019
+map_Kd jessica\\fmouth.png
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 

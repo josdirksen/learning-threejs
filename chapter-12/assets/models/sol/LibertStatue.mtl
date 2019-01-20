@@ -1,0 +1,40 @@
+newmtl Preview
+Ns 50
+Ka 0 0 0
+Kd 0.195441 0.263741 0.2537
+Ks 0.0237312 0.0522111 0.0793909
+newmtl 7_-_Default
+Ns 10
+Ka 0 0 0
+Kd 0.8 0.8 0.8
+Ks 0.447059 0.447059 0.447059
+map_Kd Liberty-GreenBronze-1.png
+newmtl 2_-_Default
+Ns 10
+Ka 0 0 0
+Kd 0.431373 0.431373 0.431373
+Ks 0.6 0.6 0.6
+map_Kd Liberty-GreenBronze-1.png
+newmtl 9_-_DefaultA
+Ns 10
+Ka 0 0 0
+Kd 0.8 0.8 0.8
+Ks 0.203922 0.203922 0.203922
+map_Kd Liberty-DecorazioniMarmo-2.png
+newmtl 7_-_PorteBlindate
+Ns 10
+Ka 0 0 0
+Kd 0.8 0.8 0.8
+Ks 0.6 0.6 0.6
+map_Kd Liberty-PortaBronzo-1.png
+newmtl 8_-_DefaultA
+Ns 10
+Ka 0 0 0
+Kd 0.8 0.8 0.8
+Ks 0.121569 0.121569 0.121569
+map_Kd Liberty-MattoniBasamento-1.png
+newmtl 2_-_Fiamma
+Ns 10
+Ka 0 0 0
+Kd 0.709804 0.643137 0
+Ks 0.996078 0.839216 0.0901961
