@@ -1,9 +1,14 @@
+//在第1章中我们介绍了Three.js库的基础知识。通过示例展示了Three.js是如何工作的，然后创建了第一个完整的Three.js应用。在本章中我们将会深入了解Three.js库，介绍构建Three.js应用的基本组件
+
+//当我们在浏览器中打开这个示例的时候，其效果大致如图2.1所示。请记住除了鼠标之外，键盘上的A、S和D键也可用于在渲染场景中转向、缩放和平移。
+
+
 <!DOCTYPE html>
 
 <html>
 
 <head>
-    <title>Example 02.01 - Basic Scene</title>
+    <title>Example 02.01 - Basic Scene创建场景 </title>
     <script type="text/javascript" src="../libs/three.js"></script>
 
     <script type="text/javascript" src="../libs/stats.js"></script>
@@ -32,6 +37,7 @@
 
         var stats = initStats();
 
+        //我们使用THREE.Scene对象的scene.add（object）方法添加了一个THREE.Mesh对象（你看到的平面）、一个THREE.SpotLight对象（聚光灯光源）和一个THREE.AmbientLight对象（环境光）。渲染场景的时候，THREE.Camera对象会自动地被Three.js添加进来。但是我们手动添加它会是一个更好的实践，尤其是当你需要处理多个摄像机的时候。
         // create a scene, that will hold all our elements such as objects, cameras and lights.
         var scene = new THREE.Scene();
 
@@ -85,17 +91,23 @@
 
         var controls = new function () {
             this.rotationSpeed = 0.02;
-            this.numberOfObjects = scene.children.length;
+            this.numberOfObjects = scene.children.length;//用numberOfObjects变量来显示场景中对象数量
 
+            //点击removeCube按钮，将会移除最后一个添加到场景中的方块。
             this.removeCube = function () {
                 var allChildren = scene.children;
+                //由于Three.js将子对象保存在数组中（最新的对象保存在数组的最后），所以我们可以使用THREE.Scene对象的children属性来获取最后一个添加到场景中的对象，children属性将场景中的所有对象存储为数组
                 var lastObject = allChildren[allChildren.length - 1];
+                
+                //children属性将场景中的所有对象存储为数组。在移除对象时，我们还需要检查该对象是不是THREE.Mesh对象，这样做的原因是避免移除摄像机和光源。
                 if (lastObject instanceof THREE.Mesh) {
                     scene.remove(lastObject);
+                    //当我们移除对象之后，需要再次更新控制界面中表示场景中对象数量的属性numberOfObjects。
                     this.numberOfObjects = scene.children.length;
                 }
             };
 
+            //当你点击addCube按钮的时候，一个新的THREE.BoxGeometry对象就会被创建，它的长、宽和高都是一个从1到3之间的随机数。除了尺寸是随机的，这个方块的颜色和位置也是随机的。
             this.addCube = function () {
 
                 var cubeSize = Math.ceil((Math.random() * 3));
@@ -103,8 +115,9 @@
                 var cubeMaterial = new THREE.MeshLambertMaterial({color: Math.random() * 0xffffff});
                 var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
                 cube.castShadow = true;
-                cube.name = "cube-" + scene.children.length;
-
+                cube.name = "cube-" + scene.children.length;//方块的名字是在cube后面加上当前场景中对象的数量（即scene.children.length）
+                
+//给对象命名在调试的时候是很有用的，而且还可以直接通过名字来获取场景中的对象。如果使用Three.Scene.getObjectByName(name)方法，可以直接获取场景中名为name的对象，然后可以执行一些比如改变位置的操作。
 
                 // position the cube randomly in the scene
 
@@ -114,14 +127,28 @@
 
                 // add the cube to the scene
                 scene.add(cube);
+                //我们的控制界面是使用numberOfObjects变量来显示场景中对象数量的。所以，无论什么时候添加或者删除对象，我们都要将该变量设置为更新后的数量。
                 this.numberOfObjects = scene.children.length;
             };
 
+            //这个按钮的功能是在浏览器的控制台中打印出场景中的所有对象信息
             this.outputObjects = function () {
-                console.log(scene.children);
+                console.log(scene.children);//我们使用的是内置的console对象在浏览器控制台日志中输出对象信息,这样做对于代码调试非常有用，尤其是当你为对象命名时,它对查找某个特定对象相关的问题非常有用。
             }
         };
-
+//例如，对象cube-17（如果你已经知道对象的名字，就可以使用console.log（scene.getObjectByName（"cube-17"））来输出对应的信息
+        
+        
+ /* 总结
+ THREE.Scene.Add：用于向场景中添加对象
+ THREE.Scene.Remove：用于移除场景中的对象
+ THREE.Scene.children：用于获取场景中所有的子对象列表
+ THREE.Scene.getObjectByName：利用name属性，用于获取场景中特定的对象
+ */
+        
+        
+        
+        
         var gui = new dat.GUI();
         gui.add(controls, 'rotationSpeed', 0, 0.5);
         gui.add(controls, 'addCube');
@@ -131,13 +158,14 @@
 
         render();
 
+        //使用render循环来渲染场景
         function render() {
             stats.update();
 
-            // rotate the cubes around its axes
+            // rotate the cubes around its axes在这里，我们使用了THREE.Scene.traverse()方法。我们可以将一个方法作为参数传递给traverse()方法，这个传递来的方法将会在每一个子对象上执行。由于THREE.Scene对象存储的是对象树，所以如果子对象本身还有子对象，traverse()方法会在所有的子对象上执行，直到遍历完场景树中的所有对象为止。
             scene.traverse(function (e) {
                 if (e instanceof THREE.Mesh && e != plane) {
-
+            //我们使用render()方法来更新每个方块的旋转状态（我们特意忽略了表示地面的plane对象）。我们还可以使用for循环或者forEach来遍历children属性数组来达到同样的目的，因为只向THREE.Scene增加对象且没有创建嵌套结构。
                     e.rotation.x += controls.rotationSpeed;
                     e.rotation.y += controls.rotationSpeed;
                     e.rotation.z += controls.rotationSpeed;
