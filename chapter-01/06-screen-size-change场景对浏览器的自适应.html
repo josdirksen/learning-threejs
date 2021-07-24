@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Example 01.06 - Screen size change</title>
+    <title>Example 01.06 - 场景对浏览器的自适应 </title>
     <script type="text/javascript" src="../libs/three.js"></script>
     <script type="text/javascript" src="../libs/stats.js"></script>
     <script type="text/javascript" src="../libs/dat.gui.js"></script>
@@ -29,7 +29,8 @@
     var camera;
     var scene;
     var renderer;
-
+//将变量camera、renderer和scene的定义移到init()方法的外面，这样其他的方法（如onResize()方法）也可以访问它们。
+    
     // once everything is loaded, we run our Three.js stuff.
     function init() {
 
@@ -156,16 +157,22 @@
             return stats;
         }
     }
+    
+    
+    
+    ///////////////////////#################################//////////////////////////////////////
+    
+    //每当浏览器尺寸改变时onResize()方法就会被执行。在onRaise()方法中需要更新摄像机和渲染器
     function onResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
-
+//对于摄像机，需要更新它的aspect属性，这个属性表示屏幕的长宽比；对于渲染器，需要改变它的尺寸。最后我们需要将变量camera、renderer和scene的定义移到init()方法的外面，这样其他的方法（如onResize()方法）也可以访问它们。
 
     window.onload = init;
 
-    // listen to the resize events
+    // 为浏览器注册一个事件监听器listen to the resize events
     window.addEventListener('resize', onResize, false);
 
 </script>

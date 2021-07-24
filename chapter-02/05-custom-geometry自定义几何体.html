@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+//通过定义顶点和面来自定义创建几何体
 <html>
 
 <head>
@@ -82,7 +82,7 @@
         // call the render function
         var step = 0;
 
-
+//创建简单的立方体。在vertices数组中保存了构成几何体的顶点，在faces数组中保存了由这些顶点连接起来创建的三角形面
         var vertices = [
             new THREE.Vector3(1, 3, 1),
             new THREE.Vector3(1, 3, -1),
@@ -94,8 +94,9 @@
             new THREE.Vector3(-1, -1, 1)
         ];
 
+        //我们使用THREE.Face3元素定义立方体的6个面，也就是说每个面都是由两个三角形面组成的。在Three.js以前的版本中，可以使用四边形来定义面。到底是使用四边形还是三角形来创建面，在三维建模领域里一直存在比较大的争议。基本上，大家都习惯于用四边形来创建面，因为它比三角形更容易增强和平滑。但是对于渲染器和游戏引擎来说，使用三角形更加容易，因为三角形渲染起来效率更高。
         var faces = [
-            new THREE.Face3(0, 2, 1),
+            new THREE.Face3(0, 2, 1),//使用vertices数组中的点0、2和1创建而成的三角形面
             new THREE.Face3(2, 3, 1),
             new THREE.Face3(4, 6, 5),
             new THREE.Face3(6, 7, 5),
@@ -108,21 +109,27 @@
             new THREE.Face3(1, 3, 4),
             new THREE.Face3(3, 6, 4),
         ];
-
+//需要注意的是创建面的顶点时的创建顺序，因为顶点顺序决定了某个面是面向摄像机还是背向摄像机的。如果你想创建面向摄像机的面，那么顶点的顺序是顺时针的，反之顶点的顺序是逆时针的。
+        
+        //有了这些顶点和面，我们就可以创建一个新的THREE.Geometry的实例对象，然后将vertices数组赋值给vertices属性，将faces数组赋值给faces属性。最后我们需要做的就是在创建的几何体上执行computeFaceNormals()方法，当该方法执行时，Three.js会决定每个面的法向量，法向量用于决定不同光源下的颜色。
         var geom = new THREE.Geometry();
         geom.vertices = vertices;
         geom.faces = faces;
         geom.computeFaceNormals();
 
 
+        //绿色材质的实现代码
+        //我们使用的不是一个材质，而是由两个材质构成的数组。这样做的原因是，除了显示绿色透明的立方体外，我还想显示一个线框。因为使用线框可以很容易地找出顶点和面的位置。
         var materials = [
             new THREE.MeshLambertMaterial({opacity: 0.6, color: 0x44ff44, transparent: true}),
             new THREE.MeshBasicMaterial({color: 0x000000, wireframe: true})
 
         ];
 
-
+//Three.js支持使用多种材质来创建网格。你可以使用SceneUtils.createMulti-MaterialObject()方法来达到这个目的。这个方法创建的并不是一个THREE.Mesh对象实例，而是为materials数组中每个指定的材质创建一个实例，并把这些实例存放在一个组里（THREE.Object3D对象）。你可以像使用场景中的对象那样使用这个组，如添加网格、按名称获取对象等。
         var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, materials);
+       
+        //如果要为这个组中所有的子对象添加阴影，我们可以这样做:
         mesh.children.forEach(function (e) {
             e.castShadow = true
         });
@@ -153,20 +160,20 @@
 
         var gui = new dat.GUI();
         gui.add(new function () {
+           //clone按钮.
             this.clone = function () {
-
                 var clonedGeometry = mesh.children[0].geometry.clone();
                 var materials = [
                     new THREE.MeshLambertMaterial({opacity: 0.6, color: 0xff44ff, transparent: true}),
                     new THREE.MeshBasicMaterial({color: 0x000000, wireframe: true})
 
                 ];
-
+//这里我们复制立方体的第一个子对象。mesh变量包含两个THREE.Mesh子对象：基于两个不同材质创建的。通过这个复制的几何体我们创建了一个新的网格，并命名为mesh2
                 var mesh2 = THREE.SceneUtils.createMultiMaterialObject(clonedGeometry, materials);
                 mesh2.children.forEach(function (e) {
                     e.castShadow = true
                 });
-
+//使用translate()方法移动这个新创建的网格，删除之前的副本（如果存在）并把这个副本添加到场景中。
                 mesh2.translateX(5);
                 mesh2.translateZ(5);
                 mesh2.name = "clone";
@@ -199,13 +206,16 @@
             for (var i = 0; i < 8; i++) {
                 vertices.push(new THREE.Vector3(controlPoints[i].x, controlPoints[i].y, controlPoints[i].z));
             }
-
+            
+//无论何时修改了顶点的属性，立方体都会基于修改后的值重新进行渲染。出于性能方面的考虑，Three.js认为组成网格的几何体在整个生命周期内是不会改变的，而且对于大部分的几何体而言，这个假设是成立的。为了使我们的示例工作，我们还需要在render循环中添加如下的代码
             mesh.children.forEach(function (e) {
                 e.geometry.vertices = vertices;
                 e.geometry.verticesNeedUpdate = true;
                 e.geometry.computeFaceNormals();
             });
-
+//上面循环中的第一行，我们将组成网格的几何体的vertices属性值指向一个更新后的顶点数组。如果顶点数组vertices没有更新，不需要重新配置这些面，因为它们仍然连接到原来的顶点。如果顶点被更新了，我们还需要告诉几何体顶点需要更新，在代码中是将verticesNeedUpdate属性设置为true来实现这一点的，最后需要调用computeFaceNormals()方法来重新计算每个面，从而完成整个模型的更新。
+            
+            
             // render using requestAnimationFrame
             requestAnimationFrame(render);
             renderer.render(scene, camera);

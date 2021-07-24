@@ -1,3 +1,6 @@
+/*
+如果希望我们的场景动起来，那么首先需要解决的问题是如何在特定的时间间隔重新渲染场景,requestAnimationFrame函数为稳定而连续的渲染场景提供了良好的解决方案。通过这个函数，你可以向浏览器提供一个回调函数。你无须定义回调间隔，浏览器将自行决定最佳回调时机。
+*/
 <!DOCTYPE html>
 
 <html>
@@ -6,7 +9,7 @@
     <title>Example 01.04 - Materials, light and animation</title>
     <script type="text/javascript" src="../libs/three.js"></script>
 
-    <script type="text/javascript" src="../libs/stats.js"></script>
+    <script type="text/javascript" src="../libs/stats.js"></script>//在动画运行时，该库可以在一个图片中显示画面每秒传输帧数。
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -108,7 +111,8 @@
         // call the render function
         var step = 0;
         renderScene();
-
+        
+        //在renderScene函数中每渲染完一帧后，调用stats.update函数更新统计。
         function renderScene() {
             stats.update();
             // rotate the cube around its axes
@@ -122,17 +126,18 @@
             sphere.position.y = 2 + ( 10 * Math.abs(Math.sin(step)));
 
             // render using requestAnimationFrame
-            requestAnimationFrame(renderScene);
+            requestAnimationFrame(renderScene);//在renderScene()方法中，requestAnimationFrame()方法又一次被调用了，这样做的目的是保证动画能够持续运行。
             renderer.render(scene, camera);
         }
 
+       
         function initStats() {
 
             var stats = new Stats();
 
             stats.setMode(0); // 0: fps, 1: ms
 
-            // Align top-left
+            // 统计图形将会显示在浏览器左上方Align top-left
             stats.domElement.style.position = 'absolute';
             stats.domElement.style.left = '0px';
             stats.domElement.style.top = '0px';
